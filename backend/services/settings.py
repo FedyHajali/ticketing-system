@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # apps
-    'tickets',
+    'api',
 
     # packages
     'rest_framework_simplejwt',

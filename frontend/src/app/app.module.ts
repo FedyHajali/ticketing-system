@@ -7,13 +7,19 @@ import { RouterModule } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TicketComponent } from './ticket/ticket.component';
 import { RegistrationComponent } from './account/registration/registration.component';
 import { LoginComponent } from './account/login/login.component';
 import { NavbarComponent } from './layout/navbar/navbar.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
-  declarations: [AppComponent, TicketComponent, RegistrationComponent, LoginComponent, NavbarComponent],
+  declarations: [
+    AppComponent,
+    RegistrationComponent,
+    LoginComponent,
+    NavbarComponent,
+    HomeComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
