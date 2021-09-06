@@ -5,7 +5,9 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
+from django.contrib.auth.models import Group, User
 from .serializers import TicketSerializer
+from auth.serializers import  UserSerializer
 import json
 from .models import Ticket
 # Create your views here.
@@ -68,3 +70,9 @@ def ticketDelete(request, pk):
     ticket.delete()
 
     return Response('Item succsesfully delete!')
+
+@api_view(['GET'])
+def groupUsers(request, pk):
+	users = User.objects.filter(groups__name=pk)
+	serializer = UserSerializer(users, many=True)
+	return Response(serializer.data)
