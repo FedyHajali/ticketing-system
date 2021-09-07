@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 
 # Create your models here.
 
@@ -23,10 +23,10 @@ class Ticket(models.Model):
 
     # Foreign keys
     created_by = models.ForeignKey(
-        get_user_model(), on_delete=models.CASCADE, related_name='created_tickets')
-    groups = models.ManyToManyField(Group, related_name='profiles')
+        get_user_model(), on_delete=models.CASCADE, related_name='created_by')
+    groups = models.ManyToManyField(Group, related_name='groups')
     destination = models.ManyToManyField(
-        get_user_model(), related_name='profiles')
+        get_user_model(), related_name='destination')
 
     def __str__(self):
         return self.title

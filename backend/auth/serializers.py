@@ -6,6 +6,12 @@ from rest_framework.validators import UniqueValidator
 
 # Serializers define the API representation.
 
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('name',)
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -20,7 +26,10 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 
-class GroupSerializer(serializers.ModelSerializer):
+class GroupUsersSerializer(serializers.ModelSerializer):
+    groups = GroupSerializer(many=True)
+
     class Meta:
-        model = Group
-        fields = '__all__'
+        model = User
+        fields = ('id', 'username', 'email', 'first_name',
+                  'last_name', 'password', 'groups')

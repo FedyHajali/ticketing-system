@@ -1,15 +1,10 @@
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from django.http import JsonResponse
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.serializers import Serializer
-from django.contrib.auth.models import Group, User
-from .serializers import TicketSerializer
-from auth.serializers import  UserSerializer
-import json
+from django.contrib.auth.models import User
+from auth.serializers import UserSerializer
 from .models import Ticket
+from .serializers import TicketSerializer
+# from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
@@ -26,15 +21,27 @@ def apiOverview(request):
     return Response(api_urls)
 
 
-@login_required(login_url='/auth/api-auth/login')
 @api_view(['GET'])
 def ticketList(request):
-    tickets = Ticket.objects.filter(destination=request.user)
+    tickets = Ticket.objects.all()
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data)
 
 
-@login_required(login_url='/auth/api-auth/login')
+@api_view(['GET'])
+def ticketDestinationList(request, pk):
+    tickets = Ticket.objects.filter(destination__username=pk)
+    serializer = TicketSerializer(tickets, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def ticketGroupList(request, pk):
+    tickets = Ticket.objects.filter(groups__name=pk)
+    serializer = TicketSerializer(tickets, many=True)
+    return Response(serializer.data)
+
+
 @api_view(['GET'])
 def ticketDetail(request, pk):
     tickets = Ticket.objects.get(id=pk)
@@ -42,7 +49,6 @@ def ticketDetail(request, pk):
     return Response(serializer.data)
 
 
-@login_required(login_url='/auth/api-auth/login')
 @api_view(['POST'])
 def ticketCreate(request):
     serializer = TicketSerializer(data=request.data)
@@ -51,8 +57,7 @@ def ticketCreate(request):
     return Response(serializer.data)
 
 
-@login_required(login_url='/auth/api-auth/login')
-@api_view(['POST'])
+@api_view(['PUT'])
 def ticketUpdate(request, pk):
     ticket = Ticket.objects.get(id=pk)
     serializer = TicketSerializer(instance=ticket, data=request.data)
@@ -63,16 +68,9 @@ def ticketUpdate(request, pk):
     return Response(serializer.data)
 
 
-@login_required(login_url='/auth/api-auth/login')
 @api_view(['DELETE'])
 def ticketDelete(request, pk):
     ticket = Ticket.objects.get(id=pk)
     ticket.delete()
 
     return Response('Item succsesfully delete!')
-
-@api_view(['GET'])
-def groupUsers(request, pk):
-	users = User.objects.filter(groups__name=pk)
-	serializer = UserSerializer(users, many=True)
-	return Response(serializer.data)
