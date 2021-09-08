@@ -1,8 +1,32 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group, User
-
+from django.contrib.auth.models import Group
+from django.db.models.deletion import CASCADE
 # Create your models here.
+
+
+class Topic(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    group = models.ForeignKey(Group, on_delete=CASCADE)
+    users = models.ManyToManyField(
+        get_user_model(), related_name='topic_users')
+
+    def __str__(self):
+        return self.name
+
+
+class Comment(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+class File(models.Model):
+    filename = models.FileField(upload_to='uploads/files/')
 
 
 class Ticket(models.Model):
@@ -11,22 +35,28 @@ class Ticket(models.Model):
         CLOSED = 'CL', 'Closed'
         PENDING = 'PE', 'Pending'
         RESOLVED = 'RE', 'Resolved'
-        WAITING_ON_BRANCH = 'WB', 'Waiting on Branch'
-        WAITING_ON_3RD_PARTY = 'W3', 'Waiting on 3rd Party'
+        EXPIRED = 'EX', 'Expired'
 
     # Fields
     title = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    expiration = models.DateTimeField()
     status = models.CharField(
         max_length=2, blank=False, choices=StatusChoices.choices, default=StatusChoices.OPEN)
     content = models.TextField()
+    uploads = models.ManyToManyField(
+        File, blank=True, related_name='uploads'
+    )
 
     # Foreign keys
-    created_by = models.ForeignKey(
-        get_user_model(), on_delete=models.CASCADE, related_name='created_by')
+    creator = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name='creator')
     groups = models.ManyToManyField(Group, related_name='groups')
-    destination = models.ManyToManyField(
-        get_user_model(), related_name='destination')
+    receivers = models.ManyToManyField(
+        get_user_model(), related_name='receivers')
+    comments = models.ManyToManyField(
+        Comment, blank=True, related_name='comments')
+    topics = models.ManyToManyField(Topic, related_name='topics')
 
     def __str__(self):
         return self.title

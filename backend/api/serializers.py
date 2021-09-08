@@ -1,6 +1,6 @@
 from django.contrib.auth.models import Group, User
 from rest_framework import serializers
-from .models import Ticket
+from .models import Ticket, Topic
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -9,16 +9,32 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = ('name', )
 
 
-class DestinationAndCreatedBySerializer(serializers.ModelSerializer):
+class UserNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', )
 
 
+class TopicSerializer(serializers.ModelSerializer):
+    groups = GroupSerializer(many=True)
+    users = UserNameSerializer(many=True)
+
+    class Meta:
+        model = Topic
+        fields = '__all__'
+
+
+class TopicNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Topic
+        fields = ('name',)
+
+
 class TicketSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True)
-    created_by = DestinationAndCreatedBySerializer()
-    destination = DestinationAndCreatedBySerializer(many=True)
+    creator = UserNameSerializer()
+    receivers = UserNameSerializer(many=True)
+    topics = TopicNameSerializer(many=True)
 
     class Meta:
         model = Ticket
