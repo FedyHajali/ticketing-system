@@ -5,7 +5,8 @@ from auth import views
 urlpatterns = [
     path('', include('rest_auth.urls')),
     path('registration/', views.registration, name='registration'),
-    path('group-users/<str:pk>/', views.groupUsers, name="group-detail"),
+    path('groups/', views.groupList, name="group-list"),
+    path('group-users/<str:pk>/', views.groupUsers, name="group-users"),
 
     # rest_auth built-in API
 

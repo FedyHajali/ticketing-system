@@ -57,7 +57,7 @@
               type="text"
               class="form-control"
               id="firstname"
-              formControlName="firstname"
+              formControlName="first_name"
             />
           </div>
         </div>
@@ -70,7 +70,7 @@
               type="text"
               class="form-control"
               id="lastname"
-              formControlName="lastname"
+              formControlName="last_name"
             />
           </div>
         </div>
@@ -79,13 +79,13 @@
           <label for="groups" class="col-sm-2 col-form-label"> Groups</label>
           <div class="col-sm-10">
             <select multiple formControlName="groups">
-              <option value="">Choose your groups</option>
+              <br />
               <option
                 *ngFor="let group of Groups"
-                [ngValue]="group"
+                [ngValue]="group['id']"
                 (change)="changeGroup($event)"
               >
-                {{ group }}
+                {{ group["name"] }}
               </option>
             </select>
           </div>
@@ -98,7 +98,7 @@
                 class="form-check-input"
                 type="checkbox"
                 id="isStaff"
-                formControlName="isStaff"
+                formControlName="is_staff"
               />
               <label class="form-check-label" for="isStaff"> is Staff </label>
             </div>

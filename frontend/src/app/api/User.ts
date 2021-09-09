@@ -1,21 +1,10 @@
-export class User {
-  id: number;
+export interface User {
+  id: number | null;
   username: string;
+  password: string | null;
   email: string;
-  firstname: string;
-  lastname: string;
-
-  constructor(
-    id: number,
-    username: string,
-    email: string,
-    firstname: string,
-    lastname: string
-  ) {
-    (this.id = id),
-      (this.username = username),
-      (this.email = email),
-      (this.firstname = firstname),
-      (this.lastname = lastname);
-  }
+  first_name: string;
+  last_name: string;
+  groups: Array<Object>;
+  is_staff: boolean;
 }

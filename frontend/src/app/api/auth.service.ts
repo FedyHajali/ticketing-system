@@ -53,15 +53,22 @@ export class AuthService {
       });
   }
 
+  getGroups() {
+    return this.httpClient.get<any>(this.baseUrl + '/auth/groups/');
+  }
+
   handleAuthentication(user: User) {
     localStorage.setItem('user', JSON.stringify(user));
-    const newUser = new User(
-      user.id,
-      user.lastname,
-      user.email,
-      user.firstname,
-      user.lastname
-    );
+    let newUser: User = {
+      id: user.id,
+      username: user.username,
+      password: null,
+      email: user.email,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      groups: user.groups,
+      is_staff: user.is_staff,
+    };
     this.user.next(newUser);
   }
 }

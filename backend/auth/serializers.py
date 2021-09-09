@@ -6,17 +6,23 @@ from rest_framework.validators import UniqueValidator
 
 # Serializers define the API representation.
 
-class GroupSerializer(serializers.ModelSerializer):
+class NameGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ('name',)
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'first_name',
-                  'last_name', 'password', 'groups')
+                  'last_name', 'password', 'groups', 'is_staff')
 
     def create(self, validated_data):
         groups_data = validated_data.pop('groups')
@@ -27,7 +33,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class GroupUsersSerializer(serializers.ModelSerializer):
-    groups = GroupSerializer(many=True)
+    groups = NameGroupSerializer(many=True)
 
     class Meta:
         model = User
