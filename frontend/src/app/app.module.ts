@@ -11,6 +11,9 @@ import { LoginComponent } from './account/login/login.component';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthInterceptor } from './api/auth.interceptor';
+import { GroupsComponent } from './dashboard/groups/groups.component';
+import { TopicsComponent } from './dashboard/topics/topics.component';
+import { TicketsComponent } from './dashboard/tickets/tickets.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +22,9 @@ import { AuthInterceptor } from './api/auth.interceptor';
     LoginComponent,
     NavbarComponent,
     DashboardComponent,
+    GroupsComponent,
+    TopicsComponent,
+    TicketsComponent,
   ],
   imports: [
     BrowserModule,
