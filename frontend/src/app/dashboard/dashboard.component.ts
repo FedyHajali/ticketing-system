@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { AuthService } from '../services/auth.service';
 import { RestService } from '../services/rest.service';
@@ -12,27 +12,21 @@ import { User } from '../models/User';
 })
 export class DashboardComponent implements OnInit {
   private userSub!: Subscription;
-  user: User | undefined;
+  user: User = new User();
   tickets: Ticket[] = [];
   constructor(private rs: RestService, private auth: AuthService) {}
 
   ngOnInit(): void {
-    this.checkUser();
-    this.userSub = this.auth.user.subscribe((user) => {
-      this.checkUser();
+    this.user = this.auth.checkUser();
+    this.userSub = this.auth.userSubject.subscribe((user) => {
+      this.user = this.auth.checkUser();
     });
   }
 
-  getTicketListReceiver(username?: string) {
-    this.rs.getTicketReceiverList(username).subscribe((response) => {
+  getTicketList() {
+    this.rs.getTicketList().subscribe((response) => {
       this.tickets = response;
       console.log(this.tickets);
     });
-  }
-
-  checkUser() {
-    this.user = sessionStorage.getItem('user')
-      ? JSON.parse(<string>sessionStorage.getItem('user'))
-      : null;
   }
 }

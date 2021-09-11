@@ -28,13 +28,12 @@ def apiOverview(request):
     return Response(api_urls)
 
 
-
-
 #################### TICKET ####################
 
 
-#creazione di un ticket
-@login_required(login_url='/auth/login/')
+# creazione di un ticket
+
+# @login_required(login_url='/auth/login/')
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -43,24 +42,26 @@ def ticketCreate(request):
     if serializer.is_valid():
         serializer.save()
     else:
-     print()
+        print()
     return Response(serializer.errors)
 
 
-#lista dei ticket esistenti
-@login_required(login_url='/auth/login/')
+# lista dei ticket esistenti
+
+# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,IsStaff ])
+@permission_classes([IsAuthenticated, IsStaff])
 def ticketList(request):
-    tickets = Ticket.objects.all()
+    tickets = Ticket.objects.filter(receivers=request.user)
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data)
 
-#lista dei ricevitori del ticket
-#pk identifica il ticket
-#ritorna gli id dei destinatari
-@login_required(login_url='/auth/login/')
+# lista dei ricevitori del ticket
+#  pk identifica il ticket
+# ritorna gli id dei destinatari
+
+# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -70,10 +71,11 @@ def ticketReceiversList(request, pk):
     return Response(serializer.data['receivers'])
 
 
-#lista dei ticket del creatore
-#pk identifica l'utente
-#ritorna gli id dei destinatari
-@login_required(login_url='/auth/login/')
+# lista dei ticket del creatore
+# pk identifica l'utente
+# ritorna gli id dei destinatari
+
+# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -83,9 +85,10 @@ def ticketListCreator(request, pk):
     return Response(serializer.data['receivers'])
 
 
-#lista dei ticket in un gruppo
-#ritorna tutta la struttura del ticket
-@login_required(login_url='/auth/login/')
+# lista dei ticket in un gruppo
+# ritorna tutta la struttura del ticket
+
+# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -94,8 +97,9 @@ def ticketGroupList(request, pk):
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data)
 
-#info del ticket
-@login_required(login_url='/auth/login/')
+# info del ticket
+
+# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -105,16 +109,17 @@ def ticketDetail(request, pk):
     return Response(serializer.data)
 
 
-#update del ticket per il creatore, può mettere solo Closed o Open
-#pk identifica il ticket
-@login_required(login_url='/auth/login/')
+# update del ticket per il creatore, può mettere solo Closed o Open
+# pk identifica il ticket
+
+# @login_required(login_url='/auth/login/')
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
 def ticketCreatorUpdate(request, pk):
     if request.data['status'] not in ('CL', 'OP'):
         return Response('Only Closed or Open are possible')
-    ticket = Ticket.objects.get(id=pk, creator=request.user)   #gestione errore
+    ticket = Ticket.objects.get(id=pk, creator=request.user)  # gestione errore
     serializer = TicketSerializer(instance=ticket, data=request.data)
     if (serializer.is_valid()):
         serializer.save()
@@ -122,10 +127,11 @@ def ticketCreatorUpdate(request, pk):
     return Response(serializer.data)
 
 
-#update del ticket per il ricevitore, può mettere solo Pending Resolved
-#ovviamente bisogna mostrare solo i biglietti in stato OPEN, gli altri sono giò in stato closed/pending/resolved
-#pk identifica il ticket
-@login_required(login_url='/auth/login/')
+# update del ticket per il ricevitore, può mettere solo Pending Resolved
+# ovviamente bisogna mostrare solo i biglietti in stato OPEN, gli altri sono giò in stato closed/pending/resolved
+# pk identifica il ticket
+
+# @login_required(login_url='/auth/login/')
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -140,10 +146,11 @@ def ticketReceiverUpdate(request, pk):
     return Response(serializer.data)
 
 
-#lo staff può mettere in qualsiasi stato, per comodità.. però tranne expired, che dipende dalla data
-#nel caso, per uno dello staff sarebbe meglio cambiare la data 
-#pk identifica il ticket
-@login_required(login_url='/auth/login/')
+# lo staff può mettere in qualsiasi stato, per comodità.. però tranne expired, che dipende dalla data
+# nel caso, per uno dello staff sarebbe meglio cambiare la data
+# pk identifica il ticket
+
+# @login_required(login_url='/auth/login/')
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -157,13 +164,14 @@ def ticketStaffUpdate(request, pk):
 
     return Response(serializer.data)
 
-#elimina un ticket dal database
-@login_required(login_url='/auth/login/')
+# elimina un ticket dal database
+
+# @login_required(login_url='/auth/login/')
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
 def ticketDelete(request, pk):
-    
+
     ticket = Ticket.objects.get(id=pk)
     ticket.delete()
 
@@ -172,8 +180,9 @@ def ticketDelete(request, pk):
 
 #################### TOPIC ####################
 
-#creazione topic
-@login_required(login_url='/auth/login/')
+# creazione topic
+
+# @login_required(login_url='/auth/login/')
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -183,8 +192,9 @@ def topicCreate(request):
         serializer.save()
     return Response(serializer.data)
 
-#info del topic
-@login_required(login_url='/auth/login/')
+# info del topic
+
+# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -193,22 +203,24 @@ def topicDetail(request, pk):
     serializer = TopicSerializer(topic, many=False)
     return Response(serializer.data)
 
-#aggiugne un utente al topic
-@login_required(login_url='/auth/login/')
+# aggiugne un utente al topic
+
+# @login_required(login_url='/auth/login/')
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def topicUsersAdd(request, pk):
-    topic = Topic.objects.get(id=pk) #oppure name=
-    user = User.objects.get(id=request.user.id) 
+    topic = Topic.objects.get(id=pk)  # oppure name=
+    user = User.objects.get(id=request.user.id)
     topic.users.add(user)
-    
+
     return Response('Sei stato iscritto al Topic')
 
 
-#lista dei topic di un gruppo
-#pk identifica il gruppo
-@login_required(login_url='/auth/login/')
+# lista dei topic di un gruppo
+# pk identifica il gruppo
+
+# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -218,9 +230,10 @@ def topicGroupList(request, pk):
     return Response(serializer.data)
 
 
-#lista dei topic di un gruppo a cui l'utente è iscritto
-#pk è il gruppo
-@login_required(login_url='/auth/login/')
+# lista dei topic di un gruppo a cui l'utente è iscritto
+# pk è il gruppo
+
+# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -230,31 +243,35 @@ def topicUserGroupList(request, pk):
     return Response(serializer.data)
 
 
-#lista dei topic a cui staff non è iscritto
-@login_required(login_url='/auth/login/')
+# lista dei topic a cui staff non è iscritto
+
+# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
 def topicNotStaffList(request, pk):
-    topics = Topic.objects.exclude(Topic.objects.filter(users_id=request.user.id))
+    topics = Topic.objects.exclude(
+        Topic.objects.filter(users_id=request.user.id))
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data)
 
-#questa non va
-#lista di tutti i topic dei gruppi di cui fa parte un utente
-@login_required(login_url='/auth/login/')
+# questa non va
+# lista di tutti i topic dei gruppi di cui fa parte un utente
+
+# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def topicUserList(request):
     groups = request.user.groups
-    topics = Topic.objects.filter(group__in = groups)
+    topics = Topic.objects.filter(group__in=groups)
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data)
 
-#gli utenti iscritti al topic
-#pk identifica il topic
-@login_required(login_url='/auth/login/')
+# gli utenti iscritti al topic
+# pk identifica il topic
+
+# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -264,16 +281,17 @@ def topicUsers(request, pk):
     return Response(serializer.data['users'])
 
 
-#manca la delete etcetc
+# manca la delete etcetc
 
 
 #################### COMMENT ####################
 
-#aggiungi un commento ad un ticket
-@login_required(login_url='/auth/login/')
+# aggiungi un commento ad un ticket
+
+# @login_required(login_url='/auth/login/')
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,])
+@permission_classes([IsAuthenticated, ])
 def commentCreate(request):
     serializer = CommentSerializer(data=request.data)
     if serializer.is_valid():
@@ -281,9 +299,9 @@ def commentCreate(request):
     return Response(serializer.data)
 
 
+# info del topic
 
-#info del topic
-@login_required(login_url='/auth/login/')
+# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -292,4 +310,4 @@ def commentDetail(request, pk):
     serializer = CommentSerializer(comment, many=False)
     return Response(serializer.data)
 
-#manca lista dei commenti, delete etc etc
+# manca lista dei commenti, delete etc etc

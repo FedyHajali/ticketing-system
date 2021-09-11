@@ -37,7 +37,6 @@ export class RegistrationComponent implements OnInit {
 
   onSubmit() {
     const data: User = {
-      id: null,
       username: this.form.controls['username'].value,
       email: this.form.controls['email'].value,
       password: this.form.controls['password'].value,

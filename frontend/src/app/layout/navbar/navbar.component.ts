@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterContentInit {
     const userlogged: any = sessionStorage.getItem('user');
     this.isAuthenticated = userlogged == null ? false : true;
 
-    this.userSub = this.auth.user.subscribe((user) => {
+    this.userSub = this.auth.userSubject.subscribe((user) => {
       if (!user) {
         this.isAuthenticated =
           sessionStorage.getItem('user') == null ? false : true;

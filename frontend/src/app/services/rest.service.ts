@@ -10,9 +10,7 @@ export class RestService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getTicketReceiverList(receiver?: string) {
-    return this.httpClient.get<Ticket[]>(
-      this.baseUrl + '/api/ticket-list-dest/' + receiver
-    );
+  getTicketList() {
+    return this.httpClient.get<Ticket[]>(this.baseUrl + '/api/ticket-list/');
   }
 }

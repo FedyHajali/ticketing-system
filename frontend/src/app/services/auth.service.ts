@@ -9,7 +9,8 @@ import { User } from '../models/User';
 })
 export class AuthService {
   baseUrl = 'http://localhost:8000';
-  user = new Subject<User>();
+  userSubject = new Subject<User>();
+  user: User = new User();
 
   constructor(private httpClient: HttpClient) {}
 
@@ -27,7 +28,7 @@ export class AuthService {
   logout() {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
-    this.user.next();
+    this.userSubject.next();
   }
 
   register(data: any) {
@@ -60,15 +61,21 @@ export class AuthService {
   handleAuthentication(user: User) {
     sessionStorage.setItem('user', JSON.stringify(user));
     let newUser: User = {
-      id: user.id,
+      pk: user.pk,
       username: user.username,
-      password: null,
       email: user.email,
       first_name: user.first_name,
       last_name: user.last_name,
       groups: user.groups,
       is_staff: user.is_staff,
     };
-    this.user.next(newUser);
+    this.userSubject.next(newUser);
+  }
+
+  checkUser() {
+    this.user = sessionStorage.getItem('user')
+      ? JSON.parse(<string>sessionStorage.getItem('user'))
+      : null;
+    return this.user;
   }
 }
