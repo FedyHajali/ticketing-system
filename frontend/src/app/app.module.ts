@@ -10,7 +10,7 @@ import { RegistrationComponent } from './account/registration/registration.compo
 import { LoginComponent } from './account/login/login.component';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { AuthInterceptor } from './api/auth.interceptor';
+import { AuthInterceptor } from './services/auth.interceptor';
 import { GroupsComponent } from './dashboard/groups/groups.component';
 import { TopicsComponent } from './dashboard/topics/topics.component';
 import { TicketsComponent } from './dashboard/tickets/tickets.component';

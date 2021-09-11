@@ -1,10 +1,38 @@
-<div class="card" style="width: 18rem">
+<div class="card">
+  <div class="card-header">
+    <div class="card-header-tabs">
+      <li class="nav-item">
+        Status:
+        <a class="nav-tabs">{{ ticket.status }}</a>
+      </li>
+      <li class="nav-item">
+        Created at:
+        <a class="nav-tabs">{{ ticket.created_at }}</a>
+      </li>
+      <li class="nav-item">
+        Expiration: 
+        <a class="nav-tabs">{{ ticket.expiration }}</a>
+      </li>
+    </div>
+  </div>
   <div class="card-body">
-    <h5 class="card-title">Ticket title</h5>
+    <h5 class="card-title">{{ ticket.title }}</h5>
+    Groups:
+    <div class="card-subtitle" *ngFor="let group of ticket.groups">
+      {{ group["name"] }}
+    </div>
+    Topics:
+    <div class="card-subtitle" *ngFor="let topic of ticket.topics">
+      {{ topic["name"] }}
+    </div>
+    Receivers:
+    <div class="card-subtitle" *ngFor="let receiver of ticket.receivers">
+      {{ receiver["username"] }}
+    </div>
     <p class="card-text">
-      Ticket Content: Some quick example text to build on the card title and
-      make up the bulk of the card's content.
+      Content: {{ ticket.content }}
     </p>
     <a href="#" class="btn btn-primary">Go somewhere</a>
   </div>
+  <div class="card-footer">Creator: {{ ticket.creator["username"] }}</div>
 </div>

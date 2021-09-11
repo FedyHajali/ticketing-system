@@ -25,7 +25,7 @@ export class AuthInterceptor implements HttpInterceptor {
         setHeaders: {
           'Content-Type': 'application/json; charset=utf-8',
           Accept: 'application/json',
-          Authorization: 'Token ' + localStorage.getItem('token'),
+          Authorization: 'Token ' + sessionStorage.getItem('token'),
         },
       });
     }

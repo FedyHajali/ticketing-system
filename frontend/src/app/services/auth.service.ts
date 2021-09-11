@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-import { User } from './User';
+import { User } from '../models/User';
 
 @Injectable({
   providedIn: 'root',
@@ -18,15 +18,15 @@ export class AuthService {
       .post<{ key: string }>(this.baseUrl + '/auth/login/', data)
       .pipe(
         map((response) => {
-          localStorage.setItem('token', response.key);
+          sessionStorage.setItem('token', response.key);
           this.getUser();
         })
       );
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
     this.user.next();
   }
 
@@ -42,7 +42,7 @@ export class AuthService {
   }
 
   public get loggedIn(): boolean {
-    return localStorage.getItem('token') !== null;
+    return sessionStorage.getItem('token') !== null;
   }
 
   getUser() {
@@ -58,7 +58,7 @@ export class AuthService {
   }
 
   handleAuthentication(user: User) {
-    localStorage.setItem('user', JSON.stringify(user));
+    sessionStorage.setItem('user', JSON.stringify(user));
     let newUser: User = {
       id: user.id,
       username: user.username,
