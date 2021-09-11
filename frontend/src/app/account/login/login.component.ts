@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RestService } from 'src/app/api/rest.service';
+import { AuthService } from 'src/app/api/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -9,14 +11,27 @@ import { RestService } from 'src/app/api/rest.service';
 })
 export class LoginComponent implements OnInit {
   form = this.fb.group({
-    username: [''],
-    password: [''],
+    username: '',
+    password: '',
   });
-  constructor(private fb: FormBuilder, private rs: RestService) {}
+
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {}
 
   onSubmit() {
-    this.rs.login(this.form.value);
+    this.auth.login(this.form.value).subscribe(
+      (response) => {
+        this.router.navigate(['/dashboard']);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 }
