@@ -10,7 +10,7 @@ class Topic(models.Model):
     description = models.TextField()
     group = models.ForeignKey(Group, on_delete=CASCADE)
     users = models.ManyToManyField(
-        get_user_model(), related_name='topic_users')
+        get_user_model(), editable=False, related_name='topic_users')
 
     def __str__(self):
         return self.name
