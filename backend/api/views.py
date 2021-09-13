@@ -14,8 +14,11 @@ from rest_framework import status
 #################### TICKET ####################
 
 
-# creazione di un ticket
-
+@swagger_auto_schema(
+    method="post",
+    operation_description='Creation of a new Ticket',
+    operation_summary='Ticket Creation',
+    request_body=TicketSerializer)
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -28,8 +31,10 @@ def ticketCreate(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# lista dei ticket di cui l'utente è destinatario
-
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of tickets for which the active user is a receiver',
+    operation_summary='Ticket list received by the active user')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -37,14 +42,14 @@ def ticketListReceiver(request):
     tickets = Ticket.objects.filter(receivers=request.user)
     if tickets.count() == 0:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
-         
+
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-# lista dei ticket del creatore
-# pk identifica l'utente
-# ritorna gli id dei destinatari
-
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of tickets for which the active user is a creator',
+    operation_summary='Ticket list created by the active user')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -57,9 +62,10 @@ def ticketListCreator(request, pk):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# lista dei ticket in un gruppo
-# ritorna tutta la struttura del ticket
-
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of tickets for a specific group',
+    operation_summary='Ticket list for a specific group')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -71,12 +77,10 @@ def ticketListGroup(request, pk):
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-
-# lista dei ricevitori del ticket
-#  pk identifica il ticket
-# ritorna gli id dei destinatari
-
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of ticket receivers',
+    operation_summary='List of ticket receivers')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -89,9 +93,6 @@ def ticketReceiversList(request, pk):
     return Response(serializer.data['receivers'], status=status.HTTP_200_OK)
 
 
-
-# info del ticket
-
 @swagger_auto_schema(
     method="get",
     operation_description='Returns all information of a ticket',
@@ -101,7 +102,7 @@ def ticketReceiversList(request, pk):
 @permission_classes([IsAuthenticated, ])
 def ticketDetail(request, pk):
     try:
-        ticket= Ticket.objects.get(id=pk)
+        ticket = Ticket.objects.get(id=pk)
     except Ticket.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
@@ -109,9 +110,10 @@ def ticketDetail(request, pk):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# update del ticket per il creatore, può mettere solo Closed o Open
-# pk identifica il ticket
-
+@swagger_auto_schema(
+    method="put",
+    operation_description='Change of ticket status for creator who can only put Closed or Open',
+    operation_summary='Ticket status update for Creator')
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -163,6 +165,7 @@ def ticketStaffUpdate(request, pk):
 
 # elimina un ticket dal database
 
+
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -189,6 +192,7 @@ def topicCreate(request):
 
 # info del topic
 
+
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -198,6 +202,7 @@ def topicDetail(request, pk):
     return Response(serializer.data)
 
 # aggiugne un utente al topic
+
 
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
@@ -248,6 +253,7 @@ def topicNotStaffList(request, pk):
 # questa non va
 # lista di tutti i topic dei gruppi di cui fa parte un utente
 
+
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -259,6 +265,7 @@ def topicUserList(request):
 
 # gli utenti iscritti al topic
 # pk identifica il topic
+
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
