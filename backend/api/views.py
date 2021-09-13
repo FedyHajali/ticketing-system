@@ -8,24 +8,8 @@ from django.contrib.auth.models import User
 from .models import Comment, Ticket, Topic
 from .permission import IsStaff
 from .serializers import CommentSerializer, TicketSerializer, TopicSerializer
+from rest_framework import status
 # Create your views here.
-
-
-#################### API ####################
-
-
-@api_view(['GET'])
-def apiOverview(request):
-    api_urls = {
-        'List': 'http://localhost:8000/api/ticket-list/',
-        'Detail': 'http://localhost:8000/api/ticket-detail/<str:pk>/',
-        'Create': 'http://localhost:8000/api/ticket-create/',
-        'Update': 'http://localhost:8000/api/ticket-update/<str:pk>/',
-        'Delete': 'http://localhost:8000/api/ticket-delete/<str:pk>/',
-    }
-
-    return Response(api_urls)
-
 
 #################### TICKET ####################
 
@@ -39,20 +23,55 @@ def ticketCreate(request):
     serializer = TicketSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
-        print()
-        return Response(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# lista dei ticket esistenti
+# lista dei ticket di cui l'utente è destinatario
 
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
-def ticketList(request):
+def ticketListReceiver(request):
     tickets = Ticket.objects.filter(receivers=request.user)
+    if tickets.count() == 0:
+        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
+         
     serializer = TicketSerializer(tickets, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+# lista dei ticket del creatore
+# pk identifica l'utente
+# ritorna gli id dei destinatari
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated, ])
+def ticketListCreator(request, pk):
+    tickets = Ticket.objects.filter(creator=pk)
+    if tickets.count() == 0:
+        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
+
+    serializer = TicketSerializer(tickets, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# lista dei ticket in un gruppo
+# ritorna tutta la struttura del ticket
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated, IsStaff])
+def ticketListGroup(request, pk):
+    tickets = Ticket.objects.filter(groups__id=pk)
+    if tickets.count() == 0:
+        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
+
+    serializer = TicketSerializer(tickets, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 
 # lista dei ricevitori del ticket
 #  pk identifica il ticket
@@ -63,45 +82,31 @@ def ticketList(request):
 @permission_classes([IsAuthenticated, ])
 def ticketReceiversList(request, pk):
     ticket = Ticket.objects.get(id=pk)
+    if ticket.DoesNotExist:
+        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
+
     serializer = TicketSerializer(ticket, many=False)
-    return Response(serializer.data['receivers'])
+    return Response(serializer.data['receivers'], status=status.HTTP_200_OK)
 
 
-# lista dei ticket del creatore
-# pk identifica l'utente
-# ritorna gli id dei destinatari
-
-@api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, ])
-def ticketListCreator(request, pk):
-    ticket = Ticket.objects.get(creator=pk)
-    serializer = TicketSerializer(ticket, many=False)
-    return Response(serializer.data['receivers'])
-
-
-# lista dei ticket in un gruppo
-# ritorna tutta la struttura del ticket
-
-@api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsStaff])
-def ticketGroupList(request, pk):
-    tickets = Ticket.objects.filter(groups__id=pk)
-    serializer = TicketSerializer(tickets, many=True)
-    return Response(serializer.data)
 
 # info del ticket
 
-response = openapi.Response('Ticket Detail', TicketSerializer)
-@swagger_auto_schema(method="get", responses={200: response})
+@swagger_auto_schema(
+    method="get",
+    operation_description='Returns all information of a ticket',
+    operation_summary='Ticket detail')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
 def ticketDetail(request, pk):
-    tickets = Ticket.objects.get(id=pk)
-    serializer = TicketSerializer(tickets, many=False)
-    return Response(serializer.data)
+    try:
+        ticket= Ticket.objects.get(id=pk)
+    except Ticket.DoesNotExist:
+        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
+
+    serializer = TicketSerializer(ticket, many=False)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # update del ticket per il creatore, può mettere solo Closed o Open

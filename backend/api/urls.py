@@ -2,17 +2,13 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    #Overview Api
-    path('', views.apiOverview, name="api-overview"),
-
     
-
     #Ticket
     path('ticket-create/', views.ticketCreate, name="ticket-create"),
-    path('ticket-list/', views.ticketList, name="ticket-list"),
-    path('ticket-receivers-list/<str:pk>', views.ticketReceiversList, name="ticket-receivers-list"),
+    path('ticket-list/', views.ticketListReceiver, name="ticket-list"),
     path('ticket-list-creator/<str:pk>', views.ticketListCreator, name="ticket-list-creator"),
-    path('ticket-list-group/<str:pk>',views.ticketGroupList, name="ticket-group-list"),
+    path('ticket-list-group/<str:pk>',views.ticketListGroup, name="ticket-group-list"),
+    path('ticket-receivers-list/<int:pk>', views.ticketReceiversList, name="ticket-receivers-list"),
     path('ticket-detail/<int:pk>/', views.ticketDetail, name="ticket-detail"),
     path('ticket-creator-update/<int:pk>/', views.ticketCreatorUpdate, name="ticket-creator-update"),
     path('ticket-receiver-update/<int:pk>/', views.ticketReceiverUpdate, name="ticket-receiver-update"),
