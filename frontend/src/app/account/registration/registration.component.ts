@@ -10,6 +10,8 @@ import { User } from 'src/app/models/User';
   styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent implements OnInit {
+  Groups: any = [];
+
   form = this.fb.group({
     username: '',
     email: '',
@@ -20,9 +22,6 @@ export class RegistrationComponent implements OnInit {
     is_staff: true,
     groups: null,
   });
-
-  // City Names
-  Groups: any = [];
 
   constructor(
     private fb: FormBuilder,
@@ -64,9 +63,14 @@ export class RegistrationComponent implements OnInit {
   }
 
   getGroups() {
-    this.auth.getGroups().subscribe((groups) => {
-      console.log(groups);
-      this.Groups = groups;
-    });
+    this.auth.getGroups().subscribe(
+      (groups) => {
+        console.log(groups);
+        this.Groups = groups;
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 }

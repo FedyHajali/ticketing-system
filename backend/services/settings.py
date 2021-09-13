@@ -44,11 +44,11 @@ INSTALLED_APPS = [
     'api',
 
     # packages
-    # 'rest_framework_simplejwt',
     'rest_framework',
     'corsheaders',
     'rest_auth',
     'rest_framework.authtoken',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [

@@ -1,5 +1,5 @@
-export interface Comment {
-    title: string | null;
-    content: string | null;
-    created_at: Date | null;
-  }
+export class Comment {
+  title: string = '';
+  content: string = '';
+  created_at: Date = new Date();
+}

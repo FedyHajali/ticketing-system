@@ -1,0 +1,358 @@
+openapi: 3.0.0
+servers:
+  - url: http://localhost:8000/
+    description: ''
+    variables: {}
+info:
+  version: 4a370ab4-79cc-4316-bbd4-9ca150fe84a8
+  title: BTS
+  description: ''
+  termsOfService: ''
+  contact: {}
+  license:
+    name: ''
+paths:
+  /auth/registration/:
+    post:
+      summary: registration
+      operationId: registration
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+                - password2
+                - email
+                - first_name
+                - last_name
+                - groups
+              properties:
+                username:
+                  type: string
+                  example: franco
+                password:
+                  type: string
+                  example: admin2020
+                password2:
+                  type: string
+                  example: admin2020
+                email:
+                  type: string
+                  example: franco@bts.com
+                first_name:
+                  type: string
+                  example: franco
+                last_name:
+                  type: string
+                  example: franchi
+                groups:
+                  type: string
+                  example: group_1
+            example:
+              - key: username
+                value: franco
+                type: text
+              - key: password
+                value: admin2020
+                type: text
+              - key: password2
+                value: admin2020
+                type: text
+              - key: email
+                value: franco@bts.com
+                type: text
+              - key: first_name
+                value: franco
+                type: text
+              - key: last_name
+                value: franchi
+                type: text
+              - key: groups
+                value: group_1
+                type: text
+      tags:
+        - auth
+  /auth/login/:
+    post:
+      summary: login
+      operationId: login
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: fedy
+                password:
+                  type: string
+                  example: admin2021
+            example:
+              - key: username
+                value: fedy
+                type: text
+              - key: password
+                value: admin2021
+                type: text
+      tags:
+        - auth
+  /auth/logout/:
+    post:
+      summary: logout
+      operationId: logout
+      parameters:
+        - $ref: '#/components/parameters/Authorization'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      tags:
+        - auth
+  /auth/user/:
+    get:
+      summary: user
+      operationId: user
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: Token {{token}}
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      tags:
+        - auth
+  /auth/password/change/:
+    post:
+      summary: password-change
+      operationId: password-change
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: Token {{token}}
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - new_password1
+                - new_password2
+              properties:
+                new_password1:
+                  type: string
+                  example: admin2021
+                new_password2:
+                  type: string
+                  example: admin2021
+            example:
+              - key: new_password1
+                value: admin2021
+                type: text
+              - key: new_password2
+                value: admin2021
+                type: text
+      tags:
+        - auth
+  /auth/password/reset/:
+    get:
+      summary: password-reset
+      operationId: password-reset
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      tags:
+        - auth
+  /auth/password/reset/confirm/:
+    get:
+      summary: password-reset-confirm
+      operationId: password-reset-confirm
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      tags:
+        - auth
+  /auth/group-users/{group_name}/:
+    get:
+      summary: group-users
+      operationId: group-users
+      parameters:
+        - $ref: '#/components/parameters/group_name'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      tags:
+        - auth
+  /api/ticket-list/:
+    get:
+      summary: ticket-list
+      operationId: ticket-list
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: Token {{token}}
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      tags:
+        - api
+  /api/ticket-list-group/{group}:
+    get:
+      summary: ticket-list-group
+      operationId: ticket-list-group
+      parameters:
+        - $ref: '#/components/parameters/group'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      tags:
+        - api
+  /api/ticket-list-dest/{destination}:
+    get:
+      summary: ticket-list-destination
+      operationId: ticket-list-destination
+      parameters:
+        - $ref: '#/components/parameters/destination'
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      tags:
+        - api
+  /api/ticket-detail/1:
+    get:
+      summary: ticket-detail
+      operationId: ticket-detail
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      tags:
+        - api
+  /api/ticket-create/:
+    post:
+      summary: ticket-create
+      operationId: ticket-create
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
+            example: []
+      tags:
+        - api
+  /api/ticket-update/:
+    put:
+      summary: ticket-update
+      operationId: ticket-update
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      tags:
+        - api
+  /api/ticket-delete/:
+    delete:
+      summary: ticket-delete
+      operationId: ticket-delete
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      tags:
+        - api
+components:
+  parameters:
+    Authorization:
+      name: Authorization
+      in: header
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: Token {{token}}
+    group_name:
+      name: group_name
+      in: path
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: group_1
+      description: Group Name
+    group:
+      name: group
+      in: path
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: group_1
+      description: Group Name
+    destination:
+      name: destination
+      in: path
+      required: true
+      style: simple
+      schema:
+        type: string
+        example: admin
+      description: Ticket recipient name
+security: []
+tags: []
+externalDocs:
+  url: ''
+  description: ''

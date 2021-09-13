@@ -16,8 +16,13 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.auth.checkUser();
-    this.userSub = this.auth.userSubject.subscribe((user) => {
-      this.user = this.auth.checkUser();
-    });
+    this.userSub = this.auth.userSubject.subscribe(
+      (user) => {
+        this.user = this.auth.checkUser();
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 }

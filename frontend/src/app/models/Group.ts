@@ -1,5 +1,5 @@
-export interface Group {
-  id: number | null;
-  name: string | null;
-  permission: Array<number> | null;
+export class Group {
+  pk?: number;
+  name: string = '';
+  permission: Array<number> = [];
 }

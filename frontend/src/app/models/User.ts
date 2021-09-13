@@ -1,3 +1,5 @@
+import { Group } from './Group';
+
 export class User {
   pk?: number;
   username: string = '';
@@ -5,6 +7,6 @@ export class User {
   email: string = '';
   first_name: string = '';
   last_name: string = '';
-  groups: Array<Object> = [];
+  groups: Array<Group> = [];
   is_staff: boolean = false;
 }

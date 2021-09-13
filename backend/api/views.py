@@ -1,14 +1,13 @@
-from copy import error
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
-from django.contrib.auth.models import Group, User
-from auth.serializers import UserSerializer, GroupSerializer
+from django.contrib.auth.models import User
 from .models import Comment, Ticket, Topic
-from .serializers import CommentSerializer, TicketSerializer, TopicSerializer, UserNameSerializer
-from .permission import IsStaff, IsSuperuser
-from django.contrib.auth.decorators import login_required
+from .permission import IsStaff
+from .serializers import CommentSerializer, TicketSerializer, TopicSerializer
 # Create your views here.
 
 
@@ -33,7 +32,6 @@ def apiOverview(request):
 
 # creazione di un ticket
 
-# @login_required(login_url='/auth/login/')
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -43,12 +41,11 @@ def ticketCreate(request):
         serializer.save()
     else:
         print()
-    return Response(serializer.errors)
+        return Response(serializer.errors)
 
 
 # lista dei ticket esistenti
 
-# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -61,7 +58,6 @@ def ticketList(request):
 #  pk identifica il ticket
 # ritorna gli id dei destinatari
 
-# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -75,7 +71,6 @@ def ticketReceiversList(request, pk):
 # pk identifica l'utente
 # ritorna gli id dei destinatari
 
-# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -88,7 +83,6 @@ def ticketListCreator(request, pk):
 # lista dei ticket in un gruppo
 # ritorna tutta la struttura del ticket
 
-# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -99,7 +93,8 @@ def ticketGroupList(request, pk):
 
 # info del ticket
 
-# @login_required(login_url='/auth/login/')
+response = openapi.Response('Ticket Detail', TicketSerializer)
+@swagger_auto_schema(method="get", responses={200: response})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -112,7 +107,6 @@ def ticketDetail(request, pk):
 # update del ticket per il creatore, può mettere solo Closed o Open
 # pk identifica il ticket
 
-# @login_required(login_url='/auth/login/')
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -131,7 +125,6 @@ def ticketCreatorUpdate(request, pk):
 # ovviamente bisogna mostrare solo i biglietti in stato OPEN, gli altri sono giò in stato closed/pending/resolved
 # pk identifica il ticket
 
-# @login_required(login_url='/auth/login/')
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -150,7 +143,6 @@ def ticketReceiverUpdate(request, pk):
 # nel caso, per uno dello staff sarebbe meglio cambiare la data
 # pk identifica il ticket
 
-# @login_required(login_url='/auth/login/')
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -166,7 +158,6 @@ def ticketStaffUpdate(request, pk):
 
 # elimina un ticket dal database
 
-# @login_required(login_url='/auth/login/')
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -182,7 +173,6 @@ def ticketDelete(request, pk):
 
 # creazione topic
 
-# @login_required(login_url='/auth/login/')
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -194,7 +184,6 @@ def topicCreate(request):
 
 # info del topic
 
-# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -205,7 +194,6 @@ def topicDetail(request, pk):
 
 # aggiugne un utente al topic
 
-# @login_required(login_url='/auth/login/')
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -220,7 +208,6 @@ def topicUsersAdd(request, pk):
 # lista dei topic di un gruppo
 # pk identifica il gruppo
 
-# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -233,7 +220,6 @@ def topicGroupList(request, pk):
 # lista dei topic di un gruppo a cui l'utente è iscritto
 # pk è il gruppo
 
-# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -245,7 +231,6 @@ def topicUserGroupList(request, pk):
 
 # lista dei topic a cui staff non è iscritto
 
-# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -258,7 +243,6 @@ def topicNotStaffList(request, pk):
 # questa non va
 # lista di tutti i topic dei gruppi di cui fa parte un utente
 
-# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -271,7 +255,6 @@ def topicUserList(request):
 # gli utenti iscritti al topic
 # pk identifica il topic
 
-# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -288,7 +271,6 @@ def topicUsers(request, pk):
 
 # aggiungi un commento ad un ticket
 
-# @login_required(login_url='/auth/login/')
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -301,7 +283,6 @@ def commentCreate(request):
 
 # info del topic
 
-# @login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])

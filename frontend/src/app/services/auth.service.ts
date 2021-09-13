@@ -35,10 +35,15 @@ export class AuthService {
     return this.httpClient
       .post<any>(this.baseUrl + '/auth/registration/', data)
       .pipe(
-        tap((res) => {
-          console.log(res);
-          // this.login(data);
-        })
+        tap(
+          (res) => {
+            console.log(res);
+            this.login(data);
+          },
+          (error) => {
+            console.error(error);
+          }
+        )
       );
   }
 
@@ -47,11 +52,14 @@ export class AuthService {
   }
 
   getUser() {
-    return this.httpClient
-      .get<User>(this.baseUrl + '/auth/user/')
-      .subscribe((user) => {
+    return this.httpClient.get<User>(this.baseUrl + '/auth/user/').subscribe(
+      (user) => {
         this.handleAuthentication(user);
-      });
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 
   getGroups() {
