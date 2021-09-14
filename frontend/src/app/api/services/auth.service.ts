@@ -7,11 +7,12 @@ import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-respo
 import { Observable as __Observable } from 'rxjs';
 import { map as __map, filter as __filter } from 'rxjs/operators';
 
+import { Group } from '../models/group';
+import { User } from '../models/user';
 import { Login } from '../models/login';
 import { PasswordChange } from '../models/password-change';
 import { PasswordReset } from '../models/password-reset';
 import { PasswordResetConfirm } from '../models/password-reset-confirm';
-import { AuthUser } from '../models/auth-user';
 import { UserDetails } from '../models/user-details';
 @Injectable({
   providedIn: 'root',
@@ -38,7 +39,14 @@ class AuthService extends __BaseService {
   ) {
     super(config, http);
   }
-  authGroupCreateCreateResponse(): __Observable<__StrictHttpResponse<null>> {
+
+  /**
+   * Create Group (only SuperUser)
+   *
+   * Creation of a new Group (only SuperUser)
+   * @return Created
+   */
+  authGroupCreateCreateResponse(): __Observable<__StrictHttpResponse<Group>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -55,15 +63,29 @@ class AuthService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Group>;
       })
     );
-  }  authGroupCreateCreate(): __Observable<null> {
+  }
+  /**
+   * Create Group (only SuperUser)
+   *
+   * Creation of a new Group (only SuperUser)
+   * @return Created
+   */
+  authGroupCreateCreate(): __Observable<Group> {
     return this.authGroupCreateCreateResponse().pipe(
-      __map(_r => _r.body as null)
+      __map(_r => _r.body as Group)
     );
   }
-  authGroupListListResponse(): __Observable<__StrictHttpResponse<null>> {
+
+  /**
+   * List all Groups
+   *
+   * List of all available groups
+   * @return OK
+   */
+  authGroupListListResponse(): __Observable<__StrictHttpResponse<Array<Group>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -80,19 +102,30 @@ class AuthService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Array<Group>>;
       })
     );
-  }  authGroupListList(): __Observable<null> {
+  }
+  /**
+   * List all Groups
+   *
+   * List of all available groups
+   * @return OK
+   */
+  authGroupListList(): __Observable<Array<Group>> {
     return this.authGroupListListResponse().pipe(
-      __map(_r => _r.body as null)
+      __map(_r => _r.body as Array<Group>)
     );
   }
 
   /**
+   * List all Groups
+   *
+   * List of all available groups
    * @param id undefined
+   * @return OK
    */
-  authGroupUsersReadResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  authGroupUsersReadResponse(id: string): __Observable<__StrictHttpResponse<Array<User>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -110,16 +143,20 @@ class AuthService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Array<User>>;
       })
     );
   }
   /**
+   * List all Groups
+   *
+   * List of all available groups
    * @param id undefined
+   * @return OK
    */
-  authGroupUsersRead(id: string): __Observable<null> {
+  authGroupUsersRead(id: string): __Observable<Array<User>> {
     return this.authGroupUsersReadResponse(id).pipe(
-      __map(_r => _r.body as null)
+      __map(_r => _r.body as Array<User>)
     );
   }
 
@@ -380,13 +417,13 @@ class AuthService extends __BaseService {
   }
 
   /**
-   * Sign In
+   * Create User
    *
    * Registration of a new user
    * @param data undefined
    * @return Created
    */
-  authRegistrationCreateResponse(data: AuthUser): __Observable<__StrictHttpResponse<AuthUser>> {
+  authRegistrationCreateResponse(data: User): __Observable<__StrictHttpResponse<User>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -404,23 +441,30 @@ class AuthService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<AuthUser>;
+        return _r as __StrictHttpResponse<User>;
       })
     );
   }
   /**
-   * Sign In
+   * Create User
    *
    * Registration of a new user
    * @param data undefined
    * @return Created
    */
-  authRegistrationCreate(data: AuthUser): __Observable<AuthUser> {
+  authRegistrationCreate(data: User): __Observable<User> {
     return this.authRegistrationCreateResponse(data).pipe(
-      __map(_r => _r.body as AuthUser)
+      __map(_r => _r.body as User)
     );
   }
-  authUserDetailListResponse(): __Observable<__StrictHttpResponse<null>> {
+
+  /**
+   * Get User Info
+   *
+   * Retrieve all User Information
+   * @return OK
+   */
+  authUserDetailListResponse(): __Observable<__StrictHttpResponse<User>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -437,12 +481,19 @@ class AuthService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<User>;
       })
     );
-  }  authUserDetailList(): __Observable<null> {
+  }
+  /**
+   * Get User Info
+   *
+   * Retrieve all User Information
+   * @return OK
+   */
+  authUserDetailList(): __Observable<User> {
     return this.authUserDetailListResponse().pipe(
-      __map(_r => _r.body as null)
+      __map(_r => _r.body as User)
     );
   }
 

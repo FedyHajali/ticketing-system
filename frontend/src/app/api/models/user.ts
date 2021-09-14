@@ -1,13 +1,10 @@
 /* tslint:disable */
-export interface ApiUser {
+import { Group } from './group';
+export interface User {
   date_joined?: string;
   email?: string;
   first_name?: string;
-
-  /**
-   * The groups this user belongs to. A user will get all permissions granted to each of their groups.
-   */
-  groups?: Array<number>;
+  groups: Array<Group>;
   id?: number;
 
   /**

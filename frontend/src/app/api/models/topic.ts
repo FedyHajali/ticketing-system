@@ -1,10 +1,10 @@
 /* tslint:disable */
-import { ApiGroup } from './api-group';
-import { ApiUser } from './api-user';
+import { Group } from './group';
+import { User } from './user';
 export interface Topic {
   description: string;
-  group: ApiGroup;
+  group: Group;
   id?: number;
   name: string;
-  users: Array<ApiUser>;
+  users: Array<User>;
 }

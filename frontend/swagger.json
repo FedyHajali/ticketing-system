@@ -276,7 +276,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/ApiUser'
+              $ref: '#/definitions/User'
         '404':
           description: Not Found
       tags:
@@ -464,7 +464,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/ApiUser'
+              $ref: '#/definitions/User'
         '404':
           description: Not Found
       tags:
@@ -477,33 +477,50 @@ paths:
   /auth/group-create/:
     post:
       operationId: auth_group-create_create
-      description: ''
+      summary: Create Group (only SuperUser)
+      description: Creation of a new Group (only SuperUser)
       parameters: []
       responses:
         '201':
-          description: ''
+          description: Created
+          schema:
+            $ref: '#/definitions/Group'
+        '400':
+          description: Bad Request
       tags:
         - auth
     parameters: []
   /auth/group-list/:
     get:
       operationId: auth_group-list_list
-      description: ''
+      summary: List all Groups
+      description: List of all available groups
       parameters: []
       responses:
         '200':
-          description: ''
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Group'
       tags:
         - auth
     parameters: []
   /auth/group-users/{id}/:
     get:
       operationId: auth_group-users_read
-      description: ''
+      summary: List all Groups
+      description: List of all available groups
       parameters: []
       responses:
         '200':
-          description: ''
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '404':
+          description: Not Found
       tags:
         - auth
     parameters:
@@ -631,19 +648,19 @@ paths:
   /auth/registration/:
     post:
       operationId: auth_registration_create
-      summary: Sign In
+      summary: Create User
       description: Registration of a new user
       parameters:
         - name: data
           in: body
           required: true
           schema:
-            $ref: '#/definitions/AuthUser'
+            $ref: '#/definitions/User'
       responses:
         '201':
           description: Created
           schema:
-            $ref: '#/definitions/AuthUser'
+            $ref: '#/definitions/User'
         '400':
           description: Bad Request
       tags:
@@ -652,11 +669,16 @@ paths:
   /auth/user-detail/:
     get:
       operationId: auth_user-detail_list
-      description: ''
+      summary: Get User Info
+      description: 'Retrieve all User Information '
       parameters: []
       responses:
         '200':
-          description: ''
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        '400':
+          description: Bad Request
       tags:
         - auth
     parameters: []
@@ -754,7 +776,7 @@ definitions:
         type: string
         format: date-time
         readOnly: true
-  ApiGroup:
+  Group:
     required:
       - name
     type: object
@@ -773,8 +795,9 @@ definitions:
         items:
           type: integer
         uniqueItems: true
-  ApiUser:
+  User:
     required:
+      - groups
       - password
       - username
     type: object
@@ -783,6 +806,10 @@ definitions:
         title: ID
         type: integer
         readOnly: true
+      groups:
+        type: array
+        items:
+          $ref: '#/definitions/Group'
       password:
         title: Password
         type: string
@@ -832,15 +859,6 @@ definitions:
         title: Date joined
         type: string
         format: date-time
-      groups:
-        description: The groups this user belongs to. A user will get all permissions
-          granted to each of their groups.
-        type: array
-        items:
-          description: The groups this user belongs to. A user will get all permissions
-            granted to each of their groups.
-          type: integer
-        uniqueItems: true
       user_permissions:
         description: Specific permissions for this user.
         type: array
@@ -863,9 +881,9 @@ definitions:
       users:
         type: array
         items:
-          $ref: '#/definitions/ApiUser'
+          $ref: '#/definitions/User'
       group:
-        $ref: '#/definitions/ApiGroup'
+        $ref: '#/definitions/Group'
       name:
         title: Name
         type: string
@@ -894,11 +912,11 @@ definitions:
       groups:
         type: array
         items:
-          $ref: '#/definitions/ApiGroup'
+          $ref: '#/definitions/Group'
       receivers:
         type: array
         items:
-          $ref: '#/definitions/ApiUser'
+          $ref: '#/definitions/User'
       topics:
         type: array
         items:
@@ -908,7 +926,7 @@ definitions:
         items:
           $ref: '#/definitions/Comment'
       creator:
-        $ref: '#/definitions/ApiUser'
+        $ref: '#/definitions/User'
       title:
         title: Title
         type: string
@@ -1009,70 +1027,6 @@ definitions:
         title: Token
         type: string
         minLength: 1
-  Group:
-    required:
-      - name
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      name:
-        title: Name
-        type: string
-        maxLength: 150
-        minLength: 1
-      permissions:
-        type: array
-        items:
-          type: integer
-        uniqueItems: true
-  AuthUser:
-    required:
-      - username
-      - password
-      - groups
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      username:
-        title: Username
-        description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
-          only.
-        type: string
-        pattern: ^[\w.@+-]+$
-        maxLength: 150
-        minLength: 1
-      email:
-        title: Email address
-        type: string
-        format: email
-        maxLength: 254
-      first_name:
-        title: First name
-        type: string
-        maxLength: 150
-      last_name:
-        title: Last name
-        type: string
-        maxLength: 150
-      password:
-        title: Password
-        type: string
-        maxLength: 128
-        minLength: 1
-      groups:
-        type: array
-        items:
-          $ref: '#/definitions/Group'
-      is_staff:
-        title: Staff status
-        description: Designates whether the user can log into this admin site.
-        type: boolean
   UserDetails:
     required:
       - username

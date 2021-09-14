@@ -82,7 +82,7 @@
               <br />
               <option
                 *ngFor="let group of Groups"
-                [ngValue]="group['id']"
+                [ngValue]="group.id"
                 (change)="changeGroup($event)"
               >
                 {{ group["name"] }}

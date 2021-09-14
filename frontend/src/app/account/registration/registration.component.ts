@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService, AuthService } from 'src/app/api/services';
-import { AuthUser, Group } from 'src/app/api/models';
+import { User, Group } from 'src/app/api/models';
 
 @Component({
   selector: 'app-registration',
@@ -37,13 +37,20 @@ export class RegistrationComponent implements OnInit {
   }
 
   onSubmit() {
-    const data: AuthUser = {
+    const newGroups: Array<number | undefined> = [];
+
+    this.Groups.filter((group) => {
+      group.id == this.form.controls['groups'].value;
+      newGroups.push(group.id);
+    });
+
+    const data: any = {
       username: this.form.controls['username'].value,
       email: this.form.controls['email'].value,
       password: this.form.controls['password'].value,
       first_name: this.form.controls['first_name'].value,
       last_name: this.form.controls['last_name'].value,
-      groups: this.Groups. this.form.controls['groups'].value,
+      groups: newGroups,
       is_staff: this.form.controls['is_staff'].value,
     };
 
@@ -61,9 +68,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   changeGroup(group: any) {
-    this.Groups.setValue(group.target.value, {
-      onlySelf: true,
-    });
+    console.log(group);
   }
 
   getGroups() {

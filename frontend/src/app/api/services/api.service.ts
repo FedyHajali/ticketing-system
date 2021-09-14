@@ -9,7 +9,7 @@ import { map as __map, filter as __filter } from 'rxjs/operators';
 
 import { Comment } from '../models/comment';
 import { Ticket } from '../models/ticket';
-import { ApiUser } from '../models/api-user';
+import { User } from '../models/user';
 import { Topic } from '../models/topic';
 @Injectable({
   providedIn: 'root',
@@ -530,7 +530,7 @@ class ApiService extends __BaseService {
    * @param id undefined
    * @return OK
    */
-  apiTicketReceiversListReadResponse(id: string): __Observable<__StrictHttpResponse<Array<ApiUser>>> {
+  apiTicketReceiversListReadResponse(id: string): __Observable<__StrictHttpResponse<Array<User>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -548,7 +548,7 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<Array<ApiUser>>;
+        return _r as __StrictHttpResponse<Array<User>>;
       })
     );
   }
@@ -559,9 +559,9 @@ class ApiService extends __BaseService {
    * @param id undefined
    * @return OK
    */
-  apiTicketReceiversListRead(id: string): __Observable<Array<ApiUser>> {
+  apiTicketReceiversListRead(id: string): __Observable<Array<User>> {
     return this.apiTicketReceiversListReadResponse(id).pipe(
-      __map(_r => _r.body as Array<ApiUser>)
+      __map(_r => _r.body as Array<User>)
     );
   }
 
@@ -911,7 +911,7 @@ class ApiService extends __BaseService {
    * @param id undefined
    * @return OK
    */
-  apiTopicUsersReadResponse(id: string): __Observable<__StrictHttpResponse<Array<ApiUser>>> {
+  apiTopicUsersReadResponse(id: string): __Observable<__StrictHttpResponse<Array<User>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -929,7 +929,7 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<Array<ApiUser>>;
+        return _r as __StrictHttpResponse<Array<User>>;
       })
     );
   }
@@ -940,9 +940,9 @@ class ApiService extends __BaseService {
    * @param id undefined
    * @return OK
    */
-  apiTopicUsersRead(id: string): __Observable<Array<ApiUser>> {
+  apiTopicUsersRead(id: string): __Observable<Array<User>> {
     return this.apiTopicUsersReadResponse(id).pipe(
-      __map(_r => _r.body as Array<ApiUser>)
+      __map(_r => _r.body as Array<User>)
     );
   }
 }
