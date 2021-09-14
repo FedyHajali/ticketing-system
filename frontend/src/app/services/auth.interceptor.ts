@@ -15,7 +15,7 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const login = 'auth/login/';
     const registration = 'auth/registration/';
-    const groups = 'auth/groups/';
+    const groups = 'auth/group-list/';
     if (
       req.url.search(login) === -1 &&
       req.url.search(registration) === -1 &&

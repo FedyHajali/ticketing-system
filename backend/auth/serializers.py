@@ -18,7 +18,7 @@ class GroupSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
+class AuthUserSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True)
 
     class Meta:

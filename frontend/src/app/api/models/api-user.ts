@@ -1,5 +1,5 @@
 /* tslint:disable */
-export interface User {
+export interface ApiUser {
   date_joined?: string;
   email?: string;
   first_name?: string;

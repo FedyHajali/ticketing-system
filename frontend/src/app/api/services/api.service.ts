@@ -7,13 +7,17 @@ import { StrictHttpResponse as __StrictHttpResponse } from '../strict-http-respo
 import { Observable as __Observable } from 'rxjs';
 import { map as __map, filter as __filter } from 'rxjs/operators';
 
+import { Comment } from '../models/comment';
 import { Ticket } from '../models/ticket';
+import { ApiUser } from '../models/api-user';
+import { Topic } from '../models/topic';
 @Injectable({
   providedIn: 'root',
 })
 class ApiService extends __BaseService {
   static readonly apiCommentCreateCreatePath = '/api/comment-create/';
   static readonly apiCommentDetailReadPath = '/api/comment-detail/{id}';
+  static readonly apiCommentTicketListReadPath = '/api/comment-ticket-list/{id}';
   static readonly apiTicketCreateCreatePath = '/api/ticket-create/';
   static readonly apiTicketCreatorUpdateUpdatePath = '/api/ticket-creator-update/{id}/';
   static readonly apiTicketDeleteDeletePath = '/api/ticket-delete/{id}/';
@@ -29,9 +33,8 @@ class ApiService extends __BaseService {
   static readonly apiTopicGroupListReadPath = '/api/topic-group-list/{id}';
   static readonly apiTopicNotStaffListListPath = '/api/topic-not-staff-list/';
   static readonly apiTopicUserAddUpdatePath = '/api/topic-user-add/{id}';
-  static readonly apiTopicUserGroupListListPath = '/api/topic-user-group-list/';
+  static readonly apiTopicUserGroupListReadPath = '/api/topic-user-group-list/{id}';
   static readonly apiTopicUserListListPath = '/api/topic-user-list/';
-  static readonly apiTopicUserReadPath = '/api/topic-user/{id}';
   static readonly apiTopicUsersReadPath = '/api/topic-users/{id}/';
 
   constructor(
@@ -40,10 +43,19 @@ class ApiService extends __BaseService {
   ) {
     super(config, http);
   }
-  apiCommentCreateCreateResponse(): __Observable<__StrictHttpResponse<null>> {
+
+  /**
+   * Add comment to ticket
+   *
+   * Add a comment to a ticket
+   * @param data undefined
+   * @return Created
+   */
+  apiCommentCreateCreateResponse(data: Comment): __Observable<__StrictHttpResponse<Comment>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
+    __body = data;
     let req = new HttpRequest<any>(
       'POST',
       this.rootUrl + `/api/comment-create/`,
@@ -57,19 +69,31 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Comment>;
       })
     );
-  }  apiCommentCreateCreate(): __Observable<null> {
-    return this.apiCommentCreateCreateResponse().pipe(
-      __map(_r => _r.body as null)
+  }
+  /**
+   * Add comment to ticket
+   *
+   * Add a comment to a ticket
+   * @param data undefined
+   * @return Created
+   */
+  apiCommentCreateCreate(data: Comment): __Observable<Comment> {
+    return this.apiCommentCreateCreateResponse(data).pipe(
+      __map(_r => _r.body as Comment)
     );
   }
 
   /**
+   * Get comment info
+   *
+   * Retrieve all comment information
    * @param id undefined
+   * @return OK
    */
-  apiCommentDetailReadResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiCommentDetailReadResponse(id: string): __Observable<__StrictHttpResponse<Comment>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -87,16 +111,62 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Comment>;
       })
     );
   }
   /**
+   * Get comment info
+   *
+   * Retrieve all comment information
    * @param id undefined
+   * @return OK
    */
-  apiCommentDetailRead(id: string): __Observable<null> {
+  apiCommentDetailRead(id: string): __Observable<Comment> {
     return this.apiCommentDetailReadResponse(id).pipe(
-      __map(_r => _r.body as null)
+      __map(_r => _r.body as Comment)
+    );
+  }
+
+  /**
+   * List of Comments of a Ticket
+   *
+   * List of Comments of a particular Ticket
+   * @param id undefined
+   * @return OK
+   */
+  apiCommentTicketListReadResponse(id: string): __Observable<__StrictHttpResponse<Array<Comment>>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+
+    let req = new HttpRequest<any>(
+      'GET',
+      this.rootUrl + `/api/comment-ticket-list/${encodeURIComponent(String(id))}`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<Array<Comment>>;
+      })
+    );
+  }
+  /**
+   * List of Comments of a Ticket
+   *
+   * List of Comments of a particular Ticket
+   * @param id undefined
+   * @return OK
+   */
+  apiCommentTicketListRead(id: string): __Observable<Array<Comment>> {
+    return this.apiCommentTicketListReadResponse(id).pipe(
+      __map(_r => _r.body as Array<Comment>)
     );
   }
 
@@ -105,7 +175,7 @@ class ApiService extends __BaseService {
    *
    * Creation of a new Ticket
    * @param data undefined
-   * @return OK
+   * @return Created
    */
   apiTicketCreateCreateResponse(data: Ticket): __Observable<__StrictHttpResponse<Ticket>> {
     let __params = this.newParams();
@@ -134,7 +204,7 @@ class ApiService extends __BaseService {
    *
    * Creation of a new Ticket
    * @param data undefined
-   * @return OK
+   * @return Created
    */
   apiTicketCreateCreate(data: Ticket): __Observable<Ticket> {
     return this.apiTicketCreateCreateResponse(data).pipe(
@@ -146,16 +216,23 @@ class ApiService extends __BaseService {
    * Ticket status update for Creator
    *
    * Change of ticket status for creator who can only put Closed or Open
-   * @param id undefined
+   * @param params The `ApiService.ApiTicketCreatorUpdateUpdateParams` containing the following parameters:
+   *
+   * - `id`:
+   *
+   * - `data`:
+   *
+   * @return OK
    */
-  apiTicketCreatorUpdateUpdateResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiTicketCreatorUpdateUpdateResponse(params: ApiService.ApiTicketCreatorUpdateUpdateParams): __Observable<__StrictHttpResponse<Ticket>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
+    __body = params.data;
     let req = new HttpRequest<any>(
       'PUT',
-      this.rootUrl + `/api/ticket-creator-update/${encodeURIComponent(String(id))}/`,
+      this.rootUrl + `/api/ticket-creator-update/${encodeURIComponent(String(params.id))}/`,
       __body,
       {
         headers: __headers,
@@ -166,7 +243,7 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Ticket>;
       })
     );
   }
@@ -174,15 +251,24 @@ class ApiService extends __BaseService {
    * Ticket status update for Creator
    *
    * Change of ticket status for creator who can only put Closed or Open
-   * @param id undefined
+   * @param params The `ApiService.ApiTicketCreatorUpdateUpdateParams` containing the following parameters:
+   *
+   * - `id`:
+   *
+   * - `data`:
+   *
+   * @return OK
    */
-  apiTicketCreatorUpdateUpdate(id: string): __Observable<null> {
-    return this.apiTicketCreatorUpdateUpdateResponse(id).pipe(
-      __map(_r => _r.body as null)
+  apiTicketCreatorUpdateUpdate(params: ApiService.ApiTicketCreatorUpdateUpdateParams): __Observable<Ticket> {
+    return this.apiTicketCreatorUpdateUpdateResponse(params).pipe(
+      __map(_r => _r.body as Ticket)
     );
   }
 
   /**
+   * Delete of a ticket
+   *
+   * Delete of a ticket
    * @param id undefined
    */
   apiTicketDeleteDeleteResponse(id: string): __Observable<__StrictHttpResponse<null>> {
@@ -208,6 +294,9 @@ class ApiService extends __BaseService {
     );
   }
   /**
+   * Delete of a ticket
+   *
+   * Delete of a ticket
    * @param id undefined
    */
   apiTicketDeleteDelete(id: string): __Observable<null> {
@@ -221,8 +310,9 @@ class ApiService extends __BaseService {
    *
    * Returns all information of a ticket
    * @param id undefined
+   * @return OK
    */
-  apiTicketDetailReadResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiTicketDetailReadResponse(id: string): __Observable<__StrictHttpResponse<Ticket>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -240,7 +330,7 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Ticket>;
       })
     );
   }
@@ -249,10 +339,11 @@ class ApiService extends __BaseService {
    *
    * Returns all information of a ticket
    * @param id undefined
+   * @return OK
    */
-  apiTicketDetailRead(id: string): __Observable<null> {
+  apiTicketDetailRead(id: string): __Observable<Ticket> {
     return this.apiTicketDetailReadResponse(id).pipe(
-      __map(_r => _r.body as null)
+      __map(_r => _r.body as Ticket)
     );
   }
 
@@ -261,8 +352,9 @@ class ApiService extends __BaseService {
    *
    * List of tickets for which the active user is a creator
    * @param id undefined
+   * @return OK
    */
-  apiTicketListCreatorReadResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiTicketListCreatorReadResponse(id: string): __Observable<__StrictHttpResponse<Array<Ticket>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -280,7 +372,7 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Array<Ticket>>;
       })
     );
   }
@@ -289,10 +381,11 @@ class ApiService extends __BaseService {
    *
    * List of tickets for which the active user is a creator
    * @param id undefined
+   * @return OK
    */
-  apiTicketListCreatorRead(id: string): __Observable<null> {
+  apiTicketListCreatorRead(id: string): __Observable<Array<Ticket>> {
     return this.apiTicketListCreatorReadResponse(id).pipe(
-      __map(_r => _r.body as null)
+      __map(_r => _r.body as Array<Ticket>)
     );
   }
 
@@ -301,8 +394,9 @@ class ApiService extends __BaseService {
    *
    * List of tickets for a specific group
    * @param id undefined
+   * @return OK
    */
-  apiTicketListGroupReadResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiTicketListGroupReadResponse(id: string): __Observable<__StrictHttpResponse<Array<Ticket>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -320,7 +414,7 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Array<Ticket>>;
       })
     );
   }
@@ -329,10 +423,11 @@ class ApiService extends __BaseService {
    *
    * List of tickets for a specific group
    * @param id undefined
+   * @return OK
    */
-  apiTicketListGroupRead(id: string): __Observable<null> {
+  apiTicketListGroupRead(id: string): __Observable<Array<Ticket>> {
     return this.apiTicketListGroupReadResponse(id).pipe(
-      __map(_r => _r.body as null)
+      __map(_r => _r.body as Array<Ticket>)
     );
   }
 
@@ -342,7 +437,7 @@ class ApiService extends __BaseService {
    * List of tickets for which the active user is a receiver
    * @return OK
    */
-  apiTicketListListResponse(): __Observable<__StrictHttpResponse<Ticket>> {
+  apiTicketListListResponse(): __Observable<__StrictHttpResponse<Array<Ticket>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -359,7 +454,7 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<Ticket>;
+        return _r as __StrictHttpResponse<Array<Ticket>>;
       })
     );
   }
@@ -369,23 +464,33 @@ class ApiService extends __BaseService {
    * List of tickets for which the active user is a receiver
    * @return OK
    */
-  apiTicketListList(): __Observable<Ticket> {
+  apiTicketListList(): __Observable<Array<Ticket>> {
     return this.apiTicketListListResponse().pipe(
-      __map(_r => _r.body as Ticket)
+      __map(_r => _r.body as Array<Ticket>)
     );
   }
 
   /**
-   * @param id undefined
+   * Ticket status update for Receiver
+   *
+   * Change of ticket status for receiver who can only put Pending or Resolved
+   * @param params The `ApiService.ApiTicketReceiverUpdateUpdateParams` containing the following parameters:
+   *
+   * - `id`:
+   *
+   * - `data`:
+   *
+   * @return OK
    */
-  apiTicketReceiverUpdateUpdateResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiTicketReceiverUpdateUpdateResponse(params: ApiService.ApiTicketReceiverUpdateUpdateParams): __Observable<__StrictHttpResponse<Ticket>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
+    __body = params.data;
     let req = new HttpRequest<any>(
       'PUT',
-      this.rootUrl + `/api/ticket-receiver-update/${encodeURIComponent(String(id))}/`,
+      this.rootUrl + `/api/ticket-receiver-update/${encodeURIComponent(String(params.id))}/`,
       __body,
       {
         headers: __headers,
@@ -396,16 +501,25 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Ticket>;
       })
     );
   }
   /**
-   * @param id undefined
+   * Ticket status update for Receiver
+   *
+   * Change of ticket status for receiver who can only put Pending or Resolved
+   * @param params The `ApiService.ApiTicketReceiverUpdateUpdateParams` containing the following parameters:
+   *
+   * - `id`:
+   *
+   * - `data`:
+   *
+   * @return OK
    */
-  apiTicketReceiverUpdateUpdate(id: string): __Observable<null> {
-    return this.apiTicketReceiverUpdateUpdateResponse(id).pipe(
-      __map(_r => _r.body as null)
+  apiTicketReceiverUpdateUpdate(params: ApiService.ApiTicketReceiverUpdateUpdateParams): __Observable<Ticket> {
+    return this.apiTicketReceiverUpdateUpdateResponse(params).pipe(
+      __map(_r => _r.body as Ticket)
     );
   }
 
@@ -414,8 +528,9 @@ class ApiService extends __BaseService {
    *
    * List of ticket receivers
    * @param id undefined
+   * @return OK
    */
-  apiTicketReceiversListReadResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiTicketReceiversListReadResponse(id: string): __Observable<__StrictHttpResponse<Array<ApiUser>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -433,7 +548,7 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Array<ApiUser>>;
       })
     );
   }
@@ -442,24 +557,35 @@ class ApiService extends __BaseService {
    *
    * List of ticket receivers
    * @param id undefined
+   * @return OK
    */
-  apiTicketReceiversListRead(id: string): __Observable<null> {
+  apiTicketReceiversListRead(id: string): __Observable<Array<ApiUser>> {
     return this.apiTicketReceiversListReadResponse(id).pipe(
-      __map(_r => _r.body as null)
+      __map(_r => _r.body as Array<ApiUser>)
     );
   }
 
   /**
-   * @param id undefined
+   * Ticket status update for is_staff user
+   *
+   * Change of ticket status for is_staff user who can put every state
+   * @param params The `ApiService.ApiTicketStaffUpdateUpdateParams` containing the following parameters:
+   *
+   * - `id`:
+   *
+   * - `data`:
+   *
+   * @return OK
    */
-  apiTicketStaffUpdateUpdateResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiTicketStaffUpdateUpdateResponse(params: ApiService.ApiTicketStaffUpdateUpdateParams): __Observable<__StrictHttpResponse<Ticket>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
+    __body = params.data;
     let req = new HttpRequest<any>(
       'PUT',
-      this.rootUrl + `/api/ticket-staff-update/${encodeURIComponent(String(id))}/`,
+      this.rootUrl + `/api/ticket-staff-update/${encodeURIComponent(String(params.id))}/`,
       __body,
       {
         headers: __headers,
@@ -470,22 +596,40 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Ticket>;
       })
     );
   }
   /**
-   * @param id undefined
+   * Ticket status update for is_staff user
+   *
+   * Change of ticket status for is_staff user who can put every state
+   * @param params The `ApiService.ApiTicketStaffUpdateUpdateParams` containing the following parameters:
+   *
+   * - `id`:
+   *
+   * - `data`:
+   *
+   * @return OK
    */
-  apiTicketStaffUpdateUpdate(id: string): __Observable<null> {
-    return this.apiTicketStaffUpdateUpdateResponse(id).pipe(
-      __map(_r => _r.body as null)
+  apiTicketStaffUpdateUpdate(params: ApiService.ApiTicketStaffUpdateUpdateParams): __Observable<Ticket> {
+    return this.apiTicketStaffUpdateUpdateResponse(params).pipe(
+      __map(_r => _r.body as Ticket)
     );
   }
-  apiTopicCreateCreateResponse(): __Observable<__StrictHttpResponse<null>> {
+
+  /**
+   * Creation of a topic
+   *
+   * Creation of a new topic
+   * @param data undefined
+   * @return Created
+   */
+  apiTopicCreateCreateResponse(data: Topic): __Observable<__StrictHttpResponse<Topic>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
+    __body = data;
     let req = new HttpRequest<any>(
       'POST',
       this.rootUrl + `/api/topic-create/`,
@@ -499,19 +643,31 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Topic>;
       })
     );
-  }  apiTopicCreateCreate(): __Observable<null> {
-    return this.apiTopicCreateCreateResponse().pipe(
-      __map(_r => _r.body as null)
+  }
+  /**
+   * Creation of a topic
+   *
+   * Creation of a new topic
+   * @param data undefined
+   * @return Created
+   */
+  apiTopicCreateCreate(data: Topic): __Observable<Topic> {
+    return this.apiTopicCreateCreateResponse(data).pipe(
+      __map(_r => _r.body as Topic)
     );
   }
 
   /**
+   * Get topic Detail
+   *
+   * Retrieve all topic information
    * @param id undefined
+   * @return OK
    */
-  apiTopicDetailReadResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiTopicDetailReadResponse(id: string): __Observable<__StrictHttpResponse<Topic>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -529,23 +685,31 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Topic>;
       })
     );
   }
   /**
+   * Get topic Detail
+   *
+   * Retrieve all topic information
    * @param id undefined
+   * @return OK
    */
-  apiTopicDetailRead(id: string): __Observable<null> {
+  apiTopicDetailRead(id: string): __Observable<Topic> {
     return this.apiTopicDetailReadResponse(id).pipe(
-      __map(_r => _r.body as null)
+      __map(_r => _r.body as Topic)
     );
   }
 
   /**
+   * List of topics of a group
+   *
+   * List of topics of a particular group
    * @param id undefined
+   * @return OK
    */
-  apiTopicGroupListReadResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiTopicGroupListReadResponse(id: string): __Observable<__StrictHttpResponse<Array<Topic>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -563,19 +727,30 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Array<Topic>>;
       })
     );
   }
   /**
+   * List of topics of a group
+   *
+   * List of topics of a particular group
    * @param id undefined
+   * @return OK
    */
-  apiTopicGroupListRead(id: string): __Observable<null> {
+  apiTopicGroupListRead(id: string): __Observable<Array<Topic>> {
     return this.apiTopicGroupListReadResponse(id).pipe(
-      __map(_r => _r.body as null)
+      __map(_r => _r.body as Array<Topic>)
     );
   }
-  apiTopicNotStaffListListResponse(): __Observable<__StrictHttpResponse<null>> {
+
+  /**
+   * List of topics is_staff user is not subscribed
+   *
+   * List of topics to which a staff user is not subscribed
+   * @return OK
+   */
+  apiTopicNotStaffListListResponse(): __Observable<__StrictHttpResponse<Array<Topic>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -592,16 +767,26 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Array<Topic>>;
       })
     );
-  }  apiTopicNotStaffListList(): __Observable<null> {
+  }
+  /**
+   * List of topics is_staff user is not subscribed
+   *
+   * List of topics to which a staff user is not subscribed
+   * @return OK
+   */
+  apiTopicNotStaffListList(): __Observable<Array<Topic>> {
     return this.apiTopicNotStaffListListResponse().pipe(
-      __map(_r => _r.body as null)
+      __map(_r => _r.body as Array<Topic>)
     );
   }
 
   /**
+   * Add user to Topic
+   *
+   * Subscribe user to selected topic
    * @param id undefined
    */
   apiTopicUserAddUpdateResponse(id: string): __Observable<__StrictHttpResponse<null>> {
@@ -627,6 +812,9 @@ class ApiService extends __BaseService {
     );
   }
   /**
+   * Add user to Topic
+   *
+   * Subscribe user to selected topic
    * @param id undefined
    */
   apiTopicUserAddUpdate(id: string): __Observable<null> {
@@ -634,13 +822,22 @@ class ApiService extends __BaseService {
       __map(_r => _r.body as null)
     );
   }
-  apiTopicUserGroupListListResponse(): __Observable<__StrictHttpResponse<null>> {
+
+  /**
+   * List of topics of a group user is subscribed
+   *
+   * List of topics of a group to which the active user is subscribed
+   * @param id undefined
+   * @return OK
+   */
+  apiTopicUserGroupListReadResponse(id: string): __Observable<__StrictHttpResponse<Array<Topic>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
+
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/api/topic-user-group-list/`,
+      this.rootUrl + `/api/topic-user-group-list/${encodeURIComponent(String(id))}`,
       __body,
       {
         headers: __headers,
@@ -651,15 +848,30 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Array<Topic>>;
       })
     );
-  }  apiTopicUserGroupListList(): __Observable<null> {
-    return this.apiTopicUserGroupListListResponse().pipe(
-      __map(_r => _r.body as null)
+  }
+  /**
+   * List of topics of a group user is subscribed
+   *
+   * List of topics of a group to which the active user is subscribed
+   * @param id undefined
+   * @return OK
+   */
+  apiTopicUserGroupListRead(id: string): __Observable<Array<Topic>> {
+    return this.apiTopicUserGroupListReadResponse(id).pipe(
+      __map(_r => _r.body as Array<Topic>)
     );
   }
-  apiTopicUserListListResponse(): __Observable<__StrictHttpResponse<null>> {
+
+  /**
+   * List of all topics of the groups to which active user belongs
+   *
+   * List of all topics of the groups to which active user belongs
+   * @return OK
+   */
+  apiTopicUserListListResponse(): __Observable<__StrictHttpResponse<Array<Topic>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -676,53 +888,30 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Array<Topic>>;
       })
     );
-  }  apiTopicUserListList(): __Observable<null> {
+  }
+  /**
+   * List of all topics of the groups to which active user belongs
+   *
+   * List of all topics of the groups to which active user belongs
+   * @return OK
+   */
+  apiTopicUserListList(): __Observable<Array<Topic>> {
     return this.apiTopicUserListListResponse().pipe(
-      __map(_r => _r.body as null)
+      __map(_r => _r.body as Array<Topic>)
     );
   }
 
   /**
+   * List users subscribed to the topic
+   *
+   * List of users subscribed to the topic
    * @param id undefined
+   * @return OK
    */
-  apiTopicUserReadResponse(id: string): __Observable<__StrictHttpResponse<null>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/api/topic-user/${encodeURIComponent(String(id))}`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
-      })
-    );
-  }
-  /**
-   * @param id undefined
-   */
-  apiTopicUserRead(id: string): __Observable<null> {
-    return this.apiTopicUserReadResponse(id).pipe(
-      __map(_r => _r.body as null)
-    );
-  }
-
-  /**
-   * @param id undefined
-   */
-  apiTopicUsersReadResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiTopicUsersReadResponse(id: string): __Observable<__StrictHttpResponse<Array<ApiUser>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
@@ -740,21 +929,49 @@ class ApiService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<Array<ApiUser>>;
       })
     );
   }
   /**
+   * List users subscribed to the topic
+   *
+   * List of users subscribed to the topic
    * @param id undefined
+   * @return OK
    */
-  apiTopicUsersRead(id: string): __Observable<null> {
+  apiTopicUsersRead(id: string): __Observable<Array<ApiUser>> {
     return this.apiTopicUsersReadResponse(id).pipe(
-      __map(_r => _r.body as null)
+      __map(_r => _r.body as Array<ApiUser>)
     );
   }
 }
 
 module ApiService {
+
+  /**
+   * Parameters for apiTicketCreatorUpdateUpdate
+   */
+  export interface ApiTicketCreatorUpdateUpdateParams {
+    id: string;
+    data: Ticket;
+  }
+
+  /**
+   * Parameters for apiTicketReceiverUpdateUpdate
+   */
+  export interface ApiTicketReceiverUpdateUpdateParams {
+    id: string;
+    data: Ticket;
+  }
+
+  /**
+   * Parameters for apiTicketStaffUpdateUpdate
+   */
+  export interface ApiTicketStaffUpdateUpdateParams {
+    id: string;
+    data: Ticket;
+  }
 }
 
 export { ApiService }

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { User } from 'src/app/models/User';
 import { ApiService, AuthService } from 'src/app/api/services';
+import { AuthUser, Group } from 'src/app/api/models';
 
 @Component({
   selector: 'app-registration',
@@ -10,7 +10,7 @@ import { ApiService, AuthService } from 'src/app/api/services';
   styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent implements OnInit {
-  Groups: any = [];
+  Groups: Group[] = [];
 
   form = this.fb.group({
     username: '',
@@ -37,43 +37,28 @@ export class RegistrationComponent implements OnInit {
   }
 
   onSubmit() {
-    const data: User = {
+    const data: AuthUser = {
       username: this.form.controls['username'].value,
       email: this.form.controls['email'].value,
       password: this.form.controls['password'].value,
       first_name: this.form.controls['first_name'].value,
       last_name: this.form.controls['last_name'].value,
-      groups: this.form.controls['groups'].value,
+      groups: this.Groups. this.form.controls['groups'].value,
       is_staff: this.form.controls['is_staff'].value,
     };
 
     console.log(data);
 
-    this.auth.authRegistrationCreate().subscribe(
+    this.auth.authRegistrationCreate(data).subscribe(
       (response) => {
+        console.log(response);
         this.router.navigate(['/login']);
       },
       (error) => {
         console.error(error);
       }
     );
-
   }
-
-  // register(data: any) {
-  //   return this.httpClient
-  //     .post<any>(this.baseUrl + '/auth/registration/', data)
-  //     .pipe(
-  //       tap(
-  //         (res) => {
-  //           console.log(res);
-  //         },
-  //         (error) => {
-  //           console.error(error);
-  //         }
-  //       )
-  //     );
-  // }
 
   changeGroup(group: any) {
     this.Groups.setValue(group.target.value, {

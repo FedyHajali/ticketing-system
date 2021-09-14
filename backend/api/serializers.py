@@ -3,13 +3,13 @@ from rest_framework import serializers
 from .models import Comment, Ticket, Topic
 
 
-class GroupSerializer(serializers.ModelSerializer):
+class ApiGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
+class ApiUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
@@ -28,8 +28,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class TopicSerializer(serializers.ModelSerializer):
-    users = UserSerializer(many=True)
-    group = GroupSerializer()
+    users = ApiUserSerializer(many=True)
+    group = ApiGroupSerializer()
 
     class Meta:
         model = Topic
@@ -44,11 +44,11 @@ class TopicNameSerializer(serializers.ModelSerializer):
 
 
 class TicketSerializer(serializers.ModelSerializer):
-    groups = GroupSerializer(many=True)
-    receivers = UserSerializer(many=True)
+    groups = ApiGroupSerializer(many=True)
+    receivers = ApiUserSerializer(many=True)
     topics = TopicSerializer(many=True)
     comments = CommentSerializer(many=True)
-    creator = UserSerializer()
+    creator = ApiUserSerializer()
 
     class Meta:
         model = Ticket

@@ -1,16 +1,17 @@
 /* tslint:disable */
-import { User } from './user';
-import { Group } from './group';
+import { Comment } from './comment';
+import { ApiUser } from './api-user';
+import { ApiGroup } from './api-group';
 import { Topic } from './topic';
 export interface Ticket {
-  comments?: Array<number>;
+  comments: Array<Comment>;
   content: string;
   created_at?: string;
-  creator: User;
+  creator: ApiUser;
   expiration: string;
-  groups: Array<Group>;
+  groups: Array<ApiGroup>;
   id?: number;
-  receivers: Array<User>;
+  receivers: Array<ApiUser>;
   status?: 'OP' | 'CL' | 'PE' | 'RE' | 'EX';
   title: string;
   topics: Array<Topic>;

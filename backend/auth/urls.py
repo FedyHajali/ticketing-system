@@ -4,14 +4,15 @@ from auth import views
 
 urlpatterns = [
     path('', include('rest_auth.urls')),
-    path('registration/', views.registration, name='registration'),
-    path('group-users/<str:pk>/', views.groupUsers, name="group-detail"),
-    #User
-    path('user-detail/<int:pk>', views.userDetail, name="user-detail"),
 
-     #Group
-    path('group-create/', views.groupCreate, name="group-create"),
+    # User
+    path('registration/', views.registration, name='registration'),
+    path('user-detail/', views.userDetail, name="user-detail"),
+
+    # Group
     path('group-list/', views.groupList, name="group-list"),
+    path('group-create/', views.groupCreate, name="group-create"),
+    path('group-users/<int:pk>/', views.groupUsers, name="group-users"),
 
     # rest_auth built-in API
 

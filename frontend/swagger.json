@@ -29,7 +29,12 @@ paths:
       operationId: api_comment-create_create
       summary: Add comment to ticket
       description: Add a comment to a ticket
-      parameters: []
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Comment'
       responses:
         '201':
           description: Created
@@ -109,7 +114,12 @@ paths:
       summary: Ticket status update for Creator
       description: Change of ticket status for creator who can only put Closed or
         Open
-      parameters: []
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Ticket'
       responses:
         '200':
           description: OK
@@ -232,7 +242,12 @@ paths:
       summary: Ticket status update for Receiver
       description: Change of ticket status for receiver who can only put Pending or
         Resolved
-      parameters: []
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Ticket'
       responses:
         '200':
           description: OK
@@ -261,7 +276,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/User'
+              $ref: '#/definitions/ApiUser'
         '404':
           description: Not Found
       tags:
@@ -276,7 +291,12 @@ paths:
       operationId: api_ticket-staff-update_update
       summary: Ticket status update for is_staff user
       description: Change of ticket status for is_staff user who can put every state
-      parameters: []
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Ticket'
       responses:
         '200':
           description: OK
@@ -298,7 +318,12 @@ paths:
       operationId: api_topic-create_create
       summary: Creation of a topic
       description: Creation of a new topic
-      parameters: []
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Topic'
       responses:
         '201':
           description: Created
@@ -351,9 +376,9 @@ paths:
         in: path
         required: true
         type: string
-  /api/topic-not-staff-list/{id}:
+  /api/topic-not-staff-list/:
     get:
-      operationId: api_topic-not-staff-list_read
+      operationId: api_topic-not-staff-list_list
       summary: List of topics is_staff user is not subscribed
       description: List of topics to which a staff user is not subscribed
       parameters: []
@@ -368,11 +393,7 @@ paths:
           description: Not Found
       tags:
         - api
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
+    parameters: []
   /api/topic-user-add/{id}:
     put:
       operationId: api_topic-user-add_update
@@ -443,7 +464,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/User'
+              $ref: '#/definitions/ApiUser'
         '404':
           description: Not Found
       tags:
@@ -610,17 +631,27 @@ paths:
   /auth/registration/:
     post:
       operationId: auth_registration_create
-      description: ''
-      parameters: []
+      summary: Sign In
+      description: Registration of a new user
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AuthUser'
       responses:
         '201':
-          description: ''
+          description: Created
+          schema:
+            $ref: '#/definitions/AuthUser'
+        '400':
+          description: Bad Request
       tags:
         - auth
     parameters: []
-  /auth/user-detail/{id}:
+  /auth/user-detail/:
     get:
-      operationId: auth_user-detail_read
+      operationId: auth_user-detail_list
       description: ''
       parameters: []
       responses:
@@ -628,11 +659,7 @@ paths:
           description: ''
       tags:
         - auth
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
+    parameters: []
   /auth/user/:
     get:
       operationId: auth_user_read
@@ -727,7 +754,7 @@ definitions:
         type: string
         format: date-time
         readOnly: true
-  Group:
+  ApiGroup:
     required:
       - name
     type: object
@@ -746,7 +773,7 @@ definitions:
         items:
           type: integer
         uniqueItems: true
-  User:
+  ApiUser:
     required:
       - password
       - username
@@ -836,9 +863,9 @@ definitions:
       users:
         type: array
         items:
-          $ref: '#/definitions/User'
+          $ref: '#/definitions/ApiUser'
       group:
-        $ref: '#/definitions/Group'
+        $ref: '#/definitions/ApiGroup'
       name:
         title: Name
         type: string
@@ -867,11 +894,11 @@ definitions:
       groups:
         type: array
         items:
-          $ref: '#/definitions/Group'
+          $ref: '#/definitions/ApiGroup'
       receivers:
         type: array
         items:
-          $ref: '#/definitions/User'
+          $ref: '#/definitions/ApiUser'
       topics:
         type: array
         items:
@@ -881,7 +908,7 @@ definitions:
         items:
           $ref: '#/definitions/Comment'
       creator:
-        $ref: '#/definitions/User'
+        $ref: '#/definitions/ApiUser'
       title:
         title: Title
         type: string
@@ -982,6 +1009,70 @@ definitions:
         title: Token
         type: string
         minLength: 1
+  Group:
+    required:
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 150
+        minLength: 1
+      permissions:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+  AuthUser:
+    required:
+      - username
+      - password
+      - groups
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      username:
+        title: Username
+        description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+          only.
+        type: string
+        pattern: ^[\w.@+-]+$
+        maxLength: 150
+        minLength: 1
+      email:
+        title: Email address
+        type: string
+        format: email
+        maxLength: 254
+      first_name:
+        title: First name
+        type: string
+        maxLength: 150
+      last_name:
+        title: Last name
+        type: string
+        maxLength: 150
+      password:
+        title: Password
+        type: string
+        maxLength: 128
+        minLength: 1
+      groups:
+        type: array
+        items:
+          $ref: '#/definitions/Group'
+      is_staff:
+        title: Staff status
+        description: Designates whether the user can log into this admin site.
+        type: boolean
   UserDetails:
     required:
       - username

@@ -11,6 +11,7 @@ import { Login } from '../models/login';
 import { PasswordChange } from '../models/password-change';
 import { PasswordReset } from '../models/password-reset';
 import { PasswordResetConfirm } from '../models/password-reset-confirm';
+import { AuthUser } from '../models/auth-user';
 import { UserDetails } from '../models/user-details';
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,7 @@ class AuthService extends __BaseService {
   static readonly authPasswordResetCreatePath = '/auth/password/reset/';
   static readonly authPasswordResetConfirmCreatePath = '/auth/password/reset/confirm/';
   static readonly authRegistrationCreatePath = '/auth/registration/';
-  static readonly authUserDetailListPath = '/auth/user-detail';
+  static readonly authUserDetailListPath = '/auth/user-detail/';
   static readonly authUserReadPath = '/auth/user/';
   static readonly authUserUpdatePath = '/auth/user/';
   static readonly authUserPartialUpdatePath = '/auth/user/';
@@ -377,10 +378,19 @@ class AuthService extends __BaseService {
       __map(_r => _r.body as PasswordResetConfirm)
     );
   }
-  authRegistrationCreateResponse(): __Observable<__StrictHttpResponse<null>> {
+
+  /**
+   * Sign In
+   *
+   * Registration of a new user
+   * @param data undefined
+   * @return Created
+   */
+  authRegistrationCreateResponse(data: AuthUser): __Observable<__StrictHttpResponse<AuthUser>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
+    __body = data;
     let req = new HttpRequest<any>(
       'POST',
       this.rootUrl + `/auth/registration/`,
@@ -394,12 +404,20 @@ class AuthService extends __BaseService {
     return this.http.request<any>(req).pipe(
       __filter(_r => _r instanceof HttpResponse),
       __map((_r) => {
-        return _r as __StrictHttpResponse<null>;
+        return _r as __StrictHttpResponse<AuthUser>;
       })
     );
-  }  authRegistrationCreate(): __Observable<null> {
-    return this.authRegistrationCreateResponse().pipe(
-      __map(_r => _r.body as null)
+  }
+  /**
+   * Sign In
+   *
+   * Registration of a new user
+   * @param data undefined
+   * @return Created
+   */
+  authRegistrationCreate(data: AuthUser): __Observable<AuthUser> {
+    return this.authRegistrationCreateResponse(data).pipe(
+      __map(_r => _r.body as AuthUser)
     );
   }
   authUserDetailListResponse(): __Observable<__StrictHttpResponse<null>> {
@@ -408,7 +426,7 @@ class AuthService extends __BaseService {
     let __body: any = null;
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/auth/user-detail`,
+      this.rootUrl + `/auth/user-detail/`,
       __body,
       {
         headers: __headers,
