@@ -18,38 +18,26 @@ from rest_framework import status
     method="get",
     operation_description='List of tickets for which the active user is a receiver',
     operation_summary='Ticket list received by the active user',
-    responses={200: openapi.Response('OK', TicketSerializer(many=True)),
-               404: openapi.Response('Not Found')})
+    responses={200: openapi.Response('OK', TicketSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
 def ticketListReceiver(request):
     tickets = Ticket.objects.filter(receivers=request.user)
-    if tickets.count() == 0:
-        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
-
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-test_param = openapi.Parameter('creator_id', openapi.IN_PATH,
-                               description="ID of Ticket Creator", type=openapi.TYPE_NUMBER)
 
 
 @swagger_auto_schema(
     method="get",
     operation_description='List of tickets for which the active user is a creator',
     operation_summary='Ticket list created by the active user',
-    responses={200: openapi.Response('OK', TicketSerializer(many=True)),
-               404: openapi.Response('Not Found')})
+    responses={200: openapi.Response('OK', TicketSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
 def ticketListCreator(request, pk):
     tickets = Ticket.objects.filter(creator=pk)
-    if tickets.count() == 0:
-        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
-
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -58,16 +46,12 @@ def ticketListCreator(request, pk):
     method="get",
     operation_description='List of tickets for a specific group',
     operation_summary='Ticket list for a specific group',
-    responses={200: openapi.Response('OK', TicketSerializer(many=True)),
-               404: openapi.Response('Not Found')})
+    responses={200: openapi.Response('OK', TicketSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
 def ticketListGroup(request, pk):
     tickets = Ticket.objects.filter(groups__id=pk)
-    if tickets.count() == 0:
-        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
-
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -189,10 +173,6 @@ def ticketReceiverUpdate(request, pk):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# TODO
-# lo staff può mettere in qualsiasi stato, per comodità.. però tranne expired, che dipende dalla data
-# nel caso, per uno dello staff sarebbe meglio cambiare la data
-# pk identifica il ticket
 @swagger_auto_schema(
     method="put",
     operation_description='Change of ticket status for is_staff user who can put every state',
@@ -268,16 +248,12 @@ def topicDetail(request, pk):
     method="get",
     operation_description='List of topics of a particular group ',
     operation_summary='List of topics of a group',
-    responses={200: openapi.Response('OK', TopicSerializer(many=True)),
-               404: openapi.Response('Not Found')})
+    responses={200: openapi.Response('OK', TopicSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
 def topicGroupList(request, pk):
-    topics = Topic.objects.filter(group__name=pk)
-    if topics.count() == 0:
-        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
-
+    topics = Topic.objects.filter(group=pk)
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -290,16 +266,12 @@ def topicGroupList(request, pk):
     method="get",
     operation_description='List of topics of a group to which the active user is subscribed',
     operation_summary='List of topics of a group user is subscribed',
-    responses={200: openapi.Response('OK', TopicSerializer(many=True)),
-               404: openapi.Response('Not Found')})
+    responses={200: openapi.Response('OK', TopicSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
 def topicsUserGroupList(request, pk):
     topics = Topic.objects.filter(group=pk, users=request.user.id)
-    if topics.count() == 0:
-        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
-
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -308,38 +280,29 @@ def topicsUserGroupList(request, pk):
     method="get",
     operation_description='List of topics to which a staff user is not subscribed',
     operation_summary='List of topics is_staff user is not subscribed',
-    responses={200: openapi.Response('OK', TopicSerializer(many=True)),
-               404: openapi.Response('Not Found')})
+    responses={200: openapi.Response('OK', TopicSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
 def topicNotStaffList(request):
     topics = Topic.objects.exclude(
         Topic.objects.filter(users_id=request.user.id))
-    if topics.count() == 0:
-        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# TODO
-# questa non va
 @swagger_auto_schema(
     method="get",
-    operation_description='List of all topics of the groups to which active user belongs',
-    operation_summary='List of all topics of the groups to which active user belongs',
-    responses={200: openapi.Response('OK', TopicSerializer(many=True)),
-               404: openapi.Response('Not Found')})
+    operation_description='List of all topics of all groups to which active user belongs',
+    operation_summary='List of all topics of all groups to which active user belongs',
+    responses={200: openapi.Response('OK', TopicSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
 def topicUserList(request):
     groups = request.user.groups
     topics = Topic.objects.filter(group__in=groups.all())
-    if topics.count() == 0:
-        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
-
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 
@@ -355,7 +318,7 @@ def topicUserList(request):
 @permission_classes([IsAuthenticated, ])
 def topicUsers(request, pk):
     try:
-        topic = Topic.objects.get(id=pk)  # oppure name=
+        topic = Topic.objects.get(id=pk)  
     except Topic.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
