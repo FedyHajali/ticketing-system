@@ -21,7 +21,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 @swagger_auto_schema(
     method="post",
     operation_description='Registration of a new user',
-    operation_summary='Sign In',
+    operation_summary='Create User',
     request_body=AuthUserSerializer,
     responses={201: openapi.Response('Created', AuthUserSerializer),
                400: openapi.Response('Bad Request')})
@@ -34,6 +34,13 @@ def registration(request):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+@swagger_auto_schema(
+    method="get",
+    operation_description='Retrieve all User Information ',
+    operation_summary='Get User Info',
+    responses={200: openapi.Response('OK', AuthUserSerializer),
+               400: openapi.Response('Bad Request')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -49,8 +56,11 @@ def userDetail(request):
 
 #################### GROUP ####################
 
-# lista di tutti i gruppi
-
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of all available groups',
+    operation_summary='List all Groups',
+    responses={200: openapi.Response('OK', GroupSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([AllowAny, ])
@@ -60,6 +70,12 @@ def groupList(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of all available groups',
+    operation_summary='List all Groups',
+    responses={200: openapi.Response('OK', AuthUserSerializer(many=True)),
+               404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -71,7 +87,12 @@ def groupUsers(request, pk):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# creazione gruppo solo da SUPERUSER
+@swagger_auto_schema(
+    method="post",
+    operation_description='Creation of a new Group (only SuperUser)',
+    operation_summary='Create Group (only SuperUser)',
+    responses={201: openapi.Response('Created', GroupSerializer),
+               400: openapi.Response('Bad Request')})
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsSuperuser])
@@ -83,7 +104,12 @@ def groupCreate(request):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# eliminazione gruppo solo da SUPERUSER
+@swagger_auto_schema(
+    method="delete",
+    operation_description='Delete a Group (only SuperUser)',
+    operation_summary='Delete Group (only SuperUser)',
+    responses={200: openapi.Response('Deleted'),
+               404: openapi.Response('Not Found')})
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsSuperuser])
