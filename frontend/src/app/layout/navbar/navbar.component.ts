@@ -1,13 +1,8 @@
-import {
-  AfterContentInit,
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from 'src/app/api/services';
 import { User } from 'src/app/models/User';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-navbar',
@@ -18,13 +13,13 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterContentInit {
   public isAuthenticated = false;
   private userSub!: Subscription;
   user: User | undefined;
-  constructor(private auth: AuthService) {}
+  constructor(private shared: SharedService, private auth: AuthService) {}
 
   ngOnInit(): void {
     const userlogged: any = sessionStorage.getItem('user');
     this.isAuthenticated = userlogged == null ? false : true;
 
-    this.userSub = this.auth.userSubject.subscribe((user) => {
+    this.userSub = this.shared.userSubject.subscribe((user) => {
       if (!user) {
         this.isAuthenticated =
           sessionStorage.getItem('user') == null ? false : true;
@@ -42,7 +37,11 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   logout() {
-    this.auth.logout();
+    this.auth.authLogoutCreate().subscribe((response) => {
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('user');
+      this.shared.userSubject.next();
+    });
   }
 
   ngOnDestroy() {

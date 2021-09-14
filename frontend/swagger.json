@@ -1,0 +1,868 @@
+swagger: '2.0'
+info:
+  title: BTS API
+  description: API for the BTS Application
+  termsOfService: https://www.google.com/policies/terms/
+  contact:
+    email: contact@snippets.local
+  license:
+    name: BSD License
+  version: v1
+host: localhost:8000
+schemes:
+  - http
+basePath: /
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  api_key:
+    type: apiKey
+    in: header
+    name: Authorization
+security:
+  - api_key: []
+paths:
+  /api/comment-create/:
+    post:
+      operationId: api_comment-create_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+        - api
+    parameters: []
+  /api/comment-detail/{id}:
+    get:
+      operationId: api_comment-detail_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/ticket-create/:
+    post:
+      operationId: api_ticket-create_create
+      summary: Ticket Creation
+      description: Creation of a new Ticket
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Ticket'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Ticket'
+        '400':
+          description: Bad Request
+      tags:
+        - api
+    parameters: []
+  /api/ticket-creator-update/{id}/:
+    put:
+      operationId: api_ticket-creator-update_update
+      summary: Ticket status update for Creator
+      description: Change of ticket status for creator who can only put Closed or
+        Open
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/ticket-delete/{id}/:
+    delete:
+      operationId: api_ticket-delete_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/ticket-detail/{id}/:
+    get:
+      operationId: api_ticket-detail_read
+      summary: Ticket detail
+      description: Returns all information of a ticket
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/ticket-list-creator/{id}:
+    get:
+      operationId: api_ticket-list-creator_read
+      summary: Ticket list created by the active user
+      description: List of tickets for which the active user is a creator
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/ticket-list-group/{id}:
+    get:
+      operationId: api_ticket-list-group_read
+      summary: Ticket list for a specific group
+      description: List of tickets for a specific group
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/ticket-list/:
+    get:
+      operationId: api_ticket-list_list
+      summary: Ticket list received by the active user
+      description: List of tickets for which the active user is a receiver
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Ticket'
+        '404':
+          description: Not Found
+      tags:
+        - api
+    parameters: []
+  /api/ticket-receiver-update/{id}/:
+    put:
+      operationId: api_ticket-receiver-update_update
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/ticket-receivers-list/{id}:
+    get:
+      operationId: api_ticket-receivers-list_read
+      summary: List of ticket receivers
+      description: List of ticket receivers
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/ticket-staff-update/{id}/:
+    put:
+      operationId: api_ticket-staff-update_update
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/topic-create/:
+    post:
+      operationId: api_topic-create_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+        - api
+    parameters: []
+  /api/topic-detail/{id}:
+    get:
+      operationId: api_topic-detail_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/topic-group-list/{id}:
+    get:
+      operationId: api_topic-group-list_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/topic-not-staff-list/:
+    get:
+      operationId: api_topic-not-staff-list_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters: []
+  /api/topic-user-add/{id}:
+    put:
+      operationId: api_topic-user-add_update
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/topic-user-group-list/:
+    get:
+      operationId: api_topic-user-group-list_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters: []
+  /api/topic-user-list/:
+    get:
+      operationId: api_topic-user-list_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters: []
+  /api/topic-user/{id}:
+    get:
+      operationId: api_topic-user_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/topic-users/{id}/:
+    get:
+      operationId: api_topic-users_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /auth/group-create/:
+    post:
+      operationId: auth_group-create_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+        - auth
+    parameters: []
+  /auth/group-list/:
+    get:
+      operationId: auth_group-list_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - auth
+    parameters: []
+  /auth/group-users/{id}/:
+    get:
+      operationId: auth_group-users_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - auth
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /auth/login/:
+    post:
+      operationId: auth_login_create
+      description: |-
+        Check the credentials and return the REST Token
+        if the credentials are valid and authenticated.
+        Calls Django Auth login method to register User ID
+        in Django session framework
+
+        Accept the following POST parameters: username, password
+        Return the REST Framework Token Object's key.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Login'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Login'
+      tags:
+        - auth
+    parameters: []
+  /auth/logout/:
+    get:
+      operationId: auth_logout_list
+      summary: |-
+        Calls Django logout method and delete the Token object
+        assigned to the current User object.
+      description: Accepts/Returns nothing.
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - auth
+    post:
+      operationId: auth_logout_create
+      summary: |-
+        Calls Django logout method and delete the Token object
+        assigned to the current User object.
+      description: Accepts/Returns nothing.
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+        - auth
+    parameters: []
+  /auth/password/change/:
+    post:
+      operationId: auth_password_change_create
+      summary: Calls Django Auth SetPasswordForm save method.
+      description: |-
+        Accepts the following POST parameters: new_password1, new_password2
+        Returns the success/fail message.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/PasswordChange'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/PasswordChange'
+      tags:
+        - auth
+    parameters: []
+  /auth/password/reset/:
+    post:
+      operationId: auth_password_reset_create
+      summary: Calls Django Auth PasswordResetForm save method.
+      description: |-
+        Accepts the following POST parameters: email
+        Returns the success/fail message.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/PasswordReset'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/PasswordReset'
+      tags:
+        - auth
+    parameters: []
+  /auth/password/reset/confirm/:
+    post:
+      operationId: auth_password_reset_confirm_create
+      summary: |-
+        Password reset e-mail link is confirmed, therefore
+        this resets the user's password.
+      description: |-
+        Accepts the following POST parameters: token, uid,
+            new_password1, new_password2
+        Returns the success/fail message.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/PasswordResetConfirm'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/PasswordResetConfirm'
+      tags:
+        - auth
+    parameters: []
+  /auth/registration/:
+    post:
+      operationId: auth_registration_create
+      description: ''
+      parameters: []
+      responses:
+        '201':
+          description: ''
+      tags:
+        - auth
+    parameters: []
+  /auth/user-detail:
+    get:
+      operationId: auth_user-detail_list
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - auth
+    parameters: []
+  /auth/user/:
+    get:
+      operationId: auth_user_read
+      summary: |-
+        Reads and updates UserModel fields
+        Accepts GET, PUT, PATCH methods.
+      description: |-
+        Default accepted fields: username, first_name, last_name
+        Default display fields: pk, username, email, first_name, last_name
+        Read-only fields: pk, email
+
+        Returns UserModel fields.
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/UserDetails'
+      tags:
+        - auth
+    put:
+      operationId: auth_user_update
+      summary: |-
+        Reads and updates UserModel fields
+        Accepts GET, PUT, PATCH methods.
+      description: |-
+        Default accepted fields: username, first_name, last_name
+        Default display fields: pk, username, email, first_name, last_name
+        Read-only fields: pk, email
+
+        Returns UserModel fields.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserDetails'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/UserDetails'
+      tags:
+        - auth
+    patch:
+      operationId: auth_user_partial_update
+      summary: |-
+        Reads and updates UserModel fields
+        Accepts GET, PUT, PATCH methods.
+      description: |-
+        Default accepted fields: username, first_name, last_name
+        Default display fields: pk, username, email, first_name, last_name
+        Read-only fields: pk, email
+
+        Returns UserModel fields.
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/UserDetails'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/UserDetails'
+      tags:
+        - auth
+    parameters: []
+definitions:
+  Group:
+    required:
+      - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 150
+        minLength: 1
+      permissions:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+  User:
+    required:
+      - password
+      - username
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      password:
+        title: Password
+        type: string
+        maxLength: 128
+        minLength: 1
+      last_login:
+        title: Last login
+        type: string
+        format: date-time
+        x-nullable: true
+      is_superuser:
+        title: Superuser status
+        description: Designates that this user has all permissions without explicitly
+          assigning them.
+        type: boolean
+      username:
+        title: Username
+        description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+          only.
+        type: string
+        pattern: ^[\w.@+-]+$
+        maxLength: 150
+        minLength: 1
+      first_name:
+        title: First name
+        type: string
+        maxLength: 150
+      last_name:
+        title: Last name
+        type: string
+        maxLength: 150
+      email:
+        title: Email address
+        type: string
+        format: email
+        maxLength: 254
+      is_staff:
+        title: Staff status
+        description: Designates whether the user can log into this admin site.
+        type: boolean
+      is_active:
+        title: Active
+        description: Designates whether this user should be treated as active. Unselect
+          this instead of deleting accounts.
+        type: boolean
+      date_joined:
+        title: Date joined
+        type: string
+        format: date-time
+      groups:
+        description: The groups this user belongs to. A user will get all permissions
+          granted to each of their groups.
+        type: array
+        items:
+          description: The groups this user belongs to. A user will get all permissions
+            granted to each of their groups.
+          type: integer
+        uniqueItems: true
+      user_permissions:
+        description: Specific permissions for this user.
+        type: array
+        items:
+          description: Specific permissions for this user.
+          type: integer
+        uniqueItems: true
+  Topic:
+    required:
+      - name
+      - description
+      - group
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      name:
+        title: Name
+        type: string
+        maxLength: 255
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        minLength: 1
+      group:
+        title: Group
+        type: integer
+      users:
+        type: array
+        items:
+          type: integer
+        readOnly: true
+        uniqueItems: true
+  Ticket:
+    required:
+      - groups
+      - receivers
+      - topics
+      - creator
+      - title
+      - expiration
+      - content
+    type: object
+    properties:
+      id:
+        title: ID
+        type: integer
+        readOnly: true
+      groups:
+        type: array
+        items:
+          $ref: '#/definitions/Group'
+      receivers:
+        type: array
+        items:
+          $ref: '#/definitions/User'
+      topics:
+        type: array
+        items:
+          $ref: '#/definitions/Topic'
+      creator:
+        $ref: '#/definitions/User'
+      title:
+        title: Title
+        type: string
+        maxLength: 255
+        minLength: 1
+      created_at:
+        title: Created at
+        type: string
+        format: date-time
+        readOnly: true
+      expiration:
+        title: Expiration
+        type: string
+        format: date-time
+      status:
+        title: Status
+        type: string
+        enum:
+          - OP
+          - CL
+          - PE
+          - RE
+          - EX
+      content:
+        title: Content
+        type: string
+        minLength: 1
+      uploads:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+      comments:
+        type: array
+        items:
+          type: integer
+        uniqueItems: true
+  Login:
+    required:
+      - password
+    type: object
+    properties:
+      username:
+        title: Username
+        type: string
+      email:
+        title: Email
+        type: string
+        format: email
+      password:
+        title: Password
+        type: string
+        minLength: 1
+  PasswordChange:
+    required:
+      - new_password1
+      - new_password2
+    type: object
+    properties:
+      new_password1:
+        title: New password1
+        type: string
+        maxLength: 128
+        minLength: 1
+      new_password2:
+        title: New password2
+        type: string
+        maxLength: 128
+        minLength: 1
+  PasswordReset:
+    required:
+      - email
+    type: object
+    properties:
+      email:
+        title: Email
+        type: string
+        format: email
+        minLength: 1
+  PasswordResetConfirm:
+    required:
+      - new_password1
+      - new_password2
+      - uid
+      - token
+    type: object
+    properties:
+      new_password1:
+        title: New password1
+        type: string
+        maxLength: 128
+        minLength: 1
+      new_password2:
+        title: New password2
+        type: string
+        maxLength: 128
+        minLength: 1
+      uid:
+        title: Uid
+        type: string
+        minLength: 1
+      token:
+        title: Token
+        type: string
+        minLength: 1
+  UserDetails:
+    required:
+      - username
+    type: object
+    properties:
+      pk:
+        title: ID
+        type: integer
+        readOnly: true
+      username:
+        title: Username
+        description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+          only.
+        type: string
+        pattern: ^[\w.@+-]+$
+        maxLength: 150
+        minLength: 1
+      email:
+        title: Email address
+        type: string
+        format: email
+        readOnly: true
+        minLength: 1
+      first_name:
+        title: First name
+        type: string
+        maxLength: 150
+      last_name:
+        title: Last name
+        type: string
+        maxLength: 150

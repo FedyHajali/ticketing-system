@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { AuthService } from '../services/auth.service';
-import { RestService } from '../services/rest.service';
-import { Ticket } from '../models/Ticket';
+import { Ticket } from '../api/models/ticket';
 import { User } from '../models/User';
+import { SharedService } from '../services/shared.service';
+import { ApiService } from '../api/services';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,18 +13,18 @@ import { User } from '../models/User';
 export class DashboardComponent implements OnInit {
   private userSub!: Subscription;
   user: User = new User();
-  tickets: Ticket[] = [];
-  constructor(private rs: RestService, private auth: AuthService) {}
+  tickets: Ticket[] | null = [];
+  constructor(private api: ApiService, private shared: SharedService) {}
 
   ngOnInit(): void {
-    this.user = this.auth.checkUser();
-    this.userSub = this.auth.userSubject.subscribe((user) => {
-      this.user = this.auth.checkUser();
+    this.user = this.shared.checkUser();
+    this.userSub = this.shared.userSubject.subscribe((user) => {
+      this.user = this.shared.checkUser();
     });
   }
 
   getTicketList() {
-    this.rs.getTicketList().subscribe((response) => {
+    this.api.apiTicketListList().subscribe((response: any) => {
       this.tickets = response;
       console.log(this.tickets);
     });

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
+import { ApiService, AuthService } from 'src/app/api/services';
 
 @Component({
   selector: 'app-registration',
@@ -26,6 +26,8 @@ export class RegistrationComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
+    private authservice: AuthService,
+    private api: ApiService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -46,7 +48,8 @@ export class RegistrationComponent implements OnInit {
     };
 
     console.log(data);
-    this.auth.register(data).subscribe(
+
+    this.auth.authRegistrationCreate().subscribe(
       (response) => {
         this.router.navigate(['/login']);
       },
@@ -54,7 +57,23 @@ export class RegistrationComponent implements OnInit {
         console.error(error);
       }
     );
+
   }
+
+  // register(data: any) {
+  //   return this.httpClient
+  //     .post<any>(this.baseUrl + '/auth/registration/', data)
+  //     .pipe(
+  //       tap(
+  //         (res) => {
+  //           console.log(res);
+  //         },
+  //         (error) => {
+  //           console.error(error);
+  //         }
+  //       )
+  //     );
+  // }
 
   changeGroup(group: any) {
     this.Groups.setValue(group.target.value, {
@@ -63,7 +82,7 @@ export class RegistrationComponent implements OnInit {
   }
 
   getGroups() {
-    this.auth.getGroups().subscribe(
+    this.auth.authGroupListList().subscribe(
       (groups) => {
         console.log(groups);
         this.Groups = groups;

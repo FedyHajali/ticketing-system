@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .models import Comment, Ticket, Topic
 from .permission import IsStaff
-from .serializers import CommentSerializer, TicketSerializer, TopicSerializer
+from .serializers import CommentSerializer, TicketSerializer, TopicSerializer, UserSerializer
 from rest_framework import status
 # Create your views here.
 
@@ -15,26 +15,11 @@ from rest_framework import status
 
 
 @swagger_auto_schema(
-    method="post",
-    operation_description='Creation of a new Ticket',
-    operation_summary='Ticket Creation',
-    request_body=TicketSerializer)
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, ])
-def ticketCreate(request):
-    serializer = TicketSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@swagger_auto_schema(
     method="get",
     operation_description='List of tickets for which the active user is a receiver',
-    operation_summary='Ticket list received by the active user')
+    operation_summary='Ticket list received by the active user',
+    responses={200: openapi.Response('OK', TicketSerializer(many=True)),
+               404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -46,10 +31,13 @@ def ticketListReceiver(request):
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 @swagger_auto_schema(
     method="get",
     operation_description='List of tickets for which the active user is a creator',
-    operation_summary='Ticket list created by the active user')
+    operation_summary='Ticket list created by the active user',
+    responses={200: openapi.Response('OK', TicketSerializer(many=True)),
+               404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -65,7 +53,9 @@ def ticketListCreator(request, pk):
 @swagger_auto_schema(
     method="get",
     operation_description='List of tickets for a specific group',
-    operation_summary='Ticket list for a specific group')
+    operation_summary='Ticket list for a specific group',
+    responses={200: openapi.Response('OK', TicketSerializer(many=True)),
+               404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -77,10 +67,13 @@ def ticketListGroup(request, pk):
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 @swagger_auto_schema(
     method="get",
     operation_description='List of ticket receivers',
-    operation_summary='List of ticket receivers')
+    operation_summary='List of ticket receivers',
+    responses={200: openapi.Response('OK', UserSerializer(many=True)),
+               404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -97,7 +90,9 @@ def ticketReceiversList(request, pk):
 @swagger_auto_schema(
     method="get",
     operation_description='Returns all information of a ticket',
-    operation_summary='Ticket detail')
+    operation_summary='Ticket detail',
+    responses={200: openapi.Response('OK', TicketSerializer),
+               404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -112,9 +107,31 @@ def ticketDetail(request, pk):
 
 
 @swagger_auto_schema(
+    method="post",
+    operation_description='Creation of a new Ticket',
+    operation_summary='Ticket Creation',
+    request_body=TicketSerializer,
+    responses={201: openapi.Response('Created', TicketSerializer),
+               400: openapi.Response('Bad Request')})
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated, ])
+def ticketCreate(request):
+    serializer = TicketSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@swagger_auto_schema(
     method="put",
     operation_description='Change of ticket status for creator who can only put Closed or Open',
-    operation_summary='Ticket status update for Creator')
+    operation_summary='Ticket status update for Creator',
+    responses={200: openapi.Response('OK', TicketSerializer),
+               400: openapi.Response('Bad Request'),
+               404: openapi.Response('Not Found')})
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -124,11 +141,11 @@ def ticketCreatorUpdate(request, pk):
         if request.data['status'] not in ('CL', 'OP'):
             return Response('Only Closed or Open are possible', status=status.HTTP_400_BAD_REQUEST)
         try:
-            ticket = Ticket.objects.get(id=pk, creator=request.user)  
+            ticket = Ticket.objects.get(id=pk, creator=request.user)
         except Ticket.DoesNotExist:
             return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
     else:
-         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
     serializer = TicketSerializer(instance=ticket, data=request.data)
     if (serializer.is_valid()):
@@ -137,10 +154,13 @@ def ticketCreatorUpdate(request, pk):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# update del ticket per il ricevitore, può mettere solo Pending Resolved
-# ovviamente bisogna mostrare solo i biglietti in stato OPEN, gli altri sono giò in stato closed/pending/resolved
-# pk identifica il ticket
-
+@swagger_auto_schema(
+    method="put",
+    operation_description='Change of ticket status for receiver who can only put Pending or Resolved',
+    operation_summary='Ticket status update for Receiver',
+    responses={200: openapi.Response('OK', TicketSerializer),
+               400: openapi.Response('Bad Request'),
+               404: openapi.Response('Not Found')})
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -154,7 +174,7 @@ def ticketReceiverUpdate(request, pk):
         except Ticket.DoesNotExist:
             return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
     else:
-         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
     serializer = TicketSerializer(instance=ticket, data=request.data)
     if (serializer.is_valid()):
@@ -163,10 +183,17 @@ def ticketReceiverUpdate(request, pk):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+# TODO
 # lo staff può mettere in qualsiasi stato, per comodità.. però tranne expired, che dipende dalla data
 # nel caso, per uno dello staff sarebbe meglio cambiare la data
 # pk identifica il ticket
-
+@swagger_auto_schema(
+    method="put",
+    operation_description='Change of ticket status for is_staff user who can put every state',
+    operation_summary='Ticket status update for is_staff user',
+    responses={200: openapi.Response('OK', TicketSerializer),
+               400: openapi.Response('Bad Request'),
+               404: openapi.Response('Not Found')})
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -175,12 +202,12 @@ def ticketStaffUpdate(request, pk):
     if (serializer.is_valid()):
         if request.data['status'] in ('EX'):
             return Response('Expired is not possible', status=status.HTTP_400_BAD_REQUEST)
-        try:   
+        try:
             ticket = Ticket.objects.get(id=pk)
         except Ticket.DoesNotExist:
             return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
     else:
-         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
     serializer = TicketSerializer(instance=ticket, data=request.data)
     if (serializer.is_valid()):
@@ -188,48 +215,40 @@ def ticketStaffUpdate(request, pk):
 
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-# elimina un ticket dal database
 
-
+@swagger_auto_schema(
+    method="delete",
+    operation_description='Delete of a ticket',
+    operation_summary='Delete of a ticket',
+    responses={200: openapi.Response('Delete OK'),
+               404: openapi.Response('Not Found')})
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
 def ticketDelete(request, pk):
-    
-    try:   
+    try:
         ticket = Ticket.objects.get(id=pk)
     except Ticket.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
     ticket.delete()
 
-    return Response('Item succsesfully delete!', status=status.HTTP_200_OK)
+    return Response('Delete OK', status=status.HTTP_200_OK)
 
 
 #################### TOPIC ####################
 
-# creazione topic
-
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsStaff])
-def topicCreate(request):
-    serializer = TopicSerializer(data=request.data)
-    if (serializer.is_valid()):
-        serializer.save()
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
-# info del topic
-
-
+@swagger_auto_schema(
+    method="get",
+    operation_description='Retrieve all topic information',
+    operation_summary='Get topic Detail',
+    responses={200: openapi.Response('OK', TopicSerializer),
+               404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
 def topicDetail(request, pk):
-    try:   
+    try:
         topic = Topic.objects.get(id=pk)
     except Topic.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
@@ -237,30 +256,13 @@ def topicDetail(request, pk):
     serializer = TopicSerializer(topic, many=False)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-# aggiunge un utente al topic
 
-
-@api_view(['PUT'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, ])
-def topicUsersAdd(request, pk):
-    try:
-        topic = Topic.objects.get(id=pk)  # oppure name=
-    except Topic.DoesNotExist:
-        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
-    try:    
-        user = User.objects.get(id=request.user.id)
-    except User.DoesNotExist:
-        return Response('Not Found user', status=status.HTTP_404_NOT_FOUND)
-
-    topic.users.add(user)
-
-    return Response('Sei stato iscritto al Topic', status.HTTP_200_OK)
-
-
-# lista dei topic di un gruppo
-# pk identifica il gruppo
-
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of topics of a particular group ',
+    operation_summary='List of topics of a group',
+    responses={200: openapi.Response('OK', TopicSerializer(many=True)),
+               404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -272,14 +274,21 @@ def topicGroupList(request, pk):
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-#OCCHIO CHE QUA DENTRO NON ABBIAMO LE STRUTTURE DATI, SOLO GLI ID
+
+# TODO
+# OCCHIO CHE QUA DENTRO NON ABBIAMO LE STRUTTURE DATI, SOLO GLI ID
 # lista dei topic di un gruppo a cui l'utente è iscritto
 # pk è il gruppo
-
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of topics of a group to which the active user is subscribed',
+    operation_summary='List of topics of a group user is subscribed',
+    responses={200: openapi.Response('OK', TopicSerializer(many=True)),
+               404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def topicUserGroupList(request, pk):
+def topicsUserGroupList(request, pk):
     topics = Topic.objects.filter(group=pk, users=request.user.id)
     if topics.count() == 0:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
@@ -288,8 +297,12 @@ def topicUserGroupList(request, pk):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# lista dei topic a cui staff non è iscritto
-
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of topics to which a staff user is not subscribed',
+    operation_summary='List of topics is_staff user is not subscribed',
+    responses={200: openapi.Response('OK', TopicSerializer(many=True)),
+               404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
@@ -303,9 +316,14 @@ def topicNotStaffList(request, pk):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# lista di tutti i topic dei gruppi di cui fa parte un utente
-
-
+# TODO
+# questa non va
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of all topics of the groups to which active user belongs',
+    operation_summary='List of all topics of the groups to which active user belongs',
+    responses={200: openapi.Response('OK', TopicSerializer(many=True)),
+               404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -318,11 +336,13 @@ def topicUserList(request):
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data, status.HTTP_200_OK)
 
-#ritorna una lista semplice di id
-# gli utenti iscritti al topic
-# pk identifica il topic
 
-
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of users subscribed to the topic',
+    operation_summary='List users subscribed to the topic',
+    responses={200: openapi.Response('OK', UserSerializer(many=True)),
+               404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -336,39 +356,77 @@ def topicUsers(request, pk):
     return Response(serializer.data['users'], status.HTTP_200_OK)
 
 
+@swagger_auto_schema(
+    method="post",
+    operation_description='Creation of a new topic',
+    operation_summary='Creation of a topic',
+    responses={201: openapi.Response('Created', TopicSerializer),
+               400: openapi.Response('Bad Request')})
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated, IsStaff])
+def topicCreate(request):
+    serializer = TopicSerializer(data=request.data)
+    if (serializer.is_valid()):
+        serializer.save()
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@swagger_auto_schema(
+    method="put",
+    operation_description='Subscribe user to selected topic',
+    operation_summary='Add user to Topic',
+    responses={200: openapi.Response('OK'),
+               404: openapi.Response('Not Found')})
+@api_view(['PUT'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated, ])
+def topicUsersAdd(request, pk):
+    try:
+        topic = Topic.objects.get(id=pk)  # oppure name=
+    except Topic.DoesNotExist:
+        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
+    try:
+        user = User.objects.get(id=request.user.id)
+    except User.DoesNotExist:
+        return Response('Not Found user', status=status.HTTP_404_NOT_FOUND)
+
+    topic.users.add(user)
+
+    return Response('You have been subscribed to the Topic', status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
+    method="delete",
+    operation_description='Delete of a topic',
+    operation_summary='Delete of a topic',
+    responses={200: openapi.Response('Delete OK'),
+               404: openapi.Response('Not Found')})
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
 def topicDelete(request, pk):
-    
-    try:   
+    try:
         topic = Topic.objects.get(id=pk)
     except Topic.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
     topic.delete()
 
-    return Response('Item succsesfully delete!', status=status.HTTP_200_OK)
+    return Response('Delete OK', status=status.HTTP_200_OK)
 
 
 #################### COMMENT ####################
 
-# aggiungi un commento ad un ticket
-
-@api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, ])
-def commentCreate(request):
-    serializer = CommentSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-    else:
-        Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-# info del commento
-
+@swagger_auto_schema(
+    method="get",
+    operation_description='Retrieve all comment information',
+    operation_summary='Get comment info',
+    responses={200: openapi.Response('OK', CommentSerializer),
+               404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -381,8 +439,13 @@ def commentDetail(request, pk):
     serializer = CommentSerializer(comment, many=False)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-#lista commenti di un ticket
-#manca comments nei serializer del ticket
+
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of Comments of a particular Ticket',
+    operation_summary='List of Comments of a Ticket',
+    responses={200: openapi.Response('OK', CommentSerializer(many=True)),
+               404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
@@ -395,16 +458,39 @@ def commentTicketList(request, pk):
     serializer = TicketSerializer(ticket, many=False)
     return Response(serializer.data['comments'], status.HTTP_200_OK)
 
+
+@swagger_auto_schema(
+    method="post",
+    operation_description='Add a comment to a ticket',
+    operation_summary='Add comment to ticket',
+    responses={201: openapi.Response('Created', CommentSerializer),
+               400: openapi.Response('Bad Request')})
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated, ])
+def commentCreate(request):
+    serializer = CommentSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    else:
+        Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+@swagger_auto_schema(
+    method="delete",
+    operation_description='Delete of a Comment',
+    operation_summary='Delete of a Comment',
+    responses={200: openapi.Response('Delete OK'),
+               404: openapi.Response('Not Found')})
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
 def commentDelete(request, pk):
-    
-    try:   
+    try:
         comment = Comment.objects.get(id=pk)
     except Comment.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
     comment.delete()
-
-    return Response('Item succsesfully delete!', status=status.HTTP_200_OK)
+    return Response('Delete OK', status=status.HTTP_200_OK)

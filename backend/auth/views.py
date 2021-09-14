@@ -29,41 +29,37 @@ def groupUsers(request, pk):
     return Response(serializer.data)
 
 
-
 #################### USER ####################
 
-#torna tutti i campi di un utente
-@login_required(login_url='/auth/login/')
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def userDetail(request, pk):
-    user = User.objects.get(id=pk)
+def userDetail(request):
+    user = User.objects.get(id=request.user.id)
     serializer = UserSerializer(user, many=False)
     return Response(serializer.data)
 
 
 #################### GROUP ####################
 
-#creazione gruppo solo da SUPERUSER
-@login_required(login_url='/auth/login/')
+# creazione gruppo solo da SUPERUSER
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsSuperuser ])
+@permission_classes([IsAuthenticated, IsSuperuser])
 def groupCreate(request):
     serializer = GroupSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
     return Response(serializer.data)
 
-#lista di tutti i gruppi
-@login_required(login_url='/auth/login/')
+# lista di tutti i gruppi
+
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def groupList(request, pk):
+def groupList(request):
     groups = Group.objects.all()
     serializer = GroupSerializer(groups, many=True)
     return Response(serializer.data)
 
-#manca la delete etce 
+# manca la delete etce

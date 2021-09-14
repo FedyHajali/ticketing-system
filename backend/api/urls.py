@@ -21,7 +21,7 @@ urlpatterns = [
     path('topic-user-add/<int:pk>', views.topicUsersAdd, name="topic-user-add"),
     path('topic-group-list/<int:pk>', views.topicGroupList, name="topic-group-list"),
     path('topic-users/<int:pk>/', views.topicUsers, name="topic-users"),
-    path('topic-user-group-list/<int:pk>', views.topicUserGroupList, name="topic-user-group-list"),
+    path('topic-user-group-list/<int:pk>', views.topicsUserGroupList, name="topic-user-group-list"),
     path('topic-not-staff-list/<int:pk>', views.topicNotStaffList, name="topic-not-user-list"),
     path('topic-user-list/', views.topicUserList, name="topic-user-list"),
 

@@ -1,14 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
-
+import { Subject } from 'rxjs/internal/Subject';
+import { AuthService } from 'src/app/api/services';
+import { User } from 'src/app/models/User';
+import { SharedService } from 'src/app/services/shared.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
+  userSubject = new Subject<User>();
+  user: User = new User();
   form = this.fb.group({
     username: '',
     password: '',
@@ -17,6 +21,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
+    private shared: SharedService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -24,11 +29,15 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit() {
-    this.auth.login(this.form.value).subscribe((response) => {
-      this.router.navigate(['/dashboard']);
-    },
-    (error) => {
-      console.error(error);
-    });
+    this.auth.authLoginCreate(this.form.value).subscribe(
+      (response) => {
+        sessionStorage.setItem('token', response.key);
+        this.shared.setUser();
+        this.router.navigate(['/dashboard']);
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 }

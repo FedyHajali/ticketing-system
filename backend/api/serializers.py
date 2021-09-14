@@ -29,13 +29,15 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class TopicSerializer(serializers.ModelSerializer):
     users = UserSerializer(many=True)
+    group = GroupSerializer()
+
     class Meta:
         model = Topic
         fields = '__all__'
 
 
 class TopicNameSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Topic
         fields = ('name',)
@@ -45,6 +47,7 @@ class TicketSerializer(serializers.ModelSerializer):
     groups = GroupSerializer(many=True)
     receivers = UserSerializer(many=True)
     topics = TopicSerializer(many=True)
+    comments = CommentSerializer(many=True)
     creator = UserSerializer()
 
     class Meta:

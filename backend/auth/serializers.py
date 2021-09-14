@@ -19,16 +19,18 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    groups = GroupSerializer(many=True)
+
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'first_name',
                   'last_name', 'password', 'groups', 'is_staff')
 
     def create(self, validated_data):
-        groups_data = validated_data.pop('groups')
         password_data = validated_data.pop('password')
         user = super().create(validated_data)
         user.set_password(password_data)
+        groups_data = validated_data.pop('groups')
         for group_data in groups_data:
             user.groups.add(group_data)
 

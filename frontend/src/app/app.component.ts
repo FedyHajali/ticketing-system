@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { User } from './models/User';
-import { AuthService } from './services/auth.service';
+import { SharedService } from './services/shared.service';
 
 @Component({
   selector: 'app-root',
@@ -12,13 +12,13 @@ export class AppComponent implements OnInit {
   private userSub!: Subscription;
   user: User = new User();
 
-  constructor(private auth: AuthService) {}
+  constructor(private shared: SharedService) {}
 
   ngOnInit(): void {
-    this.user = this.auth.checkUser();
-    this.userSub = this.auth.userSubject.subscribe(
+    this.user = this.shared.checkUser();
+    this.userSub = this.shared.userSubject.subscribe(
       (user) => {
-        this.user = this.auth.checkUser();
+        this.user = this.shared.checkUser();
       },
       (error) => {
         console.error(error);

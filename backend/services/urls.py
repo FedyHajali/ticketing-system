@@ -38,7 +38,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('auth.urls')),
     path('api/', include('api.urls')),
-    path('schema/', schema_view.with_ui('swagger',
+    path('schema/', schema_view.without_ui(
          cache_timeout=0), name="openapi-schema"),
 
 ]
