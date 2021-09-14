@@ -28,13 +28,14 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class TopicSerializer(serializers.ModelSerializer):
-
+    users = UserSerializer(many=True)
     class Meta:
         model = Topic
         fields = '__all__'
 
 
 class TopicNameSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = Topic
         fields = ('name',)
