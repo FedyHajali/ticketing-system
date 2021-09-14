@@ -32,6 +32,10 @@ def ticketListReceiver(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+test_param = openapi.Parameter('creator_id', openapi.IN_PATH,
+                               description="ID of Ticket Creator", type=openapi.TYPE_NUMBER)
+
+
 @swagger_auto_schema(
     method="get",
     operation_description='List of tickets for which the active user is a creator',
@@ -129,6 +133,7 @@ def ticketCreate(request):
     method="put",
     operation_description='Change of ticket status for creator who can only put Closed or Open',
     operation_summary='Ticket status update for Creator',
+    request_body=TicketSerializer,
     responses={200: openapi.Response('OK', TicketSerializer),
                400: openapi.Response('Bad Request'),
                404: openapi.Response('Not Found')})
@@ -158,6 +163,7 @@ def ticketCreatorUpdate(request, pk):
     method="put",
     operation_description='Change of ticket status for receiver who can only put Pending or Resolved',
     operation_summary='Ticket status update for Receiver',
+    request_body=TicketSerializer,
     responses={200: openapi.Response('OK', TicketSerializer),
                400: openapi.Response('Bad Request'),
                404: openapi.Response('Not Found')})
@@ -191,6 +197,7 @@ def ticketReceiverUpdate(request, pk):
     method="put",
     operation_description='Change of ticket status for is_staff user who can put every state',
     operation_summary='Ticket status update for is_staff user',
+    request_body=TicketSerializer,
     responses={200: openapi.Response('OK', TicketSerializer),
                400: openapi.Response('Bad Request'),
                404: openapi.Response('Not Found')})
@@ -306,7 +313,7 @@ def topicsUserGroupList(request, pk):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
-def topicNotStaffList(request, pk):
+def topicNotStaffList(request):
     topics = Topic.objects.exclude(
         Topic.objects.filter(users_id=request.user.id))
     if topics.count() == 0:
@@ -360,6 +367,7 @@ def topicUsers(request, pk):
     method="post",
     operation_description='Creation of a new topic',
     operation_summary='Creation of a topic',
+    request_body=TopicSerializer,
     responses={201: openapi.Response('Created', TopicSerializer),
                400: openapi.Response('Bad Request')})
 @api_view(['POST'])
@@ -463,6 +471,7 @@ def commentTicketList(request, pk):
     method="post",
     operation_description='Add a comment to a ticket',
     operation_summary='Add comment to ticket',
+    request_body=CommentSerializer,
     responses={201: openapi.Response('Created', CommentSerializer),
                400: openapi.Response('Bad Request')})
 @api_view(['POST'])
