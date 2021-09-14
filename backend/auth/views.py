@@ -38,9 +38,13 @@ def registration(request):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
 def userDetail(request):
-    user = User.objects.get(id=request.user.id)
+    try:
+        user = User.objects.get(id=request.user.id)
+    except User.DoesNotExist:
+        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
+    
     serializer = AuthUserSerializer(user, many=False)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 #################### GROUP ####################
@@ -53,7 +57,7 @@ def userDetail(request):
 def groupList(request):
     groups = Group.objects.all()
     serializer = GroupSerializer(groups, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -61,8 +65,10 @@ def groupList(request):
 @permission_classes([IsAuthenticated, ])
 def groupUsers(request, pk):
     users = User.objects.filter(groups=pk)
+    if users.count() == 0:
+        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
     serializer = AuthUserSerializer(users, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # creazione gruppo solo da SUPERUSER
@@ -73,14 +79,19 @@ def groupCreate(request):
     serializer = GroupSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-    return Response(serializer.data)
-
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # eliminazione gruppo solo da SUPERUSER
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsSuperuser])
 def groupDelete(request, pk):
-    group = Group.objects.filter(id=pk)
+    try:
+        group = Group.objects.filter(id=pk)
+    except Group.DoesNotExist:
+        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
+        
     group.delete()
     return Response("Delete OK", status=status.HTTP_200_OK)
