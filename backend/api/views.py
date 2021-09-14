@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .models import Comment, Ticket, Topic
 from .permission import IsStaff
-from .serializers import CommentSerializer, TicketSerializer, TopicSerializer, ApiUserSerializer
+from services.serializer import CommentSerializer, TicketSerializer, TopicSerializer, UserSerializer
 from rest_framework import status
 # Create your views here.
 
@@ -76,7 +76,7 @@ def ticketListGroup(request, pk):
     method="get",
     operation_description='List of ticket receivers',
     operation_summary='List of ticket receivers',
-    responses={200: openapi.Response('OK', ApiUserSerializer(many=True)),
+    responses={200: openapi.Response('OK', UserSerializer(many=True)),
                404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
@@ -348,7 +348,7 @@ def topicUserList(request):
     method="get",
     operation_description='List of users subscribed to the topic',
     operation_summary='List users subscribed to the topic',
-    responses={200: openapi.Response('OK', ApiUserSerializer(many=True)),
+    responses={200: openapi.Response('OK', UserSerializer(many=True)),
                404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])

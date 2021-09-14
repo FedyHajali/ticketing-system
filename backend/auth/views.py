@@ -2,13 +2,12 @@
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from .permission import IsSuperuser
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.models import User
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
-from .serializers import GroupSerializer, GroupUsersSerializer, AuthUserSerializer
+from services.serializer import GroupSerializer, UserSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
@@ -22,12 +21,12 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
     method="post",
     operation_description='Registration of a new user',
     operation_summary='Create User',
-    request_body=AuthUserSerializer,
-    responses={201: openapi.Response('Created', AuthUserSerializer),
+    request_body=UserSerializer,
+    responses={201: openapi.Response('Created', UserSerializer),
                400: openapi.Response('Bad Request')})
 @api_view(['POST'])
 def registration(request):
-    serializer = AuthUserSerializer(data=request.data)
+    serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -39,7 +38,7 @@ def registration(request):
     method="get",
     operation_description='Retrieve all User Information ',
     operation_summary='Get User Info',
-    responses={200: openapi.Response('OK', AuthUserSerializer),
+    responses={200: openapi.Response('OK', UserSerializer),
                400: openapi.Response('Bad Request')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
@@ -50,7 +49,7 @@ def userDetail(request):
     except User.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
     
-    serializer = AuthUserSerializer(user, many=False)
+    serializer = UserSerializer(user, many=False)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -74,7 +73,7 @@ def groupList(request):
     method="get",
     operation_description='List of all available groups',
     operation_summary='List all Groups',
-    responses={200: openapi.Response('OK', AuthUserSerializer(many=True)),
+    responses={200: openapi.Response('OK', UserSerializer(many=True)),
                404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
@@ -83,7 +82,7 @@ def groupUsers(request, pk):
     users = User.objects.filter(groups=pk)
     if users.count() == 0:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
-    serializer = AuthUserSerializer(users, many=True)
+    serializer = UserSerializer(users, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
