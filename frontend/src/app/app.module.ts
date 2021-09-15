@@ -14,6 +14,7 @@ import { AuthInterceptor } from './services/auth.interceptor';
 import { GroupsComponent } from './dashboard/groups/groups.component';
 import { TopicsComponent } from './dashboard/topics/topics.component';
 import { TicketsComponent } from './dashboard/tickets/tickets.component';
+import { SidebarComponent } from './layout/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { TicketsComponent } from './dashboard/tickets/tickets.component';
     GroupsComponent,
     TopicsComponent,
     TicketsComponent,
+    SidebarComponent,
   ],
   imports: [
     BrowserModule,

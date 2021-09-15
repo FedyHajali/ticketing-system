@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/internal/Subject';
 import { AuthService } from '../api/services';
-import { User } from '../models/User';
+import { User } from '../api/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
   userSubject = new Subject<User>();
-  user: User = new User();
+  user: User | undefined;
 
   constructor(private auth: AuthService) {}
 
@@ -22,8 +22,9 @@ export class SharedService {
   handleAuthentication(user: any) {
     sessionStorage.setItem('user', JSON.stringify(user));
     let newUser: User = {
-      pk: user.pk,
+      id: user.id,
       username: user.username,
+      password: user.password,
       email: user.email,
       first_name: user.first_name,
       last_name: user.last_name,

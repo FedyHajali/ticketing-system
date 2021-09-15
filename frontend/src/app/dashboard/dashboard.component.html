@@ -1,32 +1,10 @@
-<div class="container">
-  <div class="row">
-    <div class="col-3">
-      <div class="card">
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Group 1</li>
-          <li class="list-group-item">Group 2</li>
-        </ul>
-      </div>
-    </div>
-    <div class="col-6">
-      <div class="container">
-        <button
-          type="button"
-          class="btn btn-success"
-          (click)="getTicketList()"
-        >
-          Your Tickets
-        </button>
-        <div *ngFor="let ticket of tickets">
-          <app-tickets [ticket]="ticket"></app-tickets>
-        </div>
-      </div>
-    </div>
-    <div class="col-3">
-      <div class="card-group">
-        <app-topics></app-topics>
-        <app-topics></app-topics>
-      </div>
+<div class="row">
+  <div class="col">
+    <button type="button" class="btn btn-success" (click)="getTicketList()">
+      Your Tickets
+    </button>
+    <div *ngFor="let ticket of tickets">
+      <app-tickets [ticket]="ticket"></app-tickets>
     </div>
   </div>
 </div>

@@ -444,9 +444,11 @@ def commentCreate(request):
     serializer = CommentSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
+        ticket = Ticket.objects.get(id=serializer.data['ticket'])
+        ticket.comments.add(serializer.data['id'])
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
-        Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @swagger_auto_schema(

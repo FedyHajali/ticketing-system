@@ -16,15 +16,6 @@ class Topic(models.Model):
         return self.name
 
 
-class Comment(models.Model):
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title
-
-
 class File(models.Model):
     filename = models.FileField(upload_to='uploads/files/')
 
@@ -45,7 +36,7 @@ class Ticket(models.Model):
         max_length=2, blank=False, choices=StatusChoices.choices, default=StatusChoices.OPEN)
     content = models.TextField()
     uploads = models.ManyToManyField(
-        File, blank=True, related_name='uploads'
+        'File', blank=True, related_name='uploads'
     )
 
     # Foreign keys
@@ -55,8 +46,21 @@ class Ticket(models.Model):
     receivers = models.ManyToManyField(
         get_user_model(), related_name='receivers')
     comments = models.ManyToManyField(
-        Comment, blank=True, related_name='comments')
-    topics = models.ManyToManyField(Topic, related_name='topics')
+        'Comment', blank=True, related_name='comments')
+    topics = models.ManyToManyField('Topic', related_name='topics')
+
+    def __str__(self):
+        return self.title
+
+
+class Comment(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    creator = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name='comment_creator')
+    ticket = models.ForeignKey(
+        'Ticket', on_delete=models.CASCADE, related_name='comment_ticket')
 
     def __str__(self):
         return self.title

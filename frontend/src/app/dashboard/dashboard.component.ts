@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { Ticket } from '../api/models/ticket';
-import { User } from '../models/User';
+import { User } from '../api/models/user';
 import { SharedService } from '../services/shared.service';
 import { ApiService } from '../api/services';
 
@@ -12,7 +12,7 @@ import { ApiService } from '../api/services';
 })
 export class DashboardComponent implements OnInit {
   private userSub!: Subscription;
-  user: User = new User();
+  user: User | undefined;
   tickets: Ticket[] | null = [];
   constructor(private api: ApiService, private shared: SharedService) {}
 

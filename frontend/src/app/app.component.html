@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
       name="viewport"
@@ -9,13 +8,13 @@
     />
     <title>BTS App</title>
   </head>
-
   <body>
     <app-navbar></app-navbar>
-    <br />
-    <div class="container">
-      <h2>BTS</h2>
-      <div class="card-container">
+    <div class="row" style="margin-top: 56px">
+      <div class="col-3">
+        <app-sidebar></app-sidebar>
+      </div>
+      <div class="col-9">
         <router-outlet></router-outlet>
       </div>
     </div>

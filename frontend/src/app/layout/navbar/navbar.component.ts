@@ -1,7 +1,7 @@
 import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/api/services';
-import { User } from 'src/app/models/User';
+import { User } from '../../api/models';
 import { SharedService } from 'src/app/services/shared.service';
 
 @Component({

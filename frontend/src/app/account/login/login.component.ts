@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/internal/Subject';
 import { AuthService } from 'src/app/api/services';
-import { User } from 'src/app/models/User';
+import { User } from 'src/app/api/models';
 import { SharedService } from 'src/app/services/shared.service';
 @Component({
   selector: 'app-login',
@@ -12,7 +12,7 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class LoginComponent implements OnInit {
   userSubject = new Subject<User>();
-  user: User = new User();
+  user: User | undefined;
   form = this.fb.group({
     username: '',
     password: '',
