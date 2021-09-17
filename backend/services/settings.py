@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import dj_database_url
 import os
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -215,13 +216,9 @@ CELERY_BROKER_URL = 'redis://localhost:6379'
 
 # We're going to have our tasks rolling soon, so that will be handy 
 CELERY_BEAT_SCHEDULE = {
-     # Executes every Friday at 4pm
-    'prova-send': { 
-         'task': 'services.celery.debug_task', 
-         'schedule': 20,
-        }, 
-    'prova-send-api': { 
-         'task': 'api.tasks.api_task', 
-         'schedule': 20,
+     # Executes every day every three hours
+    'check_expired': { 
+         'task': 'api.tasks.check_expired', 
+         'schedule': crontab(minute=0, hour='*/3'),
         },          
 }

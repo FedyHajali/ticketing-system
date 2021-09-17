@@ -4,8 +4,10 @@ from datetime import datetime
 
 
 @app.shared_task(bind=True)
-def api_task(self):
-    ticket = Ticket.objects.get(expiration__lte=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    ticket.status='EX'
-    ticket.save()
-    print('DAJE')
+def check_expired(self):
+    tickets = Ticket.objects.filter(expiration__lte=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    if tickets.count==0:
+        pass
+    else:
+        tickets.update(status='EX')
+    print('Check executed')

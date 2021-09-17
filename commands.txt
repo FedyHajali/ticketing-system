@@ -1,1 +1,14 @@
+Path: /frontend
+
+
 Generazione nuova API: "npm run generate-api"
+
+
+
+Path: /backend
+
+Avvio redis, dalla cartella /redis :".\redis-server.exe"
+
+Avvio scheduler beat celery "celery -A services beat -l INFO"
+
+Avvio worker celery  "celery -A services worker --pool=solo -l info"

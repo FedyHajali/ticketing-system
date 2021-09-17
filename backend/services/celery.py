@@ -8,7 +8,3 @@ app = Celery('services')
 app.config_from_object('django.conf:settings', namespace='CELERY')   
 # Load tasks from all registered apps 
 app.autodiscover_tasks()
-
-@app.task(bind=True)
-def debug_task(self):
-    print('CIAO')
