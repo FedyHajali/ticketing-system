@@ -207,3 +207,21 @@ SWAGGER_SETTINGS = {
         }
     },
 }
+
+CELERY_BROKER_URL = 'redis://localhost:6379'   
+# If time zones are active (USE_TZ = True) define your local 
+#TIME_ZONE = 'Europe/Rome'
+
+
+# We're going to have our tasks rolling soon, so that will be handy 
+CELERY_BEAT_SCHEDULE = {
+     # Executes every Friday at 4pm
+    'prova-send': { 
+         'task': 'services.celery.debug_task', 
+         'schedule': 20,
+        }, 
+    'prova-send-api': { 
+         'task': 'api.tasks.api_task', 
+         'schedule': 20,
+        },          
+}
