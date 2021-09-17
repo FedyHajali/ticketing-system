@@ -246,13 +246,13 @@ def topicDetail(request, pk):
 
 @swagger_auto_schema(
     method="get",
-    operation_description='List of topics of a particular group ',
+    operation_description='List of topics of a particular group',
     operation_summary='List of topics of a group',
     responses={200: openapi.Response('OK', TopicSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def topicGroupList(request, pk):
+def topicListGroup(request, pk):
     topics = Topic.objects.filter(group=pk)
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -270,7 +270,7 @@ def topicGroupList(request, pk):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def topicsUserGroupList(request, pk):
+def topicListGroupUser(request, pk):
     topics = Topic.objects.filter(group=pk, users=request.user.id)
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
@@ -284,7 +284,7 @@ def topicsUserGroupList(request, pk):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
-def topicNotStaffList(request):
+def topicListNotStaff(request):
     topics = Topic.objects.exclude(
         Topic.objects.filter(users_id=request.user.id))
 
@@ -300,7 +300,7 @@ def topicNotStaffList(request):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def topicUserList(request):
+def topicListUserAllGroups(request):
     groups = request.user.groups
     topics = Topic.objects.filter(group__in=groups.all())
     serializer = TopicSerializer(topics, many=True)
@@ -316,7 +316,7 @@ def topicUserList(request):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def topicUsers(request, pk):
+def topicUserList(request, pk):
     try:
         topic = Topic.objects.get(id=pk)  
     except Topic.DoesNotExist:
@@ -355,7 +355,7 @@ def topicCreate(request):
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def topicUsersAdd(request, pk):
+def topicUserAdd(request, pk):
     try:
         topic = Topic.objects.get(id=pk)  # oppure name=
     except Topic.DoesNotExist:
@@ -420,7 +420,7 @@ def commentDetail(request, pk):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def commentTicketList(request, pk):
+def commentListTicket(request, pk):
     try:
         ticket = Ticket.objects.get(id=pk)  # oppure name=
     except Topic.DoesNotExist:

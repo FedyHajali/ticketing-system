@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/api/services';
 import { User } from '../../api/models';
 import { SharedService } from 'src/app/services/shared.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -13,20 +14,25 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterContentInit {
   public isAuthenticated = false;
   private userSub!: Subscription;
   user: User | undefined;
-  constructor(private shared: SharedService, private auth: AuthService) {}
+  constructor(
+    private shared: SharedService,
+    private auth: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    const userlogged: any = sessionStorage.getItem('user');
-    this.isAuthenticated = userlogged == null ? false : true;
+    this.isAuthenticated = this.shared.isAuthenticated();
+    // const userlogged: any = sessionStorage.getItem('user');
+    // this.isAuthenticated = userlogged == null ? false : true;
 
     this.userSub = this.shared.userSubject.subscribe((user) => {
       if (!user) {
-        this.isAuthenticated =
-          sessionStorage.getItem('user') == null ? false : true;
+        this.isAuthenticated = this.shared.isAuthenticated();
       } else {
         this.isAuthenticated = true;
-        this.ngAfterContentInit();
       }
+      this.ngAfterContentInit();
     });
   }
 
@@ -40,7 +46,9 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterContentInit {
     this.auth.authLogoutCreate().subscribe((response) => {
       sessionStorage.removeItem('token');
       sessionStorage.removeItem('user');
+      this.shared.isLoggedIn = false;
       this.shared.userSubject.next();
+      this.router.navigate(['/']);
     });
   }
 

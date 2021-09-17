@@ -1,12 +1,13 @@
-<div class="card">
+<div class="card" id="topics">
+  <div class="card-header">
+    <h5 class="card-title">{{ topic.name }}</h5>
+  </div>
   <div class="card-body">
-    <h5 class="card-title">Topic title</h5>
-    <p class="card-text">
-      Topic description: This is a wider card with supporting text below as a
-      natural lead-in to additional content.
-    </p>
+    <em>Description:</em>
+    <br>
+    <p class="card-text">{{ topic.description }}</p>
   </div>
   <div class="card-footer">
-    <small class="text-muted">Last updated 3 mins ago</small>
+    <small class="text-muted">Users subscribed: {{ topic.users.length }}</small>
   </div>
 </div>

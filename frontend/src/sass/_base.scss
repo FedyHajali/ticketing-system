@@ -1,0 +1,30 @@
+/* You can add global styles to this file, and also import other style files */
+
+body {
+    overflow-x: hidden;
+}
+
+
+$primary: #1b278d;
+
+// Light shades
+$primary-light-10: mix(white, $primary, 10%);
+$primary-light-20: mix(white, $primary, 20%);
+$primary-light-30: mix(white, $primary, 30%);
+
+// Dark shades
+$primary-dark-10: mix(black, $primary, 10%);
+$primary-dark-20: mix(black, $primary, 20%);
+$primary-dark-30: mix(black, $primary, 30%);
+
+$secondary: #ff3c8a;
+
+// Light shades
+$secondary-light-10: mix(white, $secondary, 10%);
+$secondary-light-20: mix(white, $secondary, 20%);
+$secondary-light-30: mix(white, $secondary, 30%);
+
+// Dark shades
+$secondary-dark-10: mix(black, $secondary, 10%);
+$secondary-dark-20: mix(black, $secondary, 20%);
+$secondary-dark-30: mix(black, $secondary, 30%);

@@ -7,16 +7,26 @@ import { User } from '../api/models';
   providedIn: 'root',
 })
 export class SharedService {
+  isLoggedIn = false;
   userSubject = new Subject<User>();
   user: User | undefined;
+  // store the URL so we can redirect after logging in
+  redirectUrl: string | null = null;
 
   constructor(private auth: AuthService) {}
 
-  setUser() {
-    this.auth.authUserDetailList().subscribe((response) => {
-      console.log(response);
+  setActiveUser() {
+    this.isLoggedIn = true;
+    this.auth.authUsersDetailList().subscribe((response) => {
       this.handleAuthentication(response);
     });
+  }
+
+  getActiveUser() {
+    const user = sessionStorage.getItem('user')
+      ? JSON.parse(<string>sessionStorage.getItem('user'))
+      : null;
+    return user;
   }
 
   handleAuthentication(user: any) {
@@ -34,10 +44,8 @@ export class SharedService {
     this.userSubject.next(newUser);
   }
 
-  checkUser() {
-    const user = sessionStorage.getItem('user')
-      ? JSON.parse(<string>sessionStorage.getItem('user'))
-      : null;
-    return user;
+  isAuthenticated() {
+    this.isLoggedIn = sessionStorage.getItem('user') == null ? false : true;
+    return this.isLoggedIn;
   }
 }

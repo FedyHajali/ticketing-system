@@ -10,7 +10,7 @@ import { User, Group } from 'src/app/api/models';
   styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent implements OnInit {
-  Groups: Group[] = [];
+  groups: Group[] = [];
 
   form = this.fb.group({
     username: '',
@@ -37,26 +37,19 @@ export class RegistrationComponent implements OnInit {
   }
 
   onSubmit() {
-    const newGroups: Array<number | undefined> = [];
-
-    this.Groups.filter((group) => {
-      group.id == this.form.controls['groups'].value;
-      newGroups.push(group.id);
-    });
-
     const data: any = {
       username: this.form.controls['username'].value,
       email: this.form.controls['email'].value,
       password: this.form.controls['password'].value,
       first_name: this.form.controls['first_name'].value,
       last_name: this.form.controls['last_name'].value,
-      groups: newGroups,
+      groups: this.form.controls['groups'].value,
       is_staff: this.form.controls['is_staff'].value,
     };
 
-    console.log(data);
+    console.log('New User:', data);
 
-    this.auth.authRegistrationCreate(data).subscribe(
+    this.auth.authUsersRegistrationCreate(data).subscribe(
       (response) => {
         console.log(response);
         this.router.navigate(['/login']);
@@ -67,19 +60,18 @@ export class RegistrationComponent implements OnInit {
     );
   }
 
-  changeGroup(group: any) {
-    console.log(group);
-  }
-
   getGroups() {
-    this.auth.authGroupListList().subscribe(
+    this.auth.authGroupsListList().subscribe(
       (groups) => {
-        console.log(groups);
-        this.Groups = groups;
+        this.groups = groups;
       },
       (error) => {
         console.error(error);
       }
     );
+  }
+
+  clearGroupsChoice() {
+    this.form.controls['groups'].reset();
   }
 }

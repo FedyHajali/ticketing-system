@@ -24,9 +24,9 @@ securityDefinitions:
 security:
   - api_key: []
 paths:
-  /api/comment-create/:
+  /api/comments/create/:
     post:
-      operationId: api_comment-create_create
+      operationId: api_comments_create_create
       summary: Add comment to ticket
       description: Add a comment to a ticket
       parameters:
@@ -45,9 +45,27 @@ paths:
       tags:
         - api
     parameters: []
-  /api/comment-detail/{id}:
+  /api/comments/delete/{id}:
+    delete:
+      operationId: api_comments_delete_delete
+      summary: Delete of a Comment
+      description: Delete of a Comment
+      parameters: []
+      responses:
+        '200':
+          description: Delete OK
+        '404':
+          description: Not Found
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/comments/detail/{id}:
     get:
-      operationId: api_comment-detail_read
+      operationId: api_comments_detail_read
       summary: Get comment info
       description: Retrieve all comment information
       parameters: []
@@ -65,9 +83,9 @@ paths:
         in: path
         required: true
         type: string
-  /api/comment-ticket-list/{id}:
+  /api/comments/ticket-list/{id}:
     get:
-      operationId: api_comment-ticket-list_read
+      operationId: api_comments_ticket-list_read
       summary: List of Comments of a Ticket
       description: List of Comments of a particular Ticket
       parameters: []
@@ -87,9 +105,9 @@ paths:
         in: path
         required: true
         type: string
-  /api/ticket-create/:
+  /api/tickets/create/:
     post:
-      operationId: api_ticket-create_create
+      operationId: api_tickets_create_create
       summary: Ticket Creation
       description: Creation of a new Ticket
       parameters:
@@ -108,9 +126,125 @@ paths:
       tags:
         - api
     parameters: []
-  /api/ticket-creator-update/{id}/:
+  /api/tickets/delete/{id}/:
+    delete:
+      operationId: api_tickets_delete_delete
+      summary: Delete of a ticket
+      description: Delete of a ticket
+      parameters: []
+      responses:
+        '200':
+          description: Delete OK
+        '404':
+          description: Not Found
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/tickets/detail/{id}/:
+    get:
+      operationId: api_tickets_detail_read
+      summary: Ticket detail
+      description: Returns all information of a ticket
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Ticket'
+        '404':
+          description: Not Found
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/tickets/list-creator/{id}:
+    get:
+      operationId: api_tickets_list-creator_read
+      summary: Ticket list created by the active user
+      description: List of tickets for which the active user is a creator
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Ticket'
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/tickets/list-groups/{id}:
+    get:
+      operationId: api_tickets_list-groups_read
+      summary: Ticket list for a specific group
+      description: List of tickets for a specific group
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Ticket'
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/tickets/list/:
+    get:
+      operationId: api_tickets_list_list
+      summary: Ticket list received by the active user
+      description: List of tickets for which the active user is a receiver
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Ticket'
+      tags:
+        - api
+    parameters: []
+  /api/tickets/receivers-list/{id}:
+    get:
+      operationId: api_tickets_receivers-list_read
+      summary: List of ticket receivers
+      description: List of ticket receivers
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '404':
+          description: Not Found
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/tickets/update-creator/{id}/:
     put:
-      operationId: api_ticket-creator-update_update
+      operationId: api_tickets_update-creator_update
       summary: Ticket status update for Creator
       description: Change of ticket status for creator who can only put Closed or
         Open
@@ -136,109 +270,9 @@ paths:
         in: path
         required: true
         type: string
-  /api/ticket-delete/{id}/:
-    delete:
-      operationId: api_ticket-delete_delete
-      summary: Delete of a ticket
-      description: Delete of a ticket
-      parameters: []
-      responses:
-        '200':
-          description: Delete OK
-        '404':
-          description: Not Found
-      tags:
-        - api
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
-  /api/ticket-detail/{id}/:
-    get:
-      operationId: api_ticket-detail_read
-      summary: Ticket detail
-      description: Returns all information of a ticket
-      parameters: []
-      responses:
-        '200':
-          description: OK
-          schema:
-            $ref: '#/definitions/Ticket'
-        '404':
-          description: Not Found
-      tags:
-        - api
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
-  /api/ticket-list-creator/{id}:
-    get:
-      operationId: api_ticket-list-creator_read
-      summary: Ticket list created by the active user
-      description: List of tickets for which the active user is a creator
-      parameters: []
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Ticket'
-        '404':
-          description: Not Found
-      tags:
-        - api
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
-  /api/ticket-list-group/{id}:
-    get:
-      operationId: api_ticket-list-group_read
-      summary: Ticket list for a specific group
-      description: List of tickets for a specific group
-      parameters: []
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Ticket'
-        '404':
-          description: Not Found
-      tags:
-        - api
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
-  /api/ticket-list/:
-    get:
-      operationId: api_ticket-list_list
-      summary: Ticket list received by the active user
-      description: List of tickets for which the active user is a receiver
-      parameters: []
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Ticket'
-        '404':
-          description: Not Found
-      tags:
-        - api
-    parameters: []
-  /api/ticket-receiver-update/{id}/:
+  /api/tickets/update-receiver/{id}/:
     put:
-      operationId: api_ticket-receiver-update_update
+      operationId: api_tickets_update-receiver_update
       summary: Ticket status update for Receiver
       description: Change of ticket status for receiver who can only put Pending or
         Resolved
@@ -264,31 +298,9 @@ paths:
         in: path
         required: true
         type: string
-  /api/ticket-receivers-list/{id}:
-    get:
-      operationId: api_ticket-receivers-list_read
-      summary: List of ticket receivers
-      description: List of ticket receivers
-      parameters: []
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/User'
-        '404':
-          description: Not Found
-      tags:
-        - api
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
-  /api/ticket-staff-update/{id}/:
+  /api/tickets/update-staff/{id}/:
     put:
-      operationId: api_ticket-staff-update_update
+      operationId: api_tickets_update-staff_update
       summary: Ticket status update for is_staff user
       description: Change of ticket status for is_staff user who can put every state
       parameters:
@@ -313,9 +325,27 @@ paths:
         in: path
         required: true
         type: string
-  /api/topic-create/:
+  /api/topics/add-user/{id}:
+    put:
+      operationId: api_topics_add-user_update
+      summary: Add user to Topic
+      description: Subscribe user to selected topic
+      parameters: []
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/topics/create/:
     post:
-      operationId: api_topic-create_create
+      operationId: api_topics_create_create
       summary: Creation of a topic
       description: Creation of a new topic
       parameters:
@@ -334,9 +364,27 @@ paths:
       tags:
         - api
     parameters: []
-  /api/topic-detail/{id}:
+  /api/topics/delete/{id}:
+    delete:
+      operationId: api_topics_delete_delete
+      summary: Delete of a topic
+      description: Delete of a topic
+      parameters: []
+      responses:
+        '200':
+          description: Delete OK
+        '404':
+          description: Not Found
+      tags:
+        - api
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /api/topics/detail/{id}:
     get:
-      operationId: api_topic-detail_read
+      operationId: api_topics_detail_read
       summary: Get topic Detail
       description: Retrieve all topic information
       parameters: []
@@ -354,11 +402,11 @@ paths:
         in: path
         required: true
         type: string
-  /api/topic-group-list/{id}:
+  /api/topics/list-group/{id}:
     get:
-      operationId: api_topic-group-list_read
+      operationId: api_topics_list-group_read
       summary: List of topics of a group
-      description: 'List of topics of a particular group '
+      description: List of topics of a particular group
       parameters: []
       responses:
         '200':
@@ -367,8 +415,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Topic'
-        '404':
-          description: Not Found
       tags:
         - api
     parameters:
@@ -376,9 +422,9 @@ paths:
         in: path
         required: true
         type: string
-  /api/topic-not-staff-list/:
+  /api/topics/list-not-staff/:
     get:
-      operationId: api_topic-not-staff-list_list
+      operationId: api_topics_list-not-staff_list
       summary: List of topics is_staff user is not subscribed
       description: List of topics to which a staff user is not subscribed
       parameters: []
@@ -389,32 +435,12 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Topic'
-        '404':
-          description: Not Found
       tags:
         - api
     parameters: []
-  /api/topic-user-add/{id}:
-    put:
-      operationId: api_topic-user-add_update
-      summary: Add user to Topic
-      description: Subscribe user to selected topic
-      parameters: []
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
-      tags:
-        - api
-    parameters:
-      - name: id
-        in: path
-        required: true
-        type: string
-  /api/topic-user-group-list/{id}:
+  /api/topics/list-user-group/{id}:
     get:
-      operationId: api_topic-user-group-list_read
+      operationId: api_topics_list-user-group_read
       summary: List of topics of a group user is subscribed
       description: List of topics of a group to which the active user is subscribed
       parameters: []
@@ -425,8 +451,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Topic'
-        '404':
-          description: Not Found
       tags:
         - api
     parameters:
@@ -434,11 +458,11 @@ paths:
         in: path
         required: true
         type: string
-  /api/topic-user-list/:
+  /api/topics/list-user-groups/:
     get:
-      operationId: api_topic-user-list_list
-      summary: List of all topics of the groups to which active user belongs
-      description: List of all topics of the groups to which active user belongs
+      operationId: api_topics_list-user-groups_list
+      summary: List of all topics of all groups to which active user belongs
+      description: List of all topics of all groups to which active user belongs
       parameters: []
       responses:
         '200':
@@ -447,14 +471,12 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Topic'
-        '404':
-          description: Not Found
       tags:
         - api
     parameters: []
-  /api/topic-users/{id}/:
+  /api/topics/user-list/{id}/:
     get:
-      operationId: api_topic-users_read
+      operationId: api_topics_user-list_read
       summary: List users subscribed to the topic
       description: List of users subscribed to the topic
       parameters: []
@@ -474,9 +496,9 @@ paths:
         in: path
         required: true
         type: string
-  /auth/group-create/:
+  /auth/groups/create/:
     post:
-      operationId: auth_group-create_create
+      operationId: auth_groups_create_create
       summary: Create Group (only SuperUser)
       description: Creation of a new Group (only SuperUser)
       parameters: []
@@ -490,9 +512,43 @@ paths:
       tags:
         - auth
     parameters: []
-  /auth/group-list/:
+  /auth/groups/delete/{id}:
+    delete:
+      operationId: auth_groups_delete_delete
+      summary: Delete Group (only SuperUser)
+      description: Delete a Group (only SuperUser)
+      parameters: []
+      responses:
+        '200':
+          description: Deleted
+        '404':
+          description: Not Found
+      tags:
+        - auth
+    parameters:
+      - name: id
+        in: path
+        required: true
+        type: string
+  /auth/groups/list-user/:
     get:
-      operationId: auth_group-list_list
+      operationId: auth_groups_list-user_list
+      summary: List Groups of active user
+      description: List of all groups of active user
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Group'
+      tags:
+        - auth
+    parameters: []
+  /auth/groups/list/:
+    get:
+      operationId: auth_groups_list_list
       summary: List all Groups
       description: List of all available groups
       parameters: []
@@ -506,11 +562,11 @@ paths:
       tags:
         - auth
     parameters: []
-  /auth/group-users/{id}/:
+  /auth/groups/user-list/{id}/:
     get:
-      operationId: auth_group-users_read
-      summary: List all Groups
-      description: List of all available groups
+      operationId: auth_groups_user-list_read
+      summary: List users of group
+      description: List all users of a group
       parameters: []
       responses:
         '200':
@@ -645,43 +701,6 @@ paths:
       tags:
         - auth
     parameters: []
-  /auth/registration/:
-    post:
-      operationId: auth_registration_create
-      summary: Create User
-      description: Registration of a new user
-      parameters:
-        - name: data
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/User'
-      responses:
-        '201':
-          description: Created
-          schema:
-            $ref: '#/definitions/User'
-        '400':
-          description: Bad Request
-      tags:
-        - auth
-    parameters: []
-  /auth/user-detail/:
-    get:
-      operationId: auth_user-detail_list
-      summary: Get User Info
-      description: 'Retrieve all User Information '
-      parameters: []
-      responses:
-        '200':
-          description: OK
-          schema:
-            $ref: '#/definitions/User'
-        '400':
-          description: Bad Request
-      tags:
-        - auth
-    parameters: []
   /auth/user/:
     get:
       operationId: auth_user_read
@@ -751,11 +770,50 @@ paths:
       tags:
         - auth
     parameters: []
+  /auth/users/detail/:
+    get:
+      operationId: auth_users_detail_list
+      summary: Get User Info
+      description: 'Retrieve all User Information '
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        '400':
+          description: Bad Request
+      tags:
+        - auth
+    parameters: []
+  /auth/users/registration/:
+    post:
+      operationId: auth_users_registration_create
+      summary: Create User
+      description: Registration of a new user
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/User'
+        '400':
+          description: Bad Request
+      tags:
+        - auth
+    parameters: []
 definitions:
   Comment:
     required:
       - title
       - content
+      - creator
+      - ticket
     type: object
     properties:
       id:
@@ -776,6 +834,12 @@ definitions:
         type: string
         format: date-time
         readOnly: true
+      creator:
+        title: Creator
+        type: integer
+      ticket:
+        title: Ticket
+        type: integer
   Group:
     required:
       - name
@@ -797,7 +861,6 @@ definitions:
         uniqueItems: true
   User:
     required:
-      - groups
       - password
       - username
     type: object
@@ -806,10 +869,6 @@ definitions:
         title: ID
         type: integer
         readOnly: true
-      groups:
-        type: array
-        items:
-          $ref: '#/definitions/Group'
       password:
         title: Password
         type: string
@@ -859,6 +918,15 @@ definitions:
         title: Date joined
         type: string
         format: date-time
+      groups:
+        description: The groups this user belongs to. A user will get all permissions
+          granted to each of their groups.
+        type: array
+        items:
+          description: The groups this user belongs to. A user will get all permissions
+            granted to each of their groups.
+          type: integer
+        uniqueItems: true
       user_permissions:
         description: Specific permissions for this user.
         type: array

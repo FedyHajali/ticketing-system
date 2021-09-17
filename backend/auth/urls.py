@@ -6,13 +6,15 @@ urlpatterns = [
     path('', include('rest_auth.urls')),
 
     # User
-    path('registration/', views.registration, name='registration'),
-    path('user-detail/', views.userDetail, name="user-detail"),
+    path('users/registration/', views.registration, name='registration'),
+    path('users/detail/', views.userDetail, name="user-detail"),
 
     # Group
-    path('group-list/', views.groupList, name="group-list"),
-    path('group-create/', views.groupCreate, name="group-create"),
-    path('group-users/<int:pk>/', views.groupUsers, name="group-users"),
+    path('groups/list/', views.groupList, name="group-list"),
+    path('groups/list-user/', views.groupListUser, name="user-group-list"),
+    path('groups/create/', views.groupCreate, name="group-create"),
+    path('groups/user-list/<int:pk>/', views.userListGroup, name="group-users"),
+    path('groups/delete/<int:pk>', views.groupDelete, name="group-delete"),
 
     # rest_auth built-in API
 

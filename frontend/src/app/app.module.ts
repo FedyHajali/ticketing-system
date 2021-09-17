@@ -11,10 +11,14 @@ import { LoginComponent } from './account/login/login.component';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthInterceptor } from './services/auth.interceptor';
-import { GroupsComponent } from './dashboard/groups/groups.component';
 import { TopicsComponent } from './dashboard/topics/topics.component';
 import { TicketsComponent } from './dashboard/tickets/tickets.component';
 import { SidebarComponent } from './layout/sidebar/sidebar.component';
+import { HomeComponent } from './home/home.component';
+import { ReportsComponent } from './reports/reports.component';
+import { SettingsComponent } from './settings/settings.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -23,10 +27,12 @@ import { SidebarComponent } from './layout/sidebar/sidebar.component';
     LoginComponent,
     NavbarComponent,
     DashboardComponent,
-    GroupsComponent,
     TopicsComponent,
     TicketsComponent,
     SidebarComponent,
+    HomeComponent,
+    ReportsComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,6 +41,8 @@ import { SidebarComponent } from './layout/sidebar/sidebar.component';
     HttpClientModule,
     ReactiveFormsModule,
     CommonModule,
+    BrowserAnimationsModule,
+    MatSelectModule
   ],
   providers: [
       {

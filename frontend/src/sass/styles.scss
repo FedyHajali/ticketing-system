@@ -1,0 +1,17 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+
+@import "../sass/base";
+
+// layout
+@import "../sass/layout/navbar";
+@import "../sass/layout/sidebar";
+
+// pages
+@import "../sass/pages/dashboard";
+@import "../sass/pages/login";
+@import "../sass/pages/registration";
+@import "../sass/pages/home";
+
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -1,10 +1,19 @@
-<div class="row">
-  <div class="col">
-    <button type="button" class="btn btn-success" (click)="getTicketList()">
-      Your Tickets
-    </button>
-    <div *ngFor="let ticket of tickets">
-      <app-tickets [ticket]="ticket"></app-tickets>
+<div class="container" id="dashboard">
+  <div class="row">
+      <app-sidebar
+        [groups]="groups"
+        (changeGroupEvent)="changeGroup($event)"
+      ></app-sidebar>
+    <div class="col">
+      <div class="container-fluid" id="dashboard-container">
+        <h3>Topics of Group: {{ activeGroup?.name }}</h3>
+        <br />
+        <div class="row card-group">
+          <div class="col-4" *ngFor="let topic of topics">
+            <app-topics [topic]="topic"></app-topics>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

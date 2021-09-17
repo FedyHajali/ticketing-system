@@ -48,7 +48,7 @@ def userDetail(request):
         user = User.objects.get(id=request.user.id)
     except User.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
-    
+
     serializer = UserSerializer(user, many=False)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -71,14 +71,29 @@ def groupList(request):
 
 @swagger_auto_schema(
     method="get",
-    operation_description='List of all available groups',
-    operation_summary='List all Groups',
+    operation_description='List of all groups of active user',
+    operation_summary='List Groups of active user',
+    responses={200: openapi.Response('OK', GroupSerializer(many=True))})
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([AllowAny, ])
+def groupListUser(request):
+    groups = request.user.groups
+    groups = Group.objects.filter(pk__in=groups.all())
+    serializer = GroupSerializer(groups, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
+    method="get",
+    operation_description='List all users of a group',
+    operation_summary='List users of group',
     responses={200: openapi.Response('OK', UserSerializer(many=True)),
                404: openapi.Response('Not Found')})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def groupUsers(request, pk):
+def userListGroup(request, pk):
     users = User.objects.filter(groups=pk)
     if users.count() == 0:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)

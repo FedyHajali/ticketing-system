@@ -1,0 +1,23 @@
+#dashboard {
+  .row {
+    .col {
+      margin-left: 250px;
+      #dashboard-container {
+        margin-top: 2rem;
+        .card-group {
+          padding: 2rem;
+          border-style: ridge;
+          background-color: slategray;
+          box-shadow: 0 0 5px 0 black;
+          #topics {
+            margin: 0.5rem;
+            height: 14rem;
+            .card-header {
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
+}

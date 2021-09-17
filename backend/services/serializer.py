@@ -22,9 +22,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         password_data = validated_data.pop('password')
+        groups_data = validated_data.pop('groups')
         user = super().create(validated_data)
         user.set_password(password_data)
-        groups_data = validated_data.pop('groups')
         for group_data in groups_data:
             user.groups.add(group_data)
 

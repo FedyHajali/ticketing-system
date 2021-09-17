@@ -4,32 +4,33 @@ from . import views
 urlpatterns = [
     
     #Ticket
-    path('ticket-create/', views.ticketCreate, name="ticket-create"),
-    path('ticket-list/', views.ticketListReceiver, name="ticket-list"),
-    path('ticket-list-creator/<str:pk>', views.ticketListCreator, name="ticket-list-creator"),
-    path('ticket-list-group/<str:pk>',views.ticketListGroup, name="ticket-group-list"),
-    path('ticket-receivers-list/<int:pk>', views.ticketReceiversList, name="ticket-receivers-list"),
-    path('ticket-detail/<int:pk>/', views.ticketDetail, name="ticket-detail"),
-    path('ticket-creator-update/<int:pk>/', views.ticketCreatorUpdate, name="ticket-creator-update"),
-    path('ticket-receiver-update/<int:pk>/', views.ticketReceiverUpdate, name="ticket-receiver-update"),
-    path('ticket-staff-update/<int:pk>/', views.ticketStaffUpdate, name="ticket-staff-update"),
-    path('ticket-delete/<int:pk>/', views.ticketDelete, name="ticket-delete"),
+    path('tickets/create/', views.ticketCreate, name="ticket-create"),
+    path('tickets/detail/<int:pk>/', views.ticketDetail, name="ticket-detail"),
+    path('tickets/list/', views.ticketListReceiver, name="ticket-list"),
+    path('tickets/list-creator/<str:pk>', views.ticketListCreator, name="ticket-list-creator"),
+    path('tickets/list-groups/<str:pk>',views.ticketListGroup, name="ticket-list-group"),
+    path('tickets/receivers-list/<int:pk>', views.ticketReceiversList, name="ticket-receivers-list"),
+    path('tickets/update-creator/<int:pk>/', views.ticketCreatorUpdate, name="ticket-creator-update"),
+    path('tickets/update-receiver/<int:pk>/', views.ticketReceiverUpdate, name="ticket-receiver-update"),
+    path('tickets/update-staff/<int:pk>/', views.ticketStaffUpdate, name="ticket-staff-update"),
+    path('tickets/delete/<int:pk>/', views.ticketDelete, name="ticket-delete"),
 
     #Topic
-    path('topic-create/', views.topicCreate, name="topic-create"),
-    path('topic-detail/<int:pk>', views.topicDetail, name="topic-detail"),
-    path('topic-user-add/<int:pk>', views.topicUsersAdd, name="topic-user-add"),
-    path('topic-group-list/<int:pk>', views.topicGroupList, name="topic-group-list"),
-    path('topic-users/<int:pk>/', views.topicUsers, name="topic-users"),
-    path('topic-user-group-list/<int:pk>', views.topicsUserGroupList, name="topic-user-group-list"),
-    path('topic-not-staff-list/', views.topicNotStaffList, name="topic-not-user-list"),
-    path('topic-user-list/', views.topicUserList, name="topic-user-list"),
+    path('topics/create/', views.topicCreate, name="topic-create"),
+    path('topics/detail/<int:pk>', views.topicDetail, name="topic-detail"),
+    path('topics/add-user/<int:pk>', views.topicUserAdd, name="topic-user-add"),
+    path('topics/list-group/<int:pk>', views.topicListGroup, name="topic-group-list"),
+    path('topics/list-user-group/<int:pk>', views.topicListGroupUser, name="topic-user-group-list"),
+    path('topics/list-user-groups/', views.topicListUserAllGroups, name="topic-user-all-groups-list"),
+    path('topics/list-not-staff/', views.topicListNotStaff, name="topic-not-user-list"),
+    path('topics/user-list/<int:pk>/', views.topicUserList, name="topic-users"),
+    path('topics/delete/<int:pk>', views.topicDelete, name="topic-delete"),
 
 
 
     #Comment
-    path('comment-create/', views.commentCreate, name="comment-create"),
-    path('comment-ticket-list/<int:pk>', views.commentTicketList, name="comment-ticket-list"),
-    path('comment-detail/<int:pk>', views.commentDetail, name="comment-detail"),
-    
+    path('comments/create/', views.commentCreate, name="comment-create"),
+    path('comments/ticket-list/<int:pk>', views.commentListTicket, name="comment-ticket-list"),
+    path('comments/detail/<int:pk>', views.commentDetail, name="comment-detail"),
+    path('comments/delete/<int:pk>', views.commentDelete, name="comment-delete"),
 ]

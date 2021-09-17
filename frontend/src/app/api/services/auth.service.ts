@@ -18,20 +18,22 @@ import { UserDetails } from '../models/user-details';
   providedIn: 'root',
 })
 class AuthService extends __BaseService {
-  static readonly authGroupCreateCreatePath = '/auth/group-create/';
-  static readonly authGroupListListPath = '/auth/group-list/';
-  static readonly authGroupUsersReadPath = '/auth/group-users/{id}/';
+  static readonly authGroupsCreateCreatePath = '/auth/groups/create/';
+  static readonly authGroupsDeleteDeletePath = '/auth/groups/delete/{id}';
+  static readonly authGroupsListUserListPath = '/auth/groups/list-user/';
+  static readonly authGroupsListListPath = '/auth/groups/list/';
+  static readonly authGroupsUserListReadPath = '/auth/groups/user-list/{id}/';
   static readonly authLoginCreatePath = '/auth/login/';
   static readonly authLogoutListPath = '/auth/logout/';
   static readonly authLogoutCreatePath = '/auth/logout/';
   static readonly authPasswordChangeCreatePath = '/auth/password/change/';
   static readonly authPasswordResetCreatePath = '/auth/password/reset/';
   static readonly authPasswordResetConfirmCreatePath = '/auth/password/reset/confirm/';
-  static readonly authRegistrationCreatePath = '/auth/registration/';
-  static readonly authUserDetailListPath = '/auth/user-detail/';
   static readonly authUserReadPath = '/auth/user/';
   static readonly authUserUpdatePath = '/auth/user/';
   static readonly authUserPartialUpdatePath = '/auth/user/';
+  static readonly authUsersDetailListPath = '/auth/users/detail/';
+  static readonly authUsersRegistrationCreatePath = '/auth/users/registration/';
 
   constructor(
     config: __Configuration,
@@ -46,13 +48,13 @@ class AuthService extends __BaseService {
    * Creation of a new Group (only SuperUser)
    * @return Created
    */
-  authGroupCreateCreateResponse(): __Observable<__StrictHttpResponse<Group>> {
+  authGroupsCreateCreateResponse(): __Observable<__StrictHttpResponse<Group>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
     let req = new HttpRequest<any>(
       'POST',
-      this.rootUrl + `/auth/group-create/`,
+      this.rootUrl + `/auth/groups/create/`,
       __body,
       {
         headers: __headers,
@@ -73,9 +75,88 @@ class AuthService extends __BaseService {
    * Creation of a new Group (only SuperUser)
    * @return Created
    */
-  authGroupCreateCreate(): __Observable<Group> {
-    return this.authGroupCreateCreateResponse().pipe(
+  authGroupsCreateCreate(): __Observable<Group> {
+    return this.authGroupsCreateCreateResponse().pipe(
       __map(_r => _r.body as Group)
+    );
+  }
+
+  /**
+   * Delete Group (only SuperUser)
+   *
+   * Delete a Group (only SuperUser)
+   * @param id undefined
+   */
+  authGroupsDeleteDeleteResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+
+    let req = new HttpRequest<any>(
+      'DELETE',
+      this.rootUrl + `/auth/groups/delete/${encodeURIComponent(String(id))}`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<null>;
+      })
+    );
+  }
+  /**
+   * Delete Group (only SuperUser)
+   *
+   * Delete a Group (only SuperUser)
+   * @param id undefined
+   */
+  authGroupsDeleteDelete(id: string): __Observable<null> {
+    return this.authGroupsDeleteDeleteResponse(id).pipe(
+      __map(_r => _r.body as null)
+    );
+  }
+
+  /**
+   * List Groups of active user
+   *
+   * List of all groups of active user
+   * @return OK
+   */
+  authGroupsListUserListResponse(): __Observable<__StrictHttpResponse<Array<Group>>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+    let req = new HttpRequest<any>(
+      'GET',
+      this.rootUrl + `/auth/groups/list-user/`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<Array<Group>>;
+      })
+    );
+  }
+  /**
+   * List Groups of active user
+   *
+   * List of all groups of active user
+   * @return OK
+   */
+  authGroupsListUserList(): __Observable<Array<Group>> {
+    return this.authGroupsListUserListResponse().pipe(
+      __map(_r => _r.body as Array<Group>)
     );
   }
 
@@ -85,13 +166,13 @@ class AuthService extends __BaseService {
    * List of all available groups
    * @return OK
    */
-  authGroupListListResponse(): __Observable<__StrictHttpResponse<Array<Group>>> {
+  authGroupsListListResponse(): __Observable<__StrictHttpResponse<Array<Group>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/auth/group-list/`,
+      this.rootUrl + `/auth/groups/list/`,
       __body,
       {
         headers: __headers,
@@ -112,27 +193,27 @@ class AuthService extends __BaseService {
    * List of all available groups
    * @return OK
    */
-  authGroupListList(): __Observable<Array<Group>> {
-    return this.authGroupListListResponse().pipe(
+  authGroupsListList(): __Observable<Array<Group>> {
+    return this.authGroupsListListResponse().pipe(
       __map(_r => _r.body as Array<Group>)
     );
   }
 
   /**
-   * List all Groups
+   * List users of group
    *
-   * List of all available groups
+   * List all users of a group
    * @param id undefined
    * @return OK
    */
-  authGroupUsersReadResponse(id: string): __Observable<__StrictHttpResponse<Array<User>>> {
+  authGroupsUserListReadResponse(id: string): __Observable<__StrictHttpResponse<Array<User>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/auth/group-users/${encodeURIComponent(String(id))}/`,
+      this.rootUrl + `/auth/groups/user-list/${encodeURIComponent(String(id))}/`,
       __body,
       {
         headers: __headers,
@@ -148,14 +229,14 @@ class AuthService extends __BaseService {
     );
   }
   /**
-   * List all Groups
+   * List users of group
    *
-   * List of all available groups
+   * List all users of a group
    * @param id undefined
    * @return OK
    */
-  authGroupUsersRead(id: string): __Observable<Array<User>> {
-    return this.authGroupUsersReadResponse(id).pipe(
+  authGroupsUserListRead(id: string): __Observable<Array<User>> {
+    return this.authGroupsUserListReadResponse(id).pipe(
       __map(_r => _r.body as Array<User>)
     );
   }
@@ -417,87 +498,6 @@ class AuthService extends __BaseService {
   }
 
   /**
-   * Create User
-   *
-   * Registration of a new user
-   * @param data undefined
-   * @return Created
-   */
-  authRegistrationCreateResponse(data: User): __Observable<__StrictHttpResponse<User>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    __body = data;
-    let req = new HttpRequest<any>(
-      'POST',
-      this.rootUrl + `/auth/registration/`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<User>;
-      })
-    );
-  }
-  /**
-   * Create User
-   *
-   * Registration of a new user
-   * @param data undefined
-   * @return Created
-   */
-  authRegistrationCreate(data: User): __Observable<User> {
-    return this.authRegistrationCreateResponse(data).pipe(
-      __map(_r => _r.body as User)
-    );
-  }
-
-  /**
-   * Get User Info
-   *
-   * Retrieve all User Information
-   * @return OK
-   */
-  authUserDetailListResponse(): __Observable<__StrictHttpResponse<User>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/auth/user-detail/`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<User>;
-      })
-    );
-  }
-  /**
-   * Get User Info
-   *
-   * Retrieve all User Information
-   * @return OK
-   */
-  authUserDetailList(): __Observable<User> {
-    return this.authUserDetailListResponse().pipe(
-      __map(_r => _r.body as User)
-    );
-  }
-
-  /**
    * Reads and updates UserModel fields
    * Accepts GET, PUT, PATCH methods.
    *
@@ -641,6 +641,87 @@ class AuthService extends __BaseService {
   authUserPartialUpdate(data: UserDetails): __Observable<UserDetails> {
     return this.authUserPartialUpdateResponse(data).pipe(
       __map(_r => _r.body as UserDetails)
+    );
+  }
+
+  /**
+   * Get User Info
+   *
+   * Retrieve all User Information
+   * @return OK
+   */
+  authUsersDetailListResponse(): __Observable<__StrictHttpResponse<User>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+    let req = new HttpRequest<any>(
+      'GET',
+      this.rootUrl + `/auth/users/detail/`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<User>;
+      })
+    );
+  }
+  /**
+   * Get User Info
+   *
+   * Retrieve all User Information
+   * @return OK
+   */
+  authUsersDetailList(): __Observable<User> {
+    return this.authUsersDetailListResponse().pipe(
+      __map(_r => _r.body as User)
+    );
+  }
+
+  /**
+   * Create User
+   *
+   * Registration of a new user
+   * @param data undefined
+   * @return Created
+   */
+  authUsersRegistrationCreateResponse(data: User): __Observable<__StrictHttpResponse<User>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+    __body = data;
+    let req = new HttpRequest<any>(
+      'POST',
+      this.rootUrl + `/auth/users/registration/`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<User>;
+      })
+    );
+  }
+  /**
+   * Create User
+   *
+   * Registration of a new user
+   * @param data undefined
+   * @return Created
+   */
+  authUsersRegistrationCreate(data: User): __Observable<User> {
+    return this.authUsersRegistrationCreateResponse(data).pipe(
+      __map(_r => _r.body as User)
     );
   }
 }

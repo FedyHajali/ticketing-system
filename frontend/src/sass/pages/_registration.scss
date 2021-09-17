@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css?family=Numans");
+#container-registration {
+  background-image: url("../../assets/images/background.jpg") !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 92vh;
+  font-family: "Numans", sans-serif;
+
+  #registration {
+    height: 100%;
+    align-content: center;
+
+    .card {
+      height: 500px;
+      margin-top: auto;
+      margin-bottom: auto;
+      width: 800px;
+      background-color: rgba(0, 0, 0, 0.5) !important;
+    }
+
+    .card-header h1 {
+      color: white;
+    }
+
+    .input-group-prepend span {
+      width: 50px;
+      background-color: $primary-light-20;
+      color: $secondary-light-20;
+      border: 0 !important;
+      height: 2.4rem;
+      i {
+        font-size: larger;
+      }
+    }
+
+    input:focus {
+      outline: 0 0 0 0 !important;
+      box-shadow: 0 0 0 0 !important;
+    }
+
+    button {
+      color: white;
+      background-color: $primary-light-20;
+      width: 100px;
+    }
+
+    button:hover {
+      color: white;
+      background-color: $secondary-light-20;
+    }
+
+    .remember {
+      color: white;
+    }
+
+    .remember input {
+      width: 20px;
+      height: 20px;
+      margin-left: 15px;
+      margin-right: 5px;
+    }
+
+    .icon-groups {
+      height: 3.2rem!important;
+    }
+    .mat-form-field-flex {
+      background-color: white;
+      padding: 0.2rem 0 0 1rem;
+      width: 16rem;
+    }
+  }
+}

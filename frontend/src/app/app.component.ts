@@ -15,10 +15,10 @@ export class AppComponent implements OnInit {
   constructor(private shared: SharedService) {}
 
   ngOnInit(): void {
-    this.user = this.shared.checkUser();
+    this.user = this.shared.getActiveUser();
     this.userSub = this.shared.userSubject.subscribe(
       (user) => {
-        this.user = this.shared.checkUser();
+        this.user = this.shared.getActiveUser();
       },
       (error) => {
         console.error(error);

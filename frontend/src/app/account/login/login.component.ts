@@ -32,8 +32,12 @@ export class LoginComponent implements OnInit {
     this.auth.authLoginCreate(this.form.value).subscribe(
       (response) => {
         sessionStorage.setItem('token', response.key);
-        this.shared.setUser();
-        this.router.navigate(['/dashboard']);
+        this.shared.setActiveUser();
+        if (this.shared.redirectUrl) {
+          this.router.navigate([this.shared.redirectUrl]);
+        } else {
+          this.router.navigate(['/dashboard']);
+        }
       },
       (error) => {
         console.error(error);
