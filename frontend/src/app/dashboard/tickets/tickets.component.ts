@@ -26,7 +26,7 @@ export class TicketsComponent implements OnInit {
   }
 
   getTicketList(id: number) {
-    this.shared.getTicketList(id).subscribe((tickets) => {
+    this.shared.getTicketListGroup(id).subscribe((tickets) => {
       this.tickets = tickets;
     });
   }

@@ -1,26 +1,140 @@
 <div class="container" id="dashboard-container">
-  <h3>Your Groups</h3>
+  <h1>Welcome {{ user?.username }}</h1>
   <br />
   <div id="dashboard">
     <div class="row card-group">
-      <div class="col">
-        <div class="card" *ngFor="let group of groups">
+      <div class="col-6">
+        <hr />
+        <h3>Your Groups</h3>
+        <div class="card" *ngFor="let group of userGroups">
           <ul class="list-group list-group-flush">
             <li class="list-group-item" [routerLink]="['groups/' + group.id]">
               {{ group.name }}
             </li>
           </ul>
         </div>
+        <hr />
+        <div class="row">
+          <div class="col">
+            <h3 style="float: left">All Groups</h3>
+            <button
+              *ngIf="user?.is_superuser"
+              type="button"
+              class="btn btn-outline-primary"
+              style="float: right"
+              (click)="createGroup()"
+            >
+              Add Group
+            </button>
+          </div>
+        </div>
+        <div class="card" *ngFor="let group of allGroups">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              {{ group.name }}
+            </li>
+          </ul>
+        </div>
+        <hr />
       </div>
-      <div>
-        <button
-          *ngIf="user?.is_superuser"
-          type="button"
-          class="btn btn-outline-primary float-end"
-          mat-raised-button
-        >
-          Add Group
-        </button>
+      <div class="col-6">
+        <hr />
+        <h3>Your Tickets</h3>
+        <mat-tab-group animationDuration="0ms">
+          <mat-tab label="Open">
+            <ng-container *ngFor="let ticket of allTickets">
+              <div class="card" *ngIf="ticket.status == 'OP'">
+                <ul class="list-group list-group-flush">
+                  <li
+                    class="list-group-item"
+                    [routerLink]="['tickets/' + ticket.id]"
+                  >
+                    <p>{{ ticket.title }}</p>
+                    <div class="icons" style="display: inline-block">
+                      <span style="margin: 0.2rem"
+                        ><i class="far fa-user"></i
+                      ></span>
+                      <span style="margin: 0.2rem"
+                        ><i class="fas fa-user-edit"></i
+                      ></span>
+                      <span style="margin: 0.2rem; color: red"
+                        ><i class="fas fa-calendar-check"></i
+                      ></span>
+                      <span style="margin: 0.2rem; color: green"
+                        ><i class="fas fa-calendar-check"></i
+                      ></span>
+                    </div>
+                  </li>
+                </ul>
+              </div> </ng-container
+          ></mat-tab>
+          <mat-tab label="In pending">
+            <ng-container *ngFor="let ticket of allTickets">
+              <div class="col" *ngIf="ticket.status == 'PE'">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">{{ ticket.title }}</h5>
+                  </div>
+                  <div class="card-body">
+                    <p class="card-text">Content: {{ ticket.content }}</p>
+                    <a
+                      [routerLink]="['tickets/' + ticket.id]"
+                      class="btn btn-primary"
+                      >Detail</a
+                    >
+                  </div>
+                  <div class="card-footer">
+                    Creator: {{ ticket.creator["username"] }}
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </mat-tab>
+          <mat-tab label="Resolved">
+            <ng-container *ngFor="let ticket of allTickets">
+              <div class="col" *ngIf="ticket.status == 'RE'">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">{{ ticket.title }}</h5>
+                  </div>
+                  <div class="card-body">
+                    <p class="card-text">Content: {{ ticket.content }}</p>
+                    <a
+                      [routerLink]="['tickets/' + ticket.id]"
+                      class="btn btn-primary"
+                      >Detail</a
+                    >
+                  </div>
+                  <div class="card-footer">
+                    Creator: {{ ticket.creator["username"] }}
+                  </div>
+                </div>
+              </div>
+            </ng-container></mat-tab
+          >
+          <mat-tab label="Closed">
+            <ng-container *ngFor="let ticket of allTickets">
+              <div class="col" *ngIf="ticket.status == 'CL'">
+                <div class="card">
+                  <div class="card-header">
+                    <h5 class="card-title">{{ ticket.title }}</h5>
+                  </div>
+                  <div class="card-body">
+                    <p class="card-text">Content: {{ ticket.content }}</p>
+                    <a
+                      [routerLink]="['tickets/' + ticket.id]"
+                      class="btn btn-primary"
+                      >Detail</a
+                    >
+                  </div>
+                  <div class="card-footer">
+                    Creator: {{ ticket.creator["username"] }}
+                  </div>
+                </div>
+              </div>
+            </ng-container></mat-tab
+          >
+        </mat-tab-group>
       </div>
     </div>
   </div>

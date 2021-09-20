@@ -1,0 +1,22 @@
+<form [formGroup]="form">
+  <h1>Create new Group</h1>
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input
+      type="text"
+      class="form-control"
+      id="name"
+      placeholder="Enter name"
+      formControlName="name"
+    />
+  </div>
+  <br />
+  <button
+    type="button"
+    class="btn btn-outline-primary"
+    mat-raised-button
+    (click)="create()"
+  >
+    Save Group
+  </button>
+</form>

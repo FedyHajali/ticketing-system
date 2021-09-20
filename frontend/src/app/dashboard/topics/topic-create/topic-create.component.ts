@@ -27,14 +27,12 @@ export class TopicCreateComponent implements OnInit {
   ngOnInit(): void {}
 
   create() {
-    console.log(this.data.group);
     let topic: Topic = {
       name: this.form.controls['name'].value,
       description: this.form.controls['description'].value,
       group: this.data.group,
       users: [],
     };
-    console.log(topic);
 
     this.api.apiTopicsCreateCreate(topic).subscribe((response) => {
       console.log(response);
