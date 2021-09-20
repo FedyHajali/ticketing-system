@@ -49,10 +49,17 @@ export class SharedService {
     return this.isLoggedIn;
   }
 
-  getGroupList() {
+  getUserGroupList() {
     var subjectGroups = new Subject<Group[]>();
     this.auth.authGroupsListUserList().subscribe((groups) => {
-      this.groups = groups;
+      subjectGroups.next(groups);
+    });
+    return subjectGroups.asObservable();
+  }
+
+  getAllGroupList() {
+    var subjectGroups = new Subject<Group[]>();
+    this.auth.authGroupsListList().subscribe((groups) => {
       subjectGroups.next(groups);
     });
     return subjectGroups.asObservable();
@@ -66,7 +73,15 @@ export class SharedService {
     return subjectTopics.asObservable();
   }
 
-  getTicketList(id: number) {
+  getTicketListAll() {
+    var subjectTickets = new Subject<Ticket[]>();
+    this.api.apiTicketsListList().subscribe((tickets) => {
+      subjectTickets.next(tickets);
+    });
+    return subjectTickets.asObservable();
+  }
+
+  getTicketListGroup(id: number) {
     var subjectTickets = new Subject<Ticket[]>();
     this.api.apiTicketsListGroupsRead(id.toString()).subscribe((tickets) => {
       subjectTickets.next(tickets);
@@ -81,5 +96,4 @@ export class SharedService {
     });
     return subjectTicket.asObservable();
   }
-
 }

@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SharedService } from '../services/shared.service';
 import { ApiService, AuthService } from '../api/services';
-import { Group, User } from '../api/models';
+import { Group, Ticket, User } from '../api/models';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GroupCreateComponent } from './groups/group-create/group-create.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,34 +15,51 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class DashboardComponent implements OnInit {
   private userSub!: Subscription;
   user: User | undefined;
-  groups: Group[] = [];
+  userGroups: Group[] = [];
+  allGroups: Group[] = [];
+  allTickets: Ticket[] = [];
 
   constructor(
-    private api: ApiService,
-    private shared: SharedService,
-    private auth: AuthService,
     private dialog: MatDialog,
+    private shared: SharedService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.user = this.shared.getActiveUser();
-    this.getGroupList();
-    this.userSub = this.shared.userSubject.subscribe((user) => {
-      this.user = this.shared.getActiveUser();
-      this.getGroupList();
+    this.getUserGroupList();
+    this.getAllGroupList();
+    this.getAllTickets();
+  }
+
+  getUserGroupList() {
+    this.shared.getUserGroupList().subscribe((groups) => {
+      this.userGroups = groups;
     });
   }
 
-  getGroupList() {
-    if (this.user)
-      this.shared.getGroupList().subscribe((groups) => {
-        this.groups = groups;
-      });
+  getAllGroupList() {
+    this.shared.getAllGroupList().subscribe((groups) => {
+      this.allGroups = groups;
+    });
   }
 
-  navigateTopics(id: any) {
-    this.router.navigate(['topics', id], { relativeTo: this.route });
+  createGroup() {
+    const dialogRef = this.dialog.open(GroupCreateComponent, {
+      width: '300px',
+      height: '300px',
+      autoFocus: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.getAllGroupList();
+    });
+  }
+
+  getAllTickets() {
+    this.shared.getTicketListAll().subscribe((tickets) => {
+      this.allTickets = tickets;
+    });
   }
 }

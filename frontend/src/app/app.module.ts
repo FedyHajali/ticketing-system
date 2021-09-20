@@ -19,19 +19,13 @@ import { ReportsComponent } from './reports/reports.component';
 import { SettingsComponent } from './settings/settings.component';
 import { TopicCreateComponent } from './dashboard/topics/topic-create/topic-create.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { MatSelectModule } from '@angular/material/select';
-// import { MatDialogModule } from '@angular/material/dialog';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-// import { MatTabsModule } from '@angular/material/tabs';
-// import { MatChipsModule } from '@angular/material/chips';
-// import { MatTableModule } from '@angular/material/table';
-// import { MatCardModule } from '@angular/material/card';
-// import { MatExpansionModule } from '@angular/material/expansion';
 import { TicketDetailComponent } from './dashboard/tickets/ticket-detail/ticket-detail.component';
 import { TicketCreateComponent } from './dashboard/tickets/ticket-create/ticket-create.component';
 import { TicketUpdateComponent } from './dashboard/tickets/ticket-update/ticket-update.component';
 import { TicketDeleteComponent } from './dashboard/tickets/ticket-delete/ticket-delete.component';
 import { TopicDeleteComponent } from './dashboard/topics/topic-delete/topic-delete.component';
+import { GroupsComponent } from './dashboard/groups/groups.component';
+import { GroupCreateComponent } from './dashboard/groups/group-create/group-create.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { MaterialModule } from '../app/material/material.module';
 @NgModule({
@@ -54,6 +48,8 @@ import { MaterialModule } from '../app/material/material.module';
     TicketDeleteComponent,
     TopicDeleteComponent,
     PageNotFoundComponent,
+    GroupsComponent,
+    GroupCreateComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,7 +59,7 @@ import { MaterialModule } from '../app/material/material.module';
     ReactiveFormsModule,
     CommonModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
   ],
   providers: [
     {

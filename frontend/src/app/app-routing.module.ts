@@ -36,6 +36,10 @@ const routes: Routes = [
         path: 'groups/:group_id/topics/:topic_id/tickets/:ticket_id',
         component: TicketDetailComponent,
       },
+      {
+        path: 'tickets/:ticket_id',
+        component: TicketDetailComponent,
+      },
     ],
     canActivate: [AuthGuard],
   },

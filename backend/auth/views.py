@@ -119,6 +119,7 @@ def groupCreate(request):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @swagger_auto_schema(
     method="delete",
     operation_description='Delete a Group (only SuperUser)',
@@ -133,7 +134,7 @@ def groupDelete(request, pk):
         group = Group.objects.filter(id=pk)
     except Group.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
-        
+
     group.delete()
     return Response("Delete OK", status=status.HTTP_200_OK)
 
