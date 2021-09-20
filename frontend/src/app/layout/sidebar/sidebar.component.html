@@ -2,13 +2,8 @@
   <!-- Sidebar -->
   <nav>
     <div class="sidebar-header">
-      <h3>My Groups</h3>
+      <h3>Welcome</h3>
     </div>
 
-    <ul *ngIf="groups?.length !== 0">
-      <li *ngFor="let group of groups" (click)="changeGroup(group)">
-        <p>{{ group.name }}</p>
-      </li>
-    </ul>
   </nav>
 </div>

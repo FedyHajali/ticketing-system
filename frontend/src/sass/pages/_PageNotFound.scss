@@ -1,0 +1,29 @@
+#container-PageNotFound {
+  background-image: url("../../assets/images/background.jpg") !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 92vh;
+  font-family: "Numans", sans-serif;
+
+  #PageNotFound {
+    height: 100%;
+    align-content: center;
+
+    .card {
+      height: 370px;
+      margin-top: auto;
+      margin-bottom: auto;
+      width: 650px;
+      background-color: rgba(0, 0, 0, 0.5) !important;
+
+      .card-body {
+        padding: 10rem 1rem;
+        text-align: center;
+        h1 {
+            color: white;
+            font-size: xxx-large;
+        }
+      }
+    }
+  }
+}

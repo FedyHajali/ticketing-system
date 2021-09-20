@@ -17,9 +17,23 @@ import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { HomeComponent } from './home/home.component';
 import { ReportsComponent } from './reports/reports.component';
 import { SettingsComponent } from './settings/settings.component';
+import { TopicCreateComponent } from './dashboard/topics/topic-create/topic-create.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSelectModule } from '@angular/material/select';
-
+// import { MatSelectModule } from '@angular/material/select';
+// import { MatDialogModule } from '@angular/material/dialog';
+// import { MatFormFieldModule } from '@angular/material/form-field';
+// import { MatTabsModule } from '@angular/material/tabs';
+// import { MatChipsModule } from '@angular/material/chips';
+// import { MatTableModule } from '@angular/material/table';
+// import { MatCardModule } from '@angular/material/card';
+// import { MatExpansionModule } from '@angular/material/expansion';
+import { TicketDetailComponent } from './dashboard/tickets/ticket-detail/ticket-detail.component';
+import { TicketCreateComponent } from './dashboard/tickets/ticket-create/ticket-create.component';
+import { TicketUpdateComponent } from './dashboard/tickets/ticket-update/ticket-update.component';
+import { TicketDeleteComponent } from './dashboard/tickets/ticket-delete/ticket-delete.component';
+import { TopicDeleteComponent } from './dashboard/topics/topic-delete/topic-delete.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { MaterialModule } from '../app/material/material.module';
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,6 +47,13 @@ import { MatSelectModule } from '@angular/material/select';
     HomeComponent,
     ReportsComponent,
     SettingsComponent,
+    TopicCreateComponent,
+    TicketDetailComponent,
+    TicketCreateComponent,
+    TicketUpdateComponent,
+    TicketDeleteComponent,
+    TopicDeleteComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,14 +63,14 @@ import { MatSelectModule } from '@angular/material/select';
     ReactiveFormsModule,
     CommonModule,
     BrowserAnimationsModule,
-    MatSelectModule
+    MaterialModule
   ],
   providers: [
-      {
-        provide: HTTP_INTERCEPTORS,
-        useClass: AuthInterceptor,
-        multi: true,
-      },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

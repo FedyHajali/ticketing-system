@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/internal/Subject';
-import { AuthService } from '../api/services';
-import { User } from '../api/models';
+import { ApiService, AuthService } from '../api/services';
+import { Group, Ticket, Topic, User } from '../api/models';
 
 @Injectable({
   providedIn: 'root',
@@ -10,10 +10,10 @@ export class SharedService {
   isLoggedIn = false;
   userSubject = new Subject<User>();
   user: User | undefined;
-  // store the URL so we can redirect after logging in
+  groups: Group[] = [];
   redirectUrl: string | null = null;
 
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService, private api: ApiService) {}
 
   setActiveUser() {
     this.isLoggedIn = true;
@@ -48,4 +48,38 @@ export class SharedService {
     this.isLoggedIn = sessionStorage.getItem('user') == null ? false : true;
     return this.isLoggedIn;
   }
+
+  getGroupList() {
+    var subjectGroups = new Subject<Group[]>();
+    this.auth.authGroupsListUserList().subscribe((groups) => {
+      this.groups = groups;
+      subjectGroups.next(groups);
+    });
+    return subjectGroups.asObservable();
+  }
+
+  getTopicList(id: number) {
+    var subjectTopics = new Subject<Topic[]>();
+    this.api.apiTopicsListGroupRead(id.toString()).subscribe((topics) => {
+      subjectTopics.next(topics);
+    });
+    return subjectTopics.asObservable();
+  }
+
+  getTicketList(id: number) {
+    var subjectTickets = new Subject<Ticket[]>();
+    this.api.apiTicketsListGroupsRead(id.toString()).subscribe((tickets) => {
+      subjectTickets.next(tickets);
+    });
+    return subjectTickets.asObservable();
+  }
+
+  getTicketDetail(id: number) {
+    var subjectTicket = new Subject<Ticket>();
+    this.api.apiTicketsDetailRead(id.toString()).subscribe((ticket) => {
+      subjectTicket.next(ticket);
+    });
+    return subjectTicket.asObservable();
+  }
+
 }

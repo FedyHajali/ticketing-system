@@ -1,0 +1,18 @@
+#ticket-detail {
+  margin-top: 3rem;
+  .row {
+    .col-8 {
+      .row:nth-child(3) {
+        margin-top: 2rem;
+      }
+      .row:nth-child(4) {
+        margin-top: 2rem;
+        .col {
+          #comment-input {
+            margin-top: 2rem;
+          }
+        }
+      }
+    }
+  }
+}

@@ -42,8 +42,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class TopicSerializer(serializers.ModelSerializer):
-    users = UserSerializer(many=True)
-    group = GroupSerializer()
+    # users = UserSerializer(many=True)
+    # group = GroupSerializer()
 
     class Meta:
         model = Topic

@@ -1,13 +1,48 @@
-<div class="card" id="topics">
-  <div class="card-header">
-    <h5 class="card-title">{{ topic.name }}</h5>
+<div class="container" id="dashboard-container">
+  <div class="row">
+    <div class="col">
+      <h3 id="title">Your Topics</h3>
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        routerLink="../.."
+        id="back"
+      >
+        Go Back
+      </button>
+    </div>
   </div>
-  <div class="card-body">
-    <em>Description:</em>
-    <br>
-    <p class="card-text">{{ topic.description }}</p>
-  </div>
-  <div class="card-footer">
-    <small class="text-muted">Users subscribed: {{ topic.users.length }}</small>
+  <br />
+  <div id="topics">
+    <div class="row card-group">
+      <div class="col-4" *ngFor="let topic of topics">
+        <div class="card" id="topics" [routerLink]="['topics/' + topic.id]">
+          <div class="card-header">
+            <h5 class="card-title">{{ topic.name }}</h5>
+          </div>
+          <div class="card-body">
+            <em>Description:</em>
+            <br />
+            <p class="card-text">{{ topic.description }}</p>
+          </div>
+          <div class="card-footer">
+            <small class="text-muted"
+              >Users subscribed: {{ topic.users.length }}</small
+            >
+          </div>
+        </div>
+      </div>
+      <div>
+        <button
+          *ngIf="user?.is_superuser"
+          type="button"
+          class="btn btn-outline-primary float-end"
+          mat-raised-button
+          (click)="openTopicModalCreate()"
+        >
+          Add Topic
+        </button>
+      </div>
+    </div>
   </div>
 </div>

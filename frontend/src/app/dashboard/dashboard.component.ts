@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { SharedService } from '../services/shared.service';
 import { ApiService, AuthService } from '../api/services';
-import { Group, User, Ticket, Topic } from '../api/models';
+import { Group, User } from '../api/models';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,50 +15,33 @@ export class DashboardComponent implements OnInit {
   private userSub!: Subscription;
   user: User | undefined;
   groups: Group[] = [];
-  tickets: Ticket[] = [];
-  topics: Topic[] = [];
-  activeGroup!: Group;
 
   constructor(
     private api: ApiService,
     private shared: SharedService,
-    private auth: AuthService
+    private auth: AuthService,
+    private dialog: MatDialog,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.user = this.shared.getActiveUser();
-    if (this.user) this.getGroupList();
+    this.getGroupList();
     this.userSub = this.shared.userSubject.subscribe((user) => {
       this.user = this.shared.getActiveUser();
-      console.log('Active User:', this.user?.username);
-      if (this.user) this.getGroupList();
+      this.getGroupList();
     });
   }
 
   getGroupList() {
-    this.auth.authGroupsListUserList().subscribe((groups) => {
-      this.groups = groups;
-      this.activeGroup = this.groups[0];
-      console.log('Active Group:', this.activeGroup.name);
-      if (this.activeGroup.id) this.getTopicList(this.activeGroup.id);
-    });
+    if (this.user)
+      this.shared.getGroupList().subscribe((groups) => {
+        this.groups = groups;
+      });
   }
 
-  changeGroup(group: Group) {
-    this.activeGroup = group;
-    console.log('Active Group:', this.activeGroup.name);
-    if (this.activeGroup.id) this.getTopicList(this.activeGroup.id);
-  }
-
-  getTicketList() {
-    this.api.apiTicketsListList().subscribe((tickets: any) => {
-      this.tickets = tickets;
-    });
-  }
-
-  getTopicList(id: number) {
-    this.api.apiTopicsListGroupRead(id.toString()).subscribe((topics: any) => {
-      this.topics = topics;
-    });
+  navigateTopics(id: any) {
+    this.router.navigate(['topics', id], { relativeTo: this.route });
   }
 }

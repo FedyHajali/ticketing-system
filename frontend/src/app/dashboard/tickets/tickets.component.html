@@ -1,38 +1,84 @@
-<div class="card">
-  <div class="card-header">
-    <div class="card-header-tabs">
-      <li class="nav-item">
-        Status:
-        <a class="nav-tabs">{{ ticket.status }}</a>
-      </li>
-      <li class="nav-item">
-        Created at:
-        <a class="nav-tabs">{{ ticket.created_at }}</a>
-      </li>
-      <li class="nav-item">
-        Expiration: 
-        <a class="nav-tabs">{{ ticket.expiration }}</a>
-      </li>
+<div class="container" id="dashboard-container">
+  <div class="row">
+    <div class="col">
+      <h3 id="title">Your Tickets</h3>
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        routerLink="../.."
+        id="back"
+      >
+        Go Back
+      </button>
     </div>
   </div>
-  <div class="card-body">
-    <h5 class="card-title">{{ ticket.title }}</h5>
-    Groups:
-    <div class="card-subtitle" *ngFor="let group of ticket.groups">
-      {{ group["name"] }}
+  <br />
+  <div id="tickets">
+    <div class="row card-group">
+      <div class="col-4" *ngFor="let ticket of tickets">
+        <div class="card">
+          <div class="card-header">
+            <!-- <mat-tab-group animationDuration="0ms" mat-stretch-tabs>
+              <mat-tab label="Status" > {{ ticket.status }} </mat-tab>
+              <mat-tab label="Created"> {{ ticket.created_at }} </mat-tab>
+              <mat-tab label="Expired"> {{ ticket.expiration }} </mat-tab>
+            </mat-tab-group> -->
+            <h5 class="card-title">{{ ticket.title }}</h5>
+          </div>
+          <div class="card-body">
+            <!-- <div class="row">
+              <div class="col-6">
+                <label for="groups">Groups</label>
+              </div>
+              <div class="col-6">
+                <select id="groups">
+                  <option
+                    *ngFor="let group of ticket.groups"
+                    [value]="group.id"
+                  >
+                    {{ group.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <label for="topics">Topics</label>
+              </div>
+              <div class="col-6">
+                <select id="topics">
+                  <option
+                    *ngFor="let topic of ticket.topics"
+                    [value]="topic.id"
+                  >
+                    {{ topic.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <label for="receivers">Receivers</label>
+              </div>
+              <div class="col-6">
+                <select id="receivers">
+                  <option *ngFor="let receiver of ticket.receivers">
+                    {{ receiver.username }}
+                  </option>
+                </select>
+              </div>
+            </div> -->
+
+            <p class="card-text">Content: {{ ticket.content }}</p>
+            <a [routerLink]="['tickets/' + ticket.id]" class="btn btn-primary"
+              >Detail</a
+            >
+          </div>
+          <div class="card-footer">
+            Creator: {{ ticket.creator["username"] }}
+          </div>
+        </div>
+      </div>
     </div>
-    Topics:
-    <div class="card-subtitle" *ngFor="let topic of ticket.topics">
-      {{ topic["name"] }}
-    </div>
-    Receivers:
-    <div class="card-subtitle" *ngFor="let receiver of ticket.receivers">
-      {{ receiver["username"] }}
-    </div>
-    <p class="card-text">
-      Content: {{ ticket.content }}
-    </p>
-    <a href="#" class="btn btn-primary">Go somewhere</a>
   </div>
-  <div class="card-footer">Creator: {{ ticket.creator["username"] }}</div>
 </div>

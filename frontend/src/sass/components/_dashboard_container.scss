@@ -1,0 +1,14 @@
+#dashboard-container {
+  width: auto;
+  margin: 5rem 2rem 2rem 18rem;
+  .row {
+    .col {
+      #title {
+        float: left;
+      }
+      #back {
+        float: right;
+      }
+    }
+  }
+}

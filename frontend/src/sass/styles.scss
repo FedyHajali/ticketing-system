@@ -3,6 +3,9 @@
 
 @import "../sass/base";
 
+// components
+@import "../sass/components/dashboard_container";
+
 // layout
 @import "../sass/layout/navbar";
 @import "../sass/layout/sidebar";
@@ -12,6 +15,7 @@
 @import "../sass/pages/login";
 @import "../sass/pages/registration";
 @import "../sass/pages/home";
-
-// html, body { height: 100%; }
-// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@import "../sass/pages/topics";
+@import "../sass/pages/tickets";
+@import "../sass/pages/PageNotFound";
+@import "../sass/pages/ticket_detail";

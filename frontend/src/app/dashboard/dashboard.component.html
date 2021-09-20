@@ -1,18 +1,26 @@
-<div class="container" id="dashboard">
-  <div class="row">
-      <app-sidebar
-        [groups]="groups"
-        (changeGroupEvent)="changeGroup($event)"
-      ></app-sidebar>
-    <div class="col">
-      <div class="container-fluid" id="dashboard-container">
-        <h3>Topics of Group: {{ activeGroup?.name }}</h3>
-        <br />
-        <div class="row card-group">
-          <div class="col-4" *ngFor="let topic of topics">
-            <app-topics [topic]="topic"></app-topics>
-          </div>
+<div class="container" id="dashboard-container">
+  <h3>Your Groups</h3>
+  <br />
+  <div id="dashboard">
+    <div class="row card-group">
+      <div class="col">
+        <div class="card" *ngFor="let group of groups">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" [routerLink]="['groups/' + group.id]">
+              {{ group.name }}
+            </li>
+          </ul>
         </div>
+      </div>
+      <div>
+        <button
+          *ngIf="user?.is_superuser"
+          type="button"
+          class="btn btn-outline-primary float-end"
+          mat-raised-button
+        >
+          Add Group
+        </button>
       </div>
     </div>
   </div>

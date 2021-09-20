@@ -1,0 +1,23 @@
+#tickets {
+  .card-group {
+    margin-bottom: 7rem;
+    padding: 2rem;
+    border-style: ridge;
+    background-color: ghostwhite;
+    box-shadow: 0 0 5px 0 black;
+    .card {
+      margin-bottom: 2rem;
+      padding: 2rem;
+      box-shadow: 0 0 5px 0 black;
+      .card-header {
+        .mat-tab-label {
+          width: 50% !important;
+        }
+      }
+    }
+  }
+}
+
+::ng-deep .mat-tab-label {
+  min-width: 100px;
+}

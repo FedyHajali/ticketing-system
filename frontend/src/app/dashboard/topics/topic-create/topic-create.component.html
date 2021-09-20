@@ -1,0 +1,30 @@
+<form [formGroup]="form">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input
+      type="text"
+      class="form-control"
+      id="name"
+      placeholder="Enter name"
+      formControlName="name"
+    />
+  </div>
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea
+      class="form-control"
+      id="description"
+      rows="3"
+      formControlName="description"
+    ></textarea>
+  </div>
+  <br />
+  <button
+    type="button"
+    class="btn btn-outline-primary"
+    mat-raised-button
+    (click)="create()"
+  >
+    Add Topic
+  </button>
+</form>
