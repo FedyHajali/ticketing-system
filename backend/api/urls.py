@@ -8,11 +8,15 @@ urlpatterns = [
     path('tickets/detail/<int:pk>/', views.ticketDetail, name="ticket-detail"),
     path('tickets/list/', views.ticketListReceiver, name="ticket-list"),
     path('tickets/list-creator/<str:pk>', views.ticketListCreator, name="ticket-list-creator"),
+    path('tickets/list-all>/', views.ticketListAll, name="ticket-list-all"),
     path('tickets/list-groups/<str:pk>',views.ticketListGroup, name="ticket-list-group"),
+    path('tickets/list-topic/<int:pk>/',views.ticketListTopic, name="ticket-list-topic"),
+    path('tickets/list-topic-user/<int:pk>/',views.ticketListTopicUser, name="ticket-list-topic-user"),
     path('tickets/receivers-list/<int:pk>', views.ticketReceiversList, name="ticket-receivers-list"),
     path('tickets/update-creator/<int:pk>/', views.ticketCreatorUpdate, name="ticket-creator-update"),
     path('tickets/update-receiver/<int:pk>/', views.ticketReceiverUpdate, name="ticket-receiver-update"),
     path('tickets/update-staff/<int:pk>/', views.ticketStaffUpdate, name="ticket-staff-update"),
+    path('tickets/user-add/<int:pk>/<int:user_id>', views.ticketUserAdd, name="ticket-user-add"), ##bisogna passare anche l'id dell'utente
     path('tickets/delete/<int:pk>/', views.ticketDelete, name="ticket-delete"),
 
     #Topic

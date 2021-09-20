@@ -42,6 +42,21 @@ def ticketListCreator(request, pk):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of tickets',
+    operation_summary='Ticket list',
+    responses={200: openapi.Response('OK', TicketSerializer(many=True))})
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated, IsStaff])
+def ticketListAll(request):
+    tickets = Ticket.objects.all()
+    serializer = TicketSerializer(tickets, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 @swagger_auto_schema(
     method="get",
     operation_description='List of tickets for a specific group',
@@ -52,6 +67,34 @@ def ticketListCreator(request, pk):
 @permission_classes([IsAuthenticated, IsStaff])
 def ticketListGroup(request, pk):
     tickets = Ticket.objects.filter(groups__id=pk)
+    serializer = TicketSerializer(tickets, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of tickets for a specific topic',
+    operation_summary='Ticket list for a specific topic',
+    responses={200: openapi.Response('OK', TicketSerializer(many=True))})
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated, IsStaff])
+def ticketListTopic(request, pk):
+    tickets = Ticket.objects.filter(topics__id=pk)
+    serializer = TicketSerializer(tickets, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
+    method="get",
+    operation_description='List of tickets of the topic to which the user is subscribed',
+    operation_summary='List of tickets of the topic to which the user is subscribed',
+    responses={200: openapi.Response('OK', TicketSerializer(many=True))})
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated,])
+def ticketListTopicUser(request, pk):
+    tickets = Ticket.objects.filter(topics__id=pk, topics__users=request.user)
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -201,6 +244,30 @@ def ticketStaffUpdate(request, pk):
         serializer.save()
 
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+## attenzione doppio parametro
+@swagger_auto_schema(
+    method="put",
+    operation_description='Subscribe user to selected ticket',
+    operation_summary='Add user to Ticket',
+    responses={200: openapi.Response('OK'),
+               404: openapi.Response('Not Found')})
+@api_view(['PUT'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated, IsStaff])
+def ticketUserAdd(request, pk, user_id):
+    try:
+        ticket = Ticket.objects.get(id=pk)  # oppure name=
+    except Ticket.DoesNotExist:
+        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return Response('Not Found user', status=status.HTTP_404_NOT_FOUND)
+
+    ticket.receivers.add(user)
+
+    return Response('You have been subscribed to the Topic', status.HTTP_200_OK)
 
 
 @swagger_auto_schema(

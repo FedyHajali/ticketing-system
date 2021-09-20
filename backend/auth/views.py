@@ -1,7 +1,7 @@
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from .permission import IsSuperuser
+from .permission import IsSuperuser ,IsStaff
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.models import User
 from rest_framework.authentication import TokenAuthentication
@@ -105,6 +105,7 @@ def userListGroup(request, pk):
     method="post",
     operation_description='Creation of a new Group (only SuperUser)',
     operation_summary='Create Group (only SuperUser)',
+    request_body=GroupSerializer,
     responses={201: openapi.Response('Created', GroupSerializer),
                400: openapi.Response('Bad Request')})
 @api_view(['POST'])
@@ -135,3 +136,24 @@ def groupDelete(request, pk):
         
     group.delete()
     return Response("Delete OK", status=status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
+    method="put",
+    operation_description='Subscribe user to group',
+    operation_summary='Add user to Group',
+    responses={200: openapi.Response('OK'),
+               404: openapi.Response('Not Found')})
+@api_view(['PUT'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated,IsStaff])
+def groupUserAdd(request, pk):
+    try:
+        group = Group.objects.get(id=pk)
+    except Group.DoesNotExist:
+        return Response('Not Found group', status=status.HTTP_404_NOT_FOUND)
+    user = User.objects.get(id=request.user_id)
+
+    user.groups.add(group)
+
+    return Response('User subscribed to the Group', status.HTTP_200_OK)

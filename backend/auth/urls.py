@@ -15,6 +15,7 @@ urlpatterns = [
     path('groups/create/', views.groupCreate, name="group-create"),
     path('groups/user-list/<int:pk>/', views.userListGroup, name="group-users"),
     path('groups/delete/<int:pk>', views.groupDelete, name="group-delete"),
+    path('groups/user-add/<int:pk>', views.groupUserAdd, name="group-user-add"),
 
     # rest_auth built-in API
 

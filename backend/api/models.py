@@ -32,6 +32,8 @@ class Ticket(models.Model):
     title = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     expiration = models.DateTimeField()
+    last_updated = models.DateTimeField()
+    last_updated_by = models.IntegerField(default=None)
     status = models.CharField(
         max_length=2, blank=False, choices=StatusChoices.choices, default=StatusChoices.OPEN)
     content = models.TextField()
