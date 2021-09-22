@@ -13,10 +13,13 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ('id', 'name', 'permissions')
+        extra_kwargs = {
+            'name': {'validators': []},
+        }
 
 
 class UserSerializer(serializers.ModelSerializer):
-    # groups = GroupSerializer(many=True)
+    groups = GroupSerializer(many=True)
 
     class Meta:
         model = User
