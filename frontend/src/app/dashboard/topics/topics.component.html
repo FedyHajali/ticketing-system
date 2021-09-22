@@ -1,47 +1,105 @@
-<div class="container" id="dashboard-container">
-  <div class="row">
-    <div class="col">
-      <h3 id="title">Your Topics</h3>
-      <button
-        type="button"
-        class="btn btn-outline-primary"
-        routerLink="../.."
-        id="back"
-      >
-        Go Back
-      </button>
-    </div>
-  </div>
-  <br />
+<div id="dashboard-container">
   <div id="topics">
-    <div class="row card-group">
-      <div class="col-4" *ngFor="let topic of topics">
-        <div class="card" id="topics" [routerLink]="['topics/' + topic.id]">
-          <div class="card-header">
-            <h5 class="card-title">{{ topic.name }}</h5>
-          </div>
-          <div class="card-body">
-            <em>Description:</em>
-            <br />
-            <p class="card-text">{{ topic.description }}</p>
-          </div>
-          <div class="card-footer">
-            <small class="text-muted"
-              >Users subscribed: {{ topic.users.length }}</small
-            >
+    <div class="container">
+      <div class="row">
+        <div class="col-8">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <h1>{{ group?.name }}</h1>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <div class="col-4">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            routerLink="../.."
+            [state]="{ group: group }"
+            id="back"
+          >
+            Back
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <hr />
+        <h1>Your Topics</h1>
+        <div class="card" *ngIf="userTopics?.length === 0">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              You are not subscribed to any topic.
+            </li>
+          </ul>
+        </div>
+        <div class="col-4" *ngFor="let topic of userTopics">
+          <div class="card-group">
+            <div class="card" id="topics">
+              <div class="card-header">
+                <p class="card-title" (click)="navigateTopic(topic)">
+                  {{ topic.name }}
+                </p>
+                <a (click)="subscribeTopicModal(false, topic)" title="Subscribe">
+                  <span><i class="fas fa-user-minus"></i></span
+                ></a>
+              </div>
+              <div class="card-body">
+                <em>Description:</em>
+                <br />
+                <p class="card-text">{{ topic.description }}</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted"
+                  >Users subscribed: {{ topic.users?.length }}</small
+                >
+                <span><i class="fas fa-users"></i></span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div>
-        <button
-          *ngIf="user?.is_staff"
-          type="button"
-          class="btn btn-outline-primary float-end"
-          mat-raised-button
-          (click)="openTopicModalCreate()"
-        >
-          Add Topic
-        </button>
+      <div class="row">
+        <hr />
+        <h1>All Topics</h1>
+        <div class="col-4" *ngFor="let topic of allTopics">
+          <div class="card-group">
+            <div class="card" id="topics">
+              <div class="card-header">
+                <p class="card-title">
+                  {{ topic.name }}
+                </p>
+                <a (click)="subscribeTopicModal(true, topic)" title="Subscribe">
+                  <span><i class="fas fa-user-plus"></i></span
+                ></a>
+              </div>
+              <div class="card-body">
+                <em>Description:</em>
+                <br />
+                <p class="card-text">{{ topic.description }}</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted"
+                  >Users subscribed: {{ topic.users?.length }}</small
+                >
+                <span><i class="fas fa-users"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <button
+            *ngIf="user?.is_staff"
+            type="button"
+            class="btn btn-outline-primary"
+            style="float: right"
+            (click)="openTopicCreateModal()"
+          >
+            Add Topic
+          </button>
+        </div>
       </div>
     </div>
   </div>

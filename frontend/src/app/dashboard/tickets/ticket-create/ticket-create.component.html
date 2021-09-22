@@ -1,1 +1,127 @@
-<p>ticket-create works!</p>
+<div id="dashboard-container">
+  <div id="ticket-detail">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <mat-card>
+            <div class="row mb-4 m-2">
+              <div class="col">
+                <h1 class="float-start">New Ticket</h1>
+              </div>
+            </div>
+            <form [formGroup]="form">
+              <div class="row mb-3">
+                <label for="title" class="col-sm-2 col-form-label">Title</label>
+                <div class="col-sm-10">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    formControlName="title"
+                  />
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="content" class="col-sm-2 col-form-label"
+                  >Content</label
+                >
+                <div class="col-sm-10">
+                  <textarea
+                    class="form-control"
+                    id="content"
+                    rows="3"
+                    formControlName="content"
+                  ></textarea>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="status" class="col-sm-2 col-form-label"
+                  >Status</label
+                >
+                <div class="col-sm-10">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Select Status</mat-label>
+                    <mat-select formControlName="status">
+                      <mat-option
+                        *ngFor="let stat of status"
+                        [value]="stat.value"
+                      >
+                        {{ stat.viewValue }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="groups" class="col-sm-2 col-form-label"
+                  >Groups</label
+                >
+                <div class="col-sm-10">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label> Select Groups</mat-label>
+                    <mat-select
+                      multiple
+                      formControlName="groups"
+                      (openedChange)="onChangeGroup($event)"
+                    >
+                      <mat-option
+                        *ngFor="let group of groups"
+                        [value]="group.id"
+                        >{{ group.name }}</mat-option
+                      >
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="topics" class="col-sm-2 col-form-label"
+                  >Topics</label
+                >
+                <div class="col-sm-10">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Select Topics</mat-label>
+                    <mat-select
+                      multiple
+                      formControlName="topics"
+                      (openedChange)="onChangeTopic($event)"
+                    >
+                      <mat-optgroup
+                        *ngFor="let group of groups"
+                        [label]="group.name"
+                      >
+                        <ng-container *ngFor="let topic of topics">
+                          <mat-option
+                            *ngIf="topic.group === group.id"
+                            [value]="topic.id"
+                            >{{ topic.name }}</mat-option
+                          >
+                        </ng-container>
+                      </mat-optgroup>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label for="receivers" class="col-sm-2 col-form-label"
+                  >Receivers</label
+                >
+                <div class="col-sm-10">
+                  <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Choose Ticket Receivers</mat-label>
+                    <mat-select multiple formControlName="receivers">
+                      <mat-option
+                        *ngFor="let receiver of receivers"
+                        [value]="receiver.id"
+                        >{{ receiver }}</mat-option
+                      >
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </form>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

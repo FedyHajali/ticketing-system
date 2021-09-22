@@ -1,16 +1,28 @@
 #ticket-detail {
-  margin-top: 3rem;
-  .row {
-    .col-8 {
-      .row:nth-child(3) {
-        margin-top: 2rem;
-      }
-      .row:nth-child(4) {
-        margin-top: 2rem;
-        .col {
-          #comment-input {
-            margin-top: 2rem;
+  .container {
+    margin-bottom: 5rem;
+    padding: 2rem;
+    border-style: ridge;
+    background-color: ghostwhite;
+    box-shadow: 0 0 5px 0 black;
+    .row {
+      width: 100%;
+      .col-8 {
+        .row:nth-child(3) {
+          margin-top: 2rem;
+        }
+        .row:nth-child(4) {
+          margin-top: 2rem;
+          .col {
+            #comment-input {
+              margin-top: 2rem;
+            }
           }
+        }
+      }
+      .col-4 {
+        button {
+          margin: 1.5rem 0px 1.5rem 13rem;
         }
       }
     }

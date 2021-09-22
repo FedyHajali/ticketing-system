@@ -5,6 +5,7 @@ import { Group, Topic, User } from 'src/app/api/models';
 import { ApiService } from 'src/app/api/services';
 import { SharedService } from 'src/app/services/shared.service';
 import { TopicCreateComponent } from './topic-create/topic-create.component';
+import { TopicSubscribeComponent } from './topic-subscribe/topic-subscribe.component';
 
 @Component({
   selector: 'app-topics',
@@ -14,25 +15,58 @@ import { TopicCreateComponent } from './topic-create/topic-create.component';
 export class TopicsComponent implements OnInit {
   group_id!: number;
   private sub: any;
-  user: User | undefined;
-  topics: Topic[] | undefined;
+  user!: User;
+  group!: Group;
+  userTopics!: Topic[];
+  allTopics!: Topic[];
   constructor(
     private shared: SharedService,
     private dialog: MatDialog,
     private api: ApiService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.group = this.router.getCurrentNavigation()?.extras?.state?.group;
+  }
 
   ngOnInit(): void {
     this.user = this.shared.getActiveUser();
     this.sub = this.route.params.subscribe((params) => {
       this.group_id = +params['group_id']; // (+) converts string 'id' to a number
-      this.getTopicList(this.group_id);
+      this.getUserTopicList(this.group_id);
     });
   }
 
-  openTopicModalCreate() {
+  getUserTopicList(id: number) {
+    this.api.apiTopicsListUserGroupRead(id.toString()).subscribe((topics) => {
+      this.userTopics = topics;
+      this.getAllTopicList(this.group_id);
+    });
+  }
+
+  getAllTopicList(id: number) {
+    this.api.apiTopicsListGroupRead(id.toString()).subscribe((topics) => {
+      this.allTopics = topics;
+      // Remove userTopics from allTopics
+      for (let i = 0; i < this.userTopics.length; i++) {
+        for (let j = 0; j < this.allTopics.length; j++) {
+          if (this.allTopics[j].id === this.userTopics[i].id) {
+            this.allTopics.splice(j, 1);
+            j -= 1;
+          }
+        }
+      }
+    });
+  }
+
+  navigateTopic(topic: Topic) {
+    this.router.navigate(['topics/' + topic.id], {
+      state: { group: this.group, topic: topic },
+      relativeTo: this.route,
+    });
+  }
+
+  openTopicCreateModal() {
     const dialogRef = this.dialog.open(TopicCreateComponent, {
       width: '400px',
       height: '400px',
@@ -41,17 +75,20 @@ export class TopicsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.getTopicList(this.group_id);
+      this.getUserTopicList(this.group_id);
     });
   }
 
-  getTopicList(id: number) {
-    this.shared.getTopicList(id).subscribe((topics) => {
-      this.topics = topics;
+  subscribeTopicModal(sub: boolean, topic: Topic) {
+    const dialogRef = this.dialog.open(TopicSubscribeComponent, {
+      width: '350px',
+      height: '250px',
+      autoFocus: true,
+      data: { sub: sub, topic: topic },
     });
-  }
 
-  navigateTickets(id: any) {
-    this.router.navigate(['tickets', id], { relativeTo: this.route });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.getUserTopicList(this.group_id);
+    });
   }
 }

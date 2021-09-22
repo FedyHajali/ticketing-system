@@ -21,7 +21,7 @@ from rest_framework import status
     responses={200: openapi.Response('OK', TicketSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsStaff])
+@permission_classes([IsAuthenticated, ])
 def ticketListReceiver(request):
     tickets = Ticket.objects.filter(receivers=request.user)
     serializer = TicketSerializer(tickets, many=True)
@@ -36,17 +36,16 @@ def ticketListReceiver(request):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def ticketListCreator(request, pk):
-    tickets = Ticket.objects.filter(creator=pk)
+def ticketListCreator(request, creator_id):
+    tickets = Ticket.objects.filter(creator=creator_id)
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
 @swagger_auto_schema(
     method="get",
-    operation_description='List of tickets',
-    operation_summary='Ticket list',
+    operation_description='List of all tickets',
+    operation_summary='All Tickets list',
     responses={200: openapi.Response('OK', TicketSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
@@ -64,11 +63,14 @@ def ticketListAll(request):
     responses={200: openapi.Response('OK', TicketSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsStaff])
-def ticketListGroup(request, pk):
-    tickets = Ticket.objects.filter(groups__id=pk)
+@permission_classes([IsAuthenticated, ])
+def ticketListGroup(request, group_id):
+    tickets = Ticket.objects.filter(groups__id=group_id)
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+# TODO
+# DIFFERENZE TRA QUESTA E LA SUCCESSIVA ?
 
 
 @swagger_auto_schema(
@@ -79,8 +81,8 @@ def ticketListGroup(request, pk):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
-def ticketListTopic(request, pk):
-    tickets = Ticket.objects.filter(topics__id=pk)
+def ticketListTopic(request, topic_id):
+    tickets = Ticket.objects.filter(topics__id=topic_id)
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -92,9 +94,10 @@ def ticketListTopic(request, pk):
     responses={200: openapi.Response('OK', TicketSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,])
-def ticketListTopicUser(request, pk):
-    tickets = Ticket.objects.filter(topics__id=pk, topics__users=request.user)
+@permission_classes([IsAuthenticated, ])
+def ticketListTopicUser(request, topic_id):
+    tickets = Ticket.objects.filter(
+        topics__id=topic_id, topics__users=request.user)
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -108,9 +111,9 @@ def ticketListTopicUser(request, pk):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def ticketReceiversList(request, pk):
+def ticketReceiversList(request, ticket_id):
     try:
-        ticket = Ticket.objects.get(id=pk)
+        ticket = Ticket.objects.get(id=ticket_id)
     except Ticket.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
@@ -127,9 +130,9 @@ def ticketReceiversList(request, pk):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def ticketDetail(request, pk):
+def ticketDetail(request, ticket_id):
     try:
-        ticket = Ticket.objects.get(id=pk)
+        ticket = Ticket.objects.get(id=ticket_id)
     except Ticket.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
@@ -167,13 +170,13 @@ def ticketCreate(request):
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def ticketCreatorUpdate(request, pk):
+def ticketCreatorUpdate(request, ticket_id):
     serializer = TicketSerializer(data=request.data)
     if (serializer.is_valid()):
         if request.data['status'] not in ('CL', 'OP'):
             return Response('Only Closed or Open are possible', status=status.HTTP_400_BAD_REQUEST)
         try:
-            ticket = Ticket.objects.get(id=pk, creator=request.user)
+            ticket = Ticket.objects.get(id=ticket_id, creator=request.user)
         except Ticket.DoesNotExist:
             return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
     else:
@@ -197,13 +200,13 @@ def ticketCreatorUpdate(request, pk):
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def ticketReceiverUpdate(request, pk):
+def ticketReceiverUpdate(request, ticket_id):
     serializer = TicketSerializer(data=request.data)
     if (serializer.is_valid()):
         if request.data['status'] not in ('PE', 'RE'):
             return Response('Only Pendign or Resolved are possible', status.HTTP_400_BAD_REQUEST)
         try:
-            ticket = Ticket.objects.get(id=pk, receivers=request.user)
+            ticket = Ticket.objects.get(id=ticket_id, receivers=request.user)
         except Ticket.DoesNotExist:
             return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
     else:
@@ -227,13 +230,13 @@ def ticketReceiverUpdate(request, pk):
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
-def ticketStaffUpdate(request, pk):
+def ticketStaffUpdate(request, ticket_id):
     serializer = TicketSerializer(data=request.data)
     if (serializer.is_valid()):
         if request.data['status'] in ('EX'):
             return Response('Expired is not possible', status=status.HTTP_400_BAD_REQUEST)
         try:
-            ticket = Ticket.objects.get(id=pk)
+            ticket = Ticket.objects.get(id=ticket_id)
         except Ticket.DoesNotExist:
             return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
     else:
@@ -245,7 +248,8 @@ def ticketStaffUpdate(request, pk):
 
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-## attenzione doppio parametro
+# attenzione doppio parametro
+# perchè staff ? #TODO
 @swagger_auto_schema(
     method="put",
     operation_description='Subscribe user to selected ticket',
@@ -255,9 +259,9 @@ def ticketStaffUpdate(request, pk):
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
-def ticketUserAdd(request, pk, user_id):
+def ticketUserAdd(request, ticket_id, user_id):
     try:
-        ticket = Ticket.objects.get(id=pk)  # oppure name=
+        ticket = Ticket.objects.get(id=ticket_id)
     except Ticket.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
     try:
@@ -279,9 +283,9 @@ def ticketUserAdd(request, pk, user_id):
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
-def ticketDelete(request, pk):
+def ticketDelete(request, ticket_id):
     try:
-        ticket = Ticket.objects.get(id=pk)
+        ticket = Ticket.objects.get(id=ticket_id)
     except Ticket.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
@@ -301,9 +305,9 @@ def ticketDelete(request, pk):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def topicDetail(request, pk):
+def topicDetail(request, topic_id):
     try:
-        topic = Topic.objects.get(id=pk)
+        topic = Topic.objects.get(id=topic_id)
     except Topic.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
@@ -319,8 +323,8 @@ def topicDetail(request, pk):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def topicListGroup(request, pk):
-    topics = Topic.objects.filter(group=pk)
+def topicListGroup(request, group_id):
+    topics = Topic.objects.filter(group=group_id)
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -337,8 +341,8 @@ def topicListGroup(request, pk):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def topicListGroupUser(request, pk):
-    topics = Topic.objects.filter(group=pk, users=request.user.id)
+def topicListGroupUser(request, group_id):
+    topics = Topic.objects.filter(group=group_id, users=request.user.id)
     serializer = TopicSerializer(topics, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -383,9 +387,9 @@ def topicListUserAllGroups(request):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def topicUserList(request, pk):
+def topicUserList(request, topic_id):
     try:
-        topic = Topic.objects.get(id=pk)  
+        topic = Topic.objects.get(id=topic_id)
     except Topic.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
@@ -422,9 +426,9 @@ def topicCreate(request):
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def topicUserAdd(request, pk):
+def topicUserAdd(request, topic_id):
     try:
-        topic = Topic.objects.get(id=pk)  # oppure name=
+        topic = Topic.objects.get(id=topic_id)
     except Topic.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
     try:
@@ -438,6 +442,30 @@ def topicUserAdd(request, pk):
 
 
 @swagger_auto_schema(
+    method="put",
+    operation_description='Unsubscribe user from selected topic',
+    operation_summary='Remove user from Topic',
+    responses={200: openapi.Response('OK'),
+               404: openapi.Response('Not Found')})
+@api_view(['PUT'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated, ])
+def topicUserDelete(request, topic_id):
+    try:
+        topic = Topic.objects.get(id=topic_id)  # oppure name=
+    except Topic.DoesNotExist:
+        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
+    try:
+        user = User.objects.get(id=request.user.id)
+    except User.DoesNotExist:
+        return Response('Not Found user', status=status.HTTP_404_NOT_FOUND)
+
+    topic.users.remove(user)
+
+    return Response('You have been unsubscribed from the Topic', status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
     method="delete",
     operation_description='Delete of a topic',
     operation_summary='Delete of a topic',
@@ -446,9 +474,9 @@ def topicUserAdd(request, pk):
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsStaff])
-def topicDelete(request, pk):
+def topicDelete(request, topic_id):
     try:
-        topic = Topic.objects.get(id=pk)
+        topic = Topic.objects.get(id=topic_id)
     except Topic.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
@@ -468,9 +496,9 @@ def topicDelete(request, pk):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def commentDetail(request, pk):
+def commentDetail(request, comment_id):
     try:
-        comment = Comment.objects.get(id=pk)
+        comment = Comment.objects.get(id=comment_id)
     except Comment.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
@@ -487,9 +515,9 @@ def commentDetail(request, pk):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def commentListTicket(request, pk):
+def commentListTicket(request, ticket_id):
     try:
-        ticket = Ticket.objects.get(id=pk)  # oppure name=
+        ticket = Ticket.objects.get(id=ticket_id)  # oppure name=
     except Topic.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
@@ -526,10 +554,10 @@ def commentCreate(request):
                404: openapi.Response('Not Found')})
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsStaff])
-def commentDelete(request, pk):
+@permission_classes([IsAuthenticated, ])
+def commentDelete(request, comment_id):
     try:
-        comment = Comment.objects.get(id=pk)
+        comment = Comment.objects.get(id=comment_id)
     except Comment.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 

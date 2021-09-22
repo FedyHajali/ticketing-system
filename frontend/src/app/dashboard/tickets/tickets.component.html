@@ -1,33 +1,98 @@
-<div class="container" id="dashboard-container">
-  <div class="row">
-    <div class="col">
-      <h3 id="title">Your Tickets</h3>
-      <button
-        type="button"
-        class="btn btn-outline-primary"
-        routerLink="../.."
-        id="back"
-      >
-        Go Back
-      </button>
-    </div>
-  </div>
-  <br />
+<div id="dashboard-container">
   <div id="tickets">
-    <div class="row card-group">
-      <div class="col-4" *ngFor="let ticket of tickets">
-        <div class="card">
-          <div class="card-header">
-            <h5 class="card-title">{{ ticket.title }}</h5>
-          </div>
-          <div class="card-body">
-            <p class="card-text">Content: {{ ticket.content }}</p>
-            <a [routerLink]="['tickets/' + ticket.id]" class="btn btn-primary"
-              >Detail</a
+    <div class="container">
+      <div class="row">
+        <div class="col-8">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <h1>{{ group?.name }}</h1>
+              </li>
+              <li class="breadcrumb-item">
+                <h1>{{ topic?.name }}</h1>
+              </li>
+            </ol>
+          </nav>
+        </div>
+        <div class="col-4">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            routerLink="../.."
+            [state]="{ group: group, topic: topic }"
+            id="back"
+          >
+            Back
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <hr />
+        <div class="col">
+          <h1>Tickets</h1>
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            routerLink="/dashboard/tickets/create"
+          >
+            Create new Ticket
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4" *ngFor="let ticket of tickets">
+          <div class="card-group">
+            <div
+              class="card"
+              [ngClass]="{
+                'border-warning': ticket.status === 'OP',
+                'border-info': ticket.status === 'PE',
+                'border-primary': ticket.status === 'RE',
+                'border-success': ticket.status === 'CL',
+                'border-danger': ticket.status === 'EX'
+              }"
             >
-          </div>
-          <div class="card-footer">
-            Creator: {{ ticket.creator["username"] }}
+              <div class="card-header">
+                <h3 class="card-title">
+                  {{ ticket.title }}
+                </h3>
+                <span
+                  [ngClass]="{
+                    'text-warning': ticket.status === 'OP',
+                    'text-info': ticket.status === 'PE',
+                    'text-primary': ticket.status === 'RE',
+                    'text-success': ticket.status === 'CL',
+                    'text-danger': ticket.status === 'EX'
+                  }"
+                  ><i class="fas fa-flag"></i
+                ></span>
+              </div>
+              <div class="card-body">
+                Content:
+                <p class="card-text">{{ ticket.content }}</p>
+                <button
+                  (click)="navigateTicket(ticket)"
+                  class="btn btn-outline-primary"
+                >
+                  Detail
+                </button>
+              </div>
+              <div class="card-footer">
+                <ul class="list-unstyled">
+                  <li>
+                    <small class="text-muted">
+                      Creator: {{ ticket.creator.username }}</small
+                    >
+                  </li>
+                  <li>
+                    <small class="text-muted">
+                      Created at:
+                      {{ ticket.created_at | date: "d MMMM, y" }}</small
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -5,36 +5,37 @@ urlpatterns = [
     
     #Ticket
     path('tickets/create/', views.ticketCreate, name="ticket-create"),
-    path('tickets/detail/<int:pk>/', views.ticketDetail, name="ticket-detail"),
+    path('tickets/detail/<int:ticket_id>/', views.ticketDetail, name="ticket-detail"),
     path('tickets/list/', views.ticketListReceiver, name="ticket-list"),
-    path('tickets/list-creator/<str:pk>', views.ticketListCreator, name="ticket-list-creator"),
-    path('tickets/list-all>/', views.ticketListAll, name="ticket-list-all"),
-    path('tickets/list-groups/<str:pk>',views.ticketListGroup, name="ticket-list-group"),
-    path('tickets/list-topic/<int:pk>/',views.ticketListTopic, name="ticket-list-topic"),
-    path('tickets/list-topic-user/<int:pk>/',views.ticketListTopicUser, name="ticket-list-topic-user"),
-    path('tickets/receivers-list/<int:pk>', views.ticketReceiversList, name="ticket-receivers-list"),
-    path('tickets/update-creator/<int:pk>/', views.ticketCreatorUpdate, name="ticket-creator-update"),
-    path('tickets/update-receiver/<int:pk>/', views.ticketReceiverUpdate, name="ticket-receiver-update"),
-    path('tickets/update-staff/<int:pk>/', views.ticketStaffUpdate, name="ticket-staff-update"),
-    path('tickets/user-add/<int:pk>/<int:user_id>', views.ticketUserAdd, name="ticket-user-add"), ##bisogna passare anche l'id dell'utente
-    path('tickets/delete/<int:pk>/', views.ticketDelete, name="ticket-delete"),
+    path('tickets/list-creator/<str:creator_id>', views.ticketListCreator, name="ticket-list-creator"),
+    path('tickets/list-all/', views.ticketListAll, name="ticket-list-all"),
+    path('tickets/list-groups/<str:group_id>',views.ticketListGroup, name="ticket-list-group"),
+    path('tickets/list-topic/<int:topic_id>/',views.ticketListTopic, name="ticket-list-topic"),
+    path('tickets/list-topic-user/<int:topic_id>/',views.ticketListTopicUser, name="ticket-list-topic-user"),
+    path('tickets/receivers-list/<int:ticket_id>', views.ticketReceiversList, name="ticket-receivers-list"),
+    path('tickets/update-creator/<int:ticket_id>/', views.ticketCreatorUpdate, name="ticket-creator-update"),
+    path('tickets/update-receiver/<int:ticket_id>/', views.ticketReceiverUpdate, name="ticket-receiver-update"),
+    path('tickets/update-staff/<int:ticket_id>/', views.ticketStaffUpdate, name="ticket-staff-update"),
+    path('tickets/user-add/<int:ticket_id>/<int:user_id>', views.ticketUserAdd, name="ticket-user-add"), ##bisogna passare anche l'id dell'utente
+    path('tickets/delete/<int:ticket_id>/', views.ticketDelete, name="ticket-delete"),
 
     #Topic
     path('topics/create/', views.topicCreate, name="topic-create"),
-    path('topics/detail/<int:pk>', views.topicDetail, name="topic-detail"),
-    path('topics/add-user/<int:pk>', views.topicUserAdd, name="topic-user-add"),
-    path('topics/list-group/<int:pk>', views.topicListGroup, name="topic-group-list"),
-    path('topics/list-user-group/<int:pk>', views.topicListGroupUser, name="topic-user-group-list"),
+    path('topics/detail/<int:topic_id>', views.topicDetail, name="topic-detail"),
+    path('topics/add-user/<int:topic_id>', views.topicUserAdd, name="topic-user-add"),
+    path('topics/delete-user/<int:topic_id>', views.topicUserDelete, name="topic-user-remove"),
+    path('topics/list-group/<int:group_id>', views.topicListGroup, name="topic-group-list"),
+    path('topics/list-user-group/<int:group_id>', views.topicListGroupUser, name="topic-user-group-list"),
     path('topics/list-user-groups/', views.topicListUserAllGroups, name="topic-user-all-groups-list"),
     path('topics/list-not-staff/', views.topicListNotStaff, name="topic-not-user-list"),
-    path('topics/user-list/<int:pk>/', views.topicUserList, name="topic-users"),
-    path('topics/delete/<int:pk>', views.topicDelete, name="topic-delete"),
+    path('topics/user-list/<int:topic_id>/', views.topicUserList, name="topic-users"),
+    path('topics/delete/<int:topic_id>', views.topicDelete, name="topic-delete"),
 
 
 
     #Comment
     path('comments/create/', views.commentCreate, name="comment-create"),
-    path('comments/ticket-list/<int:pk>', views.commentListTicket, name="comment-ticket-list"),
-    path('comments/detail/<int:pk>', views.commentDetail, name="comment-detail"),
-    path('comments/delete/<int:pk>', views.commentDelete, name="comment-delete"),
+    path('comments/ticket-list/<int:ticket_id>', views.commentListTicket, name="comment-ticket-list"),
+    path('comments/detail/<int:comment_id>', views.commentDetail, name="comment-detail"),
+    path('comments/delete/<int:comment_id>', views.commentDelete, name="comment-delete"),
 ]

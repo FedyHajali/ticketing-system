@@ -16,28 +16,33 @@ import { Topic } from '../models/topic';
 })
 class ApiService extends __BaseService {
   static readonly apiCommentsCreateCreatePath = '/api/comments/create/';
-  static readonly apiCommentsDeleteDeletePath = '/api/comments/delete/{id}';
-  static readonly apiCommentsDetailReadPath = '/api/comments/detail/{id}';
-  static readonly apiCommentsTicketListReadPath = '/api/comments/ticket-list/{id}';
+  static readonly apiCommentsDeleteDeletePath = '/api/comments/delete/{comment_id}';
+  static readonly apiCommentsDetailReadPath = '/api/comments/detail/{comment_id}';
+  static readonly apiCommentsTicketListReadPath = '/api/comments/ticket-list/{ticket_id}';
   static readonly apiTicketsCreateCreatePath = '/api/tickets/create/';
-  static readonly apiTicketsDeleteDeletePath = '/api/tickets/delete/{id}/';
-  static readonly apiTicketsDetailReadPath = '/api/tickets/detail/{id}/';
-  static readonly apiTicketsListCreatorReadPath = '/api/tickets/list-creator/{id}';
-  static readonly apiTicketsListGroupsReadPath = '/api/tickets/list-groups/{id}';
+  static readonly apiTicketsDeleteDeletePath = '/api/tickets/delete/{ticket_id}/';
+  static readonly apiTicketsDetailReadPath = '/api/tickets/detail/{ticket_id}/';
+  static readonly apiTicketsListAllListPath = '/api/tickets/list-all/';
+  static readonly apiTicketsListCreatorReadPath = '/api/tickets/list-creator/{creator_id}';
+  static readonly apiTicketsListGroupsReadPath = '/api/tickets/list-groups/{group_id}';
+  static readonly apiTicketsListTopicUserReadPath = '/api/tickets/list-topic-user/{topic_id}/';
+  static readonly apiTicketsListTopicReadPath = '/api/tickets/list-topic/{topic_id}/';
   static readonly apiTicketsListListPath = '/api/tickets/list/';
-  static readonly apiTicketsReceiversListReadPath = '/api/tickets/receivers-list/{id}';
-  static readonly apiTicketsUpdateCreatorUpdatePath = '/api/tickets/update-creator/{id}/';
-  static readonly apiTicketsUpdateReceiverUpdatePath = '/api/tickets/update-receiver/{id}/';
-  static readonly apiTicketsUpdateStaffUpdatePath = '/api/tickets/update-staff/{id}/';
-  static readonly apiTopicsAddUserUpdatePath = '/api/topics/add-user/{id}';
+  static readonly apiTicketsReceiversListReadPath = '/api/tickets/receivers-list/{ticket_id}';
+  static readonly apiTicketsUpdateCreatorUpdatePath = '/api/tickets/update-creator/{ticket_id}/';
+  static readonly apiTicketsUpdateReceiverUpdatePath = '/api/tickets/update-receiver/{ticket_id}/';
+  static readonly apiTicketsUpdateStaffUpdatePath = '/api/tickets/update-staff/{ticket_id}/';
+  static readonly apiTicketsUserAddUpdatePath = '/api/tickets/user-add/{ticket_id}/{user_id}';
+  static readonly apiTopicsAddUserUpdatePath = '/api/topics/add-user/{topic_id}';
   static readonly apiTopicsCreateCreatePath = '/api/topics/create/';
-  static readonly apiTopicsDeleteDeletePath = '/api/topics/delete/{id}';
-  static readonly apiTopicsDetailReadPath = '/api/topics/detail/{id}';
-  static readonly apiTopicsListGroupReadPath = '/api/topics/list-group/{id}';
+  static readonly apiTopicsDeleteUserUpdatePath = '/api/topics/delete-user/{topic_id}';
+  static readonly apiTopicsDeleteDeletePath = '/api/topics/delete/{topic_id}';
+  static readonly apiTopicsDetailReadPath = '/api/topics/detail/{topic_id}';
+  static readonly apiTopicsListGroupReadPath = '/api/topics/list-group/{group_id}';
   static readonly apiTopicsListNotStaffListPath = '/api/topics/list-not-staff/';
-  static readonly apiTopicsListUserGroupReadPath = '/api/topics/list-user-group/{id}';
+  static readonly apiTopicsListUserGroupReadPath = '/api/topics/list-user-group/{group_id}';
   static readonly apiTopicsListUserGroupsListPath = '/api/topics/list-user-groups/';
-  static readonly apiTopicsUserListReadPath = '/api/topics/user-list/{id}/';
+  static readonly apiTopicsUserListReadPath = '/api/topics/user-list/{topic_id}/';
 
   constructor(
     config: __Configuration,
@@ -92,16 +97,16 @@ class ApiService extends __BaseService {
    * Delete of a Comment
    *
    * Delete of a Comment
-   * @param id undefined
+   * @param comment_id undefined
    */
-  apiCommentsDeleteDeleteResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiCommentsDeleteDeleteResponse(commentId: string): __Observable<__StrictHttpResponse<null>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'DELETE',
-      this.rootUrl + `/api/comments/delete/${encodeURIComponent(String(id))}`,
+      this.rootUrl + `/api/comments/delete/${encodeURIComponent(String(commentId))}`,
       __body,
       {
         headers: __headers,
@@ -120,10 +125,10 @@ class ApiService extends __BaseService {
    * Delete of a Comment
    *
    * Delete of a Comment
-   * @param id undefined
+   * @param comment_id undefined
    */
-  apiCommentsDeleteDelete(id: string): __Observable<null> {
-    return this.apiCommentsDeleteDeleteResponse(id).pipe(
+  apiCommentsDeleteDelete(commentId: string): __Observable<null> {
+    return this.apiCommentsDeleteDeleteResponse(commentId).pipe(
       __map(_r => _r.body as null)
     );
   }
@@ -132,17 +137,17 @@ class ApiService extends __BaseService {
    * Get comment info
    *
    * Retrieve all comment information
-   * @param id undefined
+   * @param comment_id undefined
    * @return OK
    */
-  apiCommentsDetailReadResponse(id: string): __Observable<__StrictHttpResponse<Comment>> {
+  apiCommentsDetailReadResponse(commentId: string): __Observable<__StrictHttpResponse<Comment>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/api/comments/detail/${encodeURIComponent(String(id))}`,
+      this.rootUrl + `/api/comments/detail/${encodeURIComponent(String(commentId))}`,
       __body,
       {
         headers: __headers,
@@ -161,11 +166,11 @@ class ApiService extends __BaseService {
    * Get comment info
    *
    * Retrieve all comment information
-   * @param id undefined
+   * @param comment_id undefined
    * @return OK
    */
-  apiCommentsDetailRead(id: string): __Observable<Comment> {
-    return this.apiCommentsDetailReadResponse(id).pipe(
+  apiCommentsDetailRead(commentId: string): __Observable<Comment> {
+    return this.apiCommentsDetailReadResponse(commentId).pipe(
       __map(_r => _r.body as Comment)
     );
   }
@@ -174,17 +179,17 @@ class ApiService extends __BaseService {
    * List of Comments of a Ticket
    *
    * List of Comments of a particular Ticket
-   * @param id undefined
+   * @param ticket_id undefined
    * @return OK
    */
-  apiCommentsTicketListReadResponse(id: string): __Observable<__StrictHttpResponse<Array<Comment>>> {
+  apiCommentsTicketListReadResponse(ticketId: string): __Observable<__StrictHttpResponse<Array<Comment>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/api/comments/ticket-list/${encodeURIComponent(String(id))}`,
+      this.rootUrl + `/api/comments/ticket-list/${encodeURIComponent(String(ticketId))}`,
       __body,
       {
         headers: __headers,
@@ -203,11 +208,11 @@ class ApiService extends __BaseService {
    * List of Comments of a Ticket
    *
    * List of Comments of a particular Ticket
-   * @param id undefined
+   * @param ticket_id undefined
    * @return OK
    */
-  apiCommentsTicketListRead(id: string): __Observable<Array<Comment>> {
-    return this.apiCommentsTicketListReadResponse(id).pipe(
+  apiCommentsTicketListRead(ticketId: string): __Observable<Array<Comment>> {
+    return this.apiCommentsTicketListReadResponse(ticketId).pipe(
       __map(_r => _r.body as Array<Comment>)
     );
   }
@@ -258,16 +263,16 @@ class ApiService extends __BaseService {
    * Delete of a ticket
    *
    * Delete of a ticket
-   * @param id undefined
+   * @param ticket_id undefined
    */
-  apiTicketsDeleteDeleteResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiTicketsDeleteDeleteResponse(ticketId: string): __Observable<__StrictHttpResponse<null>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'DELETE',
-      this.rootUrl + `/api/tickets/delete/${encodeURIComponent(String(id))}/`,
+      this.rootUrl + `/api/tickets/delete/${encodeURIComponent(String(ticketId))}/`,
       __body,
       {
         headers: __headers,
@@ -286,10 +291,10 @@ class ApiService extends __BaseService {
    * Delete of a ticket
    *
    * Delete of a ticket
-   * @param id undefined
+   * @param ticket_id undefined
    */
-  apiTicketsDeleteDelete(id: string): __Observable<null> {
-    return this.apiTicketsDeleteDeleteResponse(id).pipe(
+  apiTicketsDeleteDelete(ticketId: string): __Observable<null> {
+    return this.apiTicketsDeleteDeleteResponse(ticketId).pipe(
       __map(_r => _r.body as null)
     );
   }
@@ -298,17 +303,17 @@ class ApiService extends __BaseService {
    * Ticket detail
    *
    * Returns all information of a ticket
-   * @param id undefined
+   * @param ticket_id undefined
    * @return OK
    */
-  apiTicketsDetailReadResponse(id: string): __Observable<__StrictHttpResponse<Ticket>> {
+  apiTicketsDetailReadResponse(ticketId: string): __Observable<__StrictHttpResponse<Ticket>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/api/tickets/detail/${encodeURIComponent(String(id))}/`,
+      this.rootUrl + `/api/tickets/detail/${encodeURIComponent(String(ticketId))}/`,
       __body,
       {
         headers: __headers,
@@ -327,12 +332,51 @@ class ApiService extends __BaseService {
    * Ticket detail
    *
    * Returns all information of a ticket
-   * @param id undefined
+   * @param ticket_id undefined
    * @return OK
    */
-  apiTicketsDetailRead(id: string): __Observable<Ticket> {
-    return this.apiTicketsDetailReadResponse(id).pipe(
+  apiTicketsDetailRead(ticketId: string): __Observable<Ticket> {
+    return this.apiTicketsDetailReadResponse(ticketId).pipe(
       __map(_r => _r.body as Ticket)
+    );
+  }
+
+  /**
+   * All Tickets list
+   *
+   * List of all tickets
+   * @return OK
+   */
+  apiTicketsListAllListResponse(): __Observable<__StrictHttpResponse<Array<Ticket>>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+    let req = new HttpRequest<any>(
+      'GET',
+      this.rootUrl + `/api/tickets/list-all/`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<Array<Ticket>>;
+      })
+    );
+  }
+  /**
+   * All Tickets list
+   *
+   * List of all tickets
+   * @return OK
+   */
+  apiTicketsListAllList(): __Observable<Array<Ticket>> {
+    return this.apiTicketsListAllListResponse().pipe(
+      __map(_r => _r.body as Array<Ticket>)
     );
   }
 
@@ -340,17 +384,17 @@ class ApiService extends __BaseService {
    * Ticket list created by the active user
    *
    * List of tickets for which the active user is a creator
-   * @param id undefined
+   * @param creator_id undefined
    * @return OK
    */
-  apiTicketsListCreatorReadResponse(id: string): __Observable<__StrictHttpResponse<Array<Ticket>>> {
+  apiTicketsListCreatorReadResponse(creatorId: string): __Observable<__StrictHttpResponse<Array<Ticket>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/api/tickets/list-creator/${encodeURIComponent(String(id))}`,
+      this.rootUrl + `/api/tickets/list-creator/${encodeURIComponent(String(creatorId))}`,
       __body,
       {
         headers: __headers,
@@ -369,11 +413,11 @@ class ApiService extends __BaseService {
    * Ticket list created by the active user
    *
    * List of tickets for which the active user is a creator
-   * @param id undefined
+   * @param creator_id undefined
    * @return OK
    */
-  apiTicketsListCreatorRead(id: string): __Observable<Array<Ticket>> {
-    return this.apiTicketsListCreatorReadResponse(id).pipe(
+  apiTicketsListCreatorRead(creatorId: string): __Observable<Array<Ticket>> {
+    return this.apiTicketsListCreatorReadResponse(creatorId).pipe(
       __map(_r => _r.body as Array<Ticket>)
     );
   }
@@ -382,17 +426,17 @@ class ApiService extends __BaseService {
    * Ticket list for a specific group
    *
    * List of tickets for a specific group
-   * @param id undefined
+   * @param group_id undefined
    * @return OK
    */
-  apiTicketsListGroupsReadResponse(id: string): __Observable<__StrictHttpResponse<Array<Ticket>>> {
+  apiTicketsListGroupsReadResponse(groupId: string): __Observable<__StrictHttpResponse<Array<Ticket>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/api/tickets/list-groups/${encodeURIComponent(String(id))}`,
+      this.rootUrl + `/api/tickets/list-groups/${encodeURIComponent(String(groupId))}`,
       __body,
       {
         headers: __headers,
@@ -411,11 +455,95 @@ class ApiService extends __BaseService {
    * Ticket list for a specific group
    *
    * List of tickets for a specific group
-   * @param id undefined
+   * @param group_id undefined
    * @return OK
    */
-  apiTicketsListGroupsRead(id: string): __Observable<Array<Ticket>> {
-    return this.apiTicketsListGroupsReadResponse(id).pipe(
+  apiTicketsListGroupsRead(groupId: string): __Observable<Array<Ticket>> {
+    return this.apiTicketsListGroupsReadResponse(groupId).pipe(
+      __map(_r => _r.body as Array<Ticket>)
+    );
+  }
+
+  /**
+   * List of tickets of the topic to which the user is subscribed
+   *
+   * List of tickets of the topic to which the user is subscribed
+   * @param topic_id undefined
+   * @return OK
+   */
+  apiTicketsListTopicUserReadResponse(topicId: string): __Observable<__StrictHttpResponse<Array<Ticket>>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+
+    let req = new HttpRequest<any>(
+      'GET',
+      this.rootUrl + `/api/tickets/list-topic-user/${encodeURIComponent(String(topicId))}/`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<Array<Ticket>>;
+      })
+    );
+  }
+  /**
+   * List of tickets of the topic to which the user is subscribed
+   *
+   * List of tickets of the topic to which the user is subscribed
+   * @param topic_id undefined
+   * @return OK
+   */
+  apiTicketsListTopicUserRead(topicId: string): __Observable<Array<Ticket>> {
+    return this.apiTicketsListTopicUserReadResponse(topicId).pipe(
+      __map(_r => _r.body as Array<Ticket>)
+    );
+  }
+
+  /**
+   * Ticket list for a specific topic
+   *
+   * List of tickets for a specific topic
+   * @param topic_id undefined
+   * @return OK
+   */
+  apiTicketsListTopicReadResponse(topicId: string): __Observable<__StrictHttpResponse<Array<Ticket>>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+
+    let req = new HttpRequest<any>(
+      'GET',
+      this.rootUrl + `/api/tickets/list-topic/${encodeURIComponent(String(topicId))}/`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<Array<Ticket>>;
+      })
+    );
+  }
+  /**
+   * Ticket list for a specific topic
+   *
+   * List of tickets for a specific topic
+   * @param topic_id undefined
+   * @return OK
+   */
+  apiTicketsListTopicRead(topicId: string): __Observable<Array<Ticket>> {
+    return this.apiTicketsListTopicReadResponse(topicId).pipe(
       __map(_r => _r.body as Array<Ticket>)
     );
   }
@@ -463,17 +591,17 @@ class ApiService extends __BaseService {
    * List of ticket receivers
    *
    * List of ticket receivers
-   * @param id undefined
+   * @param ticket_id undefined
    * @return OK
    */
-  apiTicketsReceiversListReadResponse(id: string): __Observable<__StrictHttpResponse<Array<User>>> {
+  apiTicketsReceiversListReadResponse(ticketId: string): __Observable<__StrictHttpResponse<Array<User>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/api/tickets/receivers-list/${encodeURIComponent(String(id))}`,
+      this.rootUrl + `/api/tickets/receivers-list/${encodeURIComponent(String(ticketId))}`,
       __body,
       {
         headers: __headers,
@@ -492,11 +620,11 @@ class ApiService extends __BaseService {
    * List of ticket receivers
    *
    * List of ticket receivers
-   * @param id undefined
+   * @param ticket_id undefined
    * @return OK
    */
-  apiTicketsReceiversListRead(id: string): __Observable<Array<User>> {
-    return this.apiTicketsReceiversListReadResponse(id).pipe(
+  apiTicketsReceiversListRead(ticketId: string): __Observable<Array<User>> {
+    return this.apiTicketsReceiversListReadResponse(ticketId).pipe(
       __map(_r => _r.body as Array<User>)
     );
   }
@@ -507,7 +635,7 @@ class ApiService extends __BaseService {
    * Change of ticket status for creator who can only put Closed or Open
    * @param params The `ApiService.ApiTicketsUpdateCreatorUpdateParams` containing the following parameters:
    *
-   * - `id`:
+   * - `ticket_id`:
    *
    * - `data`:
    *
@@ -521,7 +649,7 @@ class ApiService extends __BaseService {
     __body = params.data;
     let req = new HttpRequest<any>(
       'PUT',
-      this.rootUrl + `/api/tickets/update-creator/${encodeURIComponent(String(params.id))}/`,
+      this.rootUrl + `/api/tickets/update-creator/${encodeURIComponent(String(params.ticketId))}/`,
       __body,
       {
         headers: __headers,
@@ -542,7 +670,7 @@ class ApiService extends __BaseService {
    * Change of ticket status for creator who can only put Closed or Open
    * @param params The `ApiService.ApiTicketsUpdateCreatorUpdateParams` containing the following parameters:
    *
-   * - `id`:
+   * - `ticket_id`:
    *
    * - `data`:
    *
@@ -560,7 +688,7 @@ class ApiService extends __BaseService {
    * Change of ticket status for receiver who can only put Pending or Resolved
    * @param params The `ApiService.ApiTicketsUpdateReceiverUpdateParams` containing the following parameters:
    *
-   * - `id`:
+   * - `ticket_id`:
    *
    * - `data`:
    *
@@ -574,7 +702,7 @@ class ApiService extends __BaseService {
     __body = params.data;
     let req = new HttpRequest<any>(
       'PUT',
-      this.rootUrl + `/api/tickets/update-receiver/${encodeURIComponent(String(params.id))}/`,
+      this.rootUrl + `/api/tickets/update-receiver/${encodeURIComponent(String(params.ticketId))}/`,
       __body,
       {
         headers: __headers,
@@ -595,7 +723,7 @@ class ApiService extends __BaseService {
    * Change of ticket status for receiver who can only put Pending or Resolved
    * @param params The `ApiService.ApiTicketsUpdateReceiverUpdateParams` containing the following parameters:
    *
-   * - `id`:
+   * - `ticket_id`:
    *
    * - `data`:
    *
@@ -613,7 +741,7 @@ class ApiService extends __BaseService {
    * Change of ticket status for is_staff user who can put every state
    * @param params The `ApiService.ApiTicketsUpdateStaffUpdateParams` containing the following parameters:
    *
-   * - `id`:
+   * - `ticket_id`:
    *
    * - `data`:
    *
@@ -627,7 +755,7 @@ class ApiService extends __BaseService {
     __body = params.data;
     let req = new HttpRequest<any>(
       'PUT',
-      this.rootUrl + `/api/tickets/update-staff/${encodeURIComponent(String(params.id))}/`,
+      this.rootUrl + `/api/tickets/update-staff/${encodeURIComponent(String(params.ticketId))}/`,
       __body,
       {
         headers: __headers,
@@ -648,7 +776,7 @@ class ApiService extends __BaseService {
    * Change of ticket status for is_staff user who can put every state
    * @param params The `ApiService.ApiTicketsUpdateStaffUpdateParams` containing the following parameters:
    *
-   * - `id`:
+   * - `ticket_id`:
    *
    * - `data`:
    *
@@ -661,19 +789,68 @@ class ApiService extends __BaseService {
   }
 
   /**
+   * Add user to Ticket
+   *
+   * Subscribe user to selected ticket
+   * @param params The `ApiService.ApiTicketsUserAddUpdateParams` containing the following parameters:
+   *
+   * - `user_id`:
+   *
+   * - `ticket_id`:
+   */
+  apiTicketsUserAddUpdateResponse(params: ApiService.ApiTicketsUserAddUpdateParams): __Observable<__StrictHttpResponse<null>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+
+
+    let req = new HttpRequest<any>(
+      'PUT',
+      this.rootUrl + `/api/tickets/user-add/${encodeURIComponent(String(params.ticketId))}/${encodeURIComponent(String(params.userId))}`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<null>;
+      })
+    );
+  }
+  /**
+   * Add user to Ticket
+   *
+   * Subscribe user to selected ticket
+   * @param params The `ApiService.ApiTicketsUserAddUpdateParams` containing the following parameters:
+   *
+   * - `user_id`:
+   *
+   * - `ticket_id`:
+   */
+  apiTicketsUserAddUpdate(params: ApiService.ApiTicketsUserAddUpdateParams): __Observable<null> {
+    return this.apiTicketsUserAddUpdateResponse(params).pipe(
+      __map(_r => _r.body as null)
+    );
+  }
+
+  /**
    * Add user to Topic
    *
    * Subscribe user to selected topic
-   * @param id undefined
+   * @param topic_id undefined
    */
-  apiTopicsAddUserUpdateResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiTopicsAddUserUpdateResponse(topicId: string): __Observable<__StrictHttpResponse<null>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'PUT',
-      this.rootUrl + `/api/topics/add-user/${encodeURIComponent(String(id))}`,
+      this.rootUrl + `/api/topics/add-user/${encodeURIComponent(String(topicId))}`,
       __body,
       {
         headers: __headers,
@@ -692,10 +869,10 @@ class ApiService extends __BaseService {
    * Add user to Topic
    *
    * Subscribe user to selected topic
-   * @param id undefined
+   * @param topic_id undefined
    */
-  apiTopicsAddUserUpdate(id: string): __Observable<null> {
-    return this.apiTopicsAddUserUpdateResponse(id).pipe(
+  apiTopicsAddUserUpdate(topicId: string): __Observable<null> {
+    return this.apiTopicsAddUserUpdateResponse(topicId).pipe(
       __map(_r => _r.body as null)
     );
   }
@@ -743,19 +920,59 @@ class ApiService extends __BaseService {
   }
 
   /**
+   * Remove user from Topic
+   *
+   * Unsubscribe user from selected topic
+   * @param topic_id undefined
+   */
+  apiTopicsDeleteUserUpdateResponse(topicId: string): __Observable<__StrictHttpResponse<null>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+
+    let req = new HttpRequest<any>(
+      'PUT',
+      this.rootUrl + `/api/topics/delete-user/${encodeURIComponent(String(topicId))}`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<null>;
+      })
+    );
+  }
+  /**
+   * Remove user from Topic
+   *
+   * Unsubscribe user from selected topic
+   * @param topic_id undefined
+   */
+  apiTopicsDeleteUserUpdate(topicId: string): __Observable<null> {
+    return this.apiTopicsDeleteUserUpdateResponse(topicId).pipe(
+      __map(_r => _r.body as null)
+    );
+  }
+
+  /**
    * Delete of a topic
    *
    * Delete of a topic
-   * @param id undefined
+   * @param topic_id undefined
    */
-  apiTopicsDeleteDeleteResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  apiTopicsDeleteDeleteResponse(topicId: string): __Observable<__StrictHttpResponse<null>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'DELETE',
-      this.rootUrl + `/api/topics/delete/${encodeURIComponent(String(id))}`,
+      this.rootUrl + `/api/topics/delete/${encodeURIComponent(String(topicId))}`,
       __body,
       {
         headers: __headers,
@@ -774,10 +991,10 @@ class ApiService extends __BaseService {
    * Delete of a topic
    *
    * Delete of a topic
-   * @param id undefined
+   * @param topic_id undefined
    */
-  apiTopicsDeleteDelete(id: string): __Observable<null> {
-    return this.apiTopicsDeleteDeleteResponse(id).pipe(
+  apiTopicsDeleteDelete(topicId: string): __Observable<null> {
+    return this.apiTopicsDeleteDeleteResponse(topicId).pipe(
       __map(_r => _r.body as null)
     );
   }
@@ -786,17 +1003,17 @@ class ApiService extends __BaseService {
    * Get topic Detail
    *
    * Retrieve all topic information
-   * @param id undefined
+   * @param topic_id undefined
    * @return OK
    */
-  apiTopicsDetailReadResponse(id: string): __Observable<__StrictHttpResponse<Topic>> {
+  apiTopicsDetailReadResponse(topicId: string): __Observable<__StrictHttpResponse<Topic>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/api/topics/detail/${encodeURIComponent(String(id))}`,
+      this.rootUrl + `/api/topics/detail/${encodeURIComponent(String(topicId))}`,
       __body,
       {
         headers: __headers,
@@ -815,11 +1032,11 @@ class ApiService extends __BaseService {
    * Get topic Detail
    *
    * Retrieve all topic information
-   * @param id undefined
+   * @param topic_id undefined
    * @return OK
    */
-  apiTopicsDetailRead(id: string): __Observable<Topic> {
-    return this.apiTopicsDetailReadResponse(id).pipe(
+  apiTopicsDetailRead(topicId: string): __Observable<Topic> {
+    return this.apiTopicsDetailReadResponse(topicId).pipe(
       __map(_r => _r.body as Topic)
     );
   }
@@ -828,17 +1045,17 @@ class ApiService extends __BaseService {
    * List of topics of a group
    *
    * List of topics of a particular group
-   * @param id undefined
+   * @param group_id undefined
    * @return OK
    */
-  apiTopicsListGroupReadResponse(id: string): __Observable<__StrictHttpResponse<Array<Topic>>> {
+  apiTopicsListGroupReadResponse(groupId: string): __Observable<__StrictHttpResponse<Array<Topic>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/api/topics/list-group/${encodeURIComponent(String(id))}`,
+      this.rootUrl + `/api/topics/list-group/${encodeURIComponent(String(groupId))}`,
       __body,
       {
         headers: __headers,
@@ -857,11 +1074,11 @@ class ApiService extends __BaseService {
    * List of topics of a group
    *
    * List of topics of a particular group
-   * @param id undefined
+   * @param group_id undefined
    * @return OK
    */
-  apiTopicsListGroupRead(id: string): __Observable<Array<Topic>> {
-    return this.apiTopicsListGroupReadResponse(id).pipe(
+  apiTopicsListGroupRead(groupId: string): __Observable<Array<Topic>> {
+    return this.apiTopicsListGroupReadResponse(groupId).pipe(
       __map(_r => _r.body as Array<Topic>)
     );
   }
@@ -909,17 +1126,17 @@ class ApiService extends __BaseService {
    * List of topics of a group user is subscribed
    *
    * List of topics of a group to which the active user is subscribed
-   * @param id undefined
+   * @param group_id undefined
    * @return OK
    */
-  apiTopicsListUserGroupReadResponse(id: string): __Observable<__StrictHttpResponse<Array<Topic>>> {
+  apiTopicsListUserGroupReadResponse(groupId: string): __Observable<__StrictHttpResponse<Array<Topic>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/api/topics/list-user-group/${encodeURIComponent(String(id))}`,
+      this.rootUrl + `/api/topics/list-user-group/${encodeURIComponent(String(groupId))}`,
       __body,
       {
         headers: __headers,
@@ -938,11 +1155,11 @@ class ApiService extends __BaseService {
    * List of topics of a group user is subscribed
    *
    * List of topics of a group to which the active user is subscribed
-   * @param id undefined
+   * @param group_id undefined
    * @return OK
    */
-  apiTopicsListUserGroupRead(id: string): __Observable<Array<Topic>> {
-    return this.apiTopicsListUserGroupReadResponse(id).pipe(
+  apiTopicsListUserGroupRead(groupId: string): __Observable<Array<Topic>> {
+    return this.apiTopicsListUserGroupReadResponse(groupId).pipe(
       __map(_r => _r.body as Array<Topic>)
     );
   }
@@ -990,17 +1207,17 @@ class ApiService extends __BaseService {
    * List users subscribed to the topic
    *
    * List of users subscribed to the topic
-   * @param id undefined
+   * @param topic_id undefined
    * @return OK
    */
-  apiTopicsUserListReadResponse(id: string): __Observable<__StrictHttpResponse<Array<User>>> {
+  apiTopicsUserListReadResponse(topicId: string): __Observable<__StrictHttpResponse<Array<User>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/api/topics/user-list/${encodeURIComponent(String(id))}/`,
+      this.rootUrl + `/api/topics/user-list/${encodeURIComponent(String(topicId))}/`,
       __body,
       {
         headers: __headers,
@@ -1019,11 +1236,11 @@ class ApiService extends __BaseService {
    * List users subscribed to the topic
    *
    * List of users subscribed to the topic
-   * @param id undefined
+   * @param topic_id undefined
    * @return OK
    */
-  apiTopicsUserListRead(id: string): __Observable<Array<User>> {
-    return this.apiTopicsUserListReadResponse(id).pipe(
+  apiTopicsUserListRead(topicId: string): __Observable<Array<User>> {
+    return this.apiTopicsUserListReadResponse(topicId).pipe(
       __map(_r => _r.body as Array<User>)
     );
   }
@@ -1035,7 +1252,7 @@ module ApiService {
    * Parameters for apiTicketsUpdateCreatorUpdate
    */
   export interface ApiTicketsUpdateCreatorUpdateParams {
-    id: string;
+    ticketId: string;
     data: Ticket;
   }
 
@@ -1043,7 +1260,7 @@ module ApiService {
    * Parameters for apiTicketsUpdateReceiverUpdate
    */
   export interface ApiTicketsUpdateReceiverUpdateParams {
-    id: string;
+    ticketId: string;
     data: Ticket;
   }
 
@@ -1051,8 +1268,16 @@ module ApiService {
    * Parameters for apiTicketsUpdateStaffUpdate
    */
   export interface ApiTicketsUpdateStaffUpdateParams {
-    id: string;
+    ticketId: string;
     data: Ticket;
+  }
+
+  /**
+   * Parameters for apiTicketsUserAddUpdate
+   */
+  export interface ApiTicketsUserAddUpdateParams {
+    userId: string;
+    ticketId: string;
   }
 }
 

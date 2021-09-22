@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Group, Topic } from 'src/app/api/models';
 import { Ticket } from 'src/app/api/models/ticket';
 import { ApiService } from 'src/app/api/services';
 import { SharedService } from 'src/app/services/shared.service';
@@ -12,32 +13,32 @@ import { SharedService } from 'src/app/services/shared.service';
 export class TicketDetailComponent implements OnInit {
   ticket_id!: number;
   private sub: any;
-  ticket: Ticket | undefined;
+  group!: Group;
+  topic!: Topic;
+  ticket!: Ticket;
   panelOpenState = true;
-  path: string[] = [];
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private shared: SharedService,
     private api: ApiService
-  ) {}
+  ) {
+    this.group = this.router.getCurrentNavigation()?.extras?.state?.group;
+    this.topic = this.router.getCurrentNavigation()?.extras?.state?.topic;
+    this.ticket = this.router.getCurrentNavigation()?.extras?.state?.ticket;
+  }
 
   ngOnInit() {
-    this.route.url.forEach((urlSegments) => {
-      urlSegments.forEach((segment) => {
-        this.path.push(segment.path);
-      });
-    });
     this.sub = this.route.params.subscribe((params) => {
       this.ticket_id = +params['ticket_id'];
     });
-
-    this.getTicketDetail(this.ticket_id).subscribe((ticket) => {
-      this.ticket = ticket;
-    });
+    
+    this.getTicketDetail(this.ticket_id)
   }
 
-  getTicketDetail(id: number) {
-    return this.shared.getTicketDetail(id);
+  getTicketDetail(ticket_id: number) {
+    this.api.apiTicketsDetailRead(ticket_id.toString()).subscribe((ticket) => {
+      this.ticket = ticket;
+    });
   }
 }

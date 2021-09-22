@@ -93,8 +93,8 @@ def groupListUser(request):
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, ])
-def userListGroup(request, pk):
-    users = User.objects.filter(groups=pk)
+def userListGroup(request, group_id):
+    users = User.objects.filter(groups=group_id)
     if users.count() == 0:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
     serializer = UserSerializer(users, many=True)
@@ -129,9 +129,9 @@ def groupCreate(request):
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated, IsSuperuser])
-def groupDelete(request, pk):
+def groupDelete(request, group_id):
     try:
-        group = Group.objects.filter(id=pk)
+        group = Group.objects.filter(id=group_id)
     except Group.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
 
@@ -148,13 +148,34 @@ def groupDelete(request, pk):
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated,IsStaff])
-def groupUserAdd(request, pk):
+def groupUserAdd(request, group_id):
     try:
-        group = Group.objects.get(id=pk)
+        group = Group.objects.get(id=group_id)
     except Group.DoesNotExist:
         return Response('Not Found group', status=status.HTTP_404_NOT_FOUND)
-    user = User.objects.get(id=request.user_id)
+    user = User.objects.get(id=request.user.id)
 
     user.groups.add(group)
 
     return Response('User subscribed to the Group', status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
+    method="put",
+    operation_description='Unsubscribe user from group',
+    operation_summary='Remove user from Group',
+    responses={200: openapi.Response('OK'),
+               404: openapi.Response('Not Found')})
+@api_view(['PUT'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated,IsStaff])
+def groupUserDelete(request, group_id):
+    try:
+        group = Group.objects.get(id=group_id)
+    except Group.DoesNotExist:
+        return Response('Not Found group', status=status.HTTP_404_NOT_FOUND)
+    user = User.objects.get(id=request.user.id)
+
+    user.groups.remove(group)
+
+    return Response('User Unsubscribed from the Group', status.HTTP_200_OK)

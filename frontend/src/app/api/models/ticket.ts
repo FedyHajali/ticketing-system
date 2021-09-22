@@ -11,6 +11,8 @@ export interface Ticket {
   expiration: string;
   groups: Array<Group>;
   id?: number;
+  last_updated?: string;
+  last_updated_by: User;
   receivers: Array<User>;
   status?: 'OP' | 'CL' | 'PE' | 'RE' | 'EX';
   title: string;

@@ -1,4 +1,4 @@
-<div class="container" id="dashboard-container">
+<div id="dashboard-container">
   <h1>Welcome {{ user?.username }}</h1>
   <br />
   <div id="dashboard">
@@ -6,13 +6,30 @@
       <div class="col-6">
         <hr />
         <h3>Your Groups</h3>
-        <div class="card" *ngFor="let group of userGroups">
+        <div class="card" *ngIf="userGroups?.length === 0">
           <ul class="list-group list-group-flush">
-            <li class="list-group-item" [routerLink]="['groups/' + group.id]">
-              {{ group.name }}
-            </li>
+            <li class="list-group-item"> You are not subscribed to any group.</li>
           </ul>
         </div>
+        <ng-container *ngFor="let group of userGroups">
+          <div class="card">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <p style="float: left; cursor: pointer" (click)="navigateGroup(group)">
+                  {{ group.name }}
+                </p>
+                <a
+                  (click)="subscribeGroupModal(false, group)"
+                  title="Unsubscribe"
+                  style="cursor: pointer"
+                >
+                  <span style="float: right; color: rgb(241, 134, 134)"
+                    ><i class="fas fa-user-minus"></i></span
+                ></a>
+              </li>
+            </ul>
+          </div>
+        </ng-container>
         <hr />
         <div class="row">
           <div class="col">
@@ -22,19 +39,29 @@
               type="button"
               class="btn btn-outline-primary"
               style="float: right"
-              (click)="createGroup()"
+              (click)="createGroupModal()"
             >
               Add Group
             </button>
           </div>
         </div>
-        <div class="card" *ngFor="let group of allGroups">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              {{ group.name }}
-            </li>
-          </ul>
-        </div>
+        <ng-container *ngFor="let group of allGroups">
+          <div class="card">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <p style="float: left; cursor: pointer">{{ group.name }}</p>
+                <a
+                  (click)="subscribeGroupModal(true, group)"
+                  title="Subscribe"
+                  style="cursor: pointer"
+                >
+                  <span style="float: right; color: rgb(177, 219, 177)"
+                    ><i class="fas fa-user-plus"></i></span
+                ></a>
+              </li>
+            </ul>
+          </div>
+        </ng-container>
         <hr />
       </div>
       <div class="col-6">

@@ -7,11 +7,11 @@ import { ApiService, AuthService } from 'src/app/api/services';
 @Component({
   selector: 'app-group-create',
   templateUrl: './group-create.component.html',
-  styleUrls: ['./group-create.component.scss']
+  styleUrls: ['./group-create.component.scss'],
 })
 export class GroupCreateComponent implements OnInit {
   form = this.fb.group({
-    name: ''
+    name: '',
   });
   constructor(
     public dialogRef: MatDialogRef<GroupCreateComponent>,
@@ -31,8 +31,9 @@ export class GroupCreateComponent implements OnInit {
       permissions: [],
     };
 
-    // this.auth.authGroupsCreateCreate(group).subscribe((response) => {
-    //   console.log(response);
-    // });
+    this.auth.authGroupsCreateCreate(group).subscribe((response) => {
+      console.log(response);
+      this.dialogRef.close();
+    });
   }
 }

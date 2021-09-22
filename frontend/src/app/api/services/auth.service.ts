@@ -18,11 +18,13 @@ import { UserDetails } from '../models/user-details';
   providedIn: 'root',
 })
 class AuthService extends __BaseService {
+  static readonly authGroupsAddUserUpdatePath = '/auth/groups/add-user/{group_id}';
   static readonly authGroupsCreateCreatePath = '/auth/groups/create/';
-  static readonly authGroupsDeleteDeletePath = '/auth/groups/delete/{id}';
+  static readonly authGroupsDeleteUserUpdatePath = '/auth/groups/delete-user/{group_id}';
+  static readonly authGroupsDeleteDeletePath = '/auth/groups/delete/{group_id}';
   static readonly authGroupsListUserListPath = '/auth/groups/list-user/';
   static readonly authGroupsListListPath = '/auth/groups/list/';
-  static readonly authGroupsUserListReadPath = '/auth/groups/user-list/{id}/';
+  static readonly authGroupsUserListReadPath = '/auth/groups/user-list/{group_id}/';
   static readonly authLoginCreatePath = '/auth/login/';
   static readonly authLogoutListPath = '/auth/logout/';
   static readonly authLogoutCreatePath = '/auth/logout/';
@@ -43,15 +45,57 @@ class AuthService extends __BaseService {
   }
 
   /**
-   * Create Group (only SuperUser)
+   * Add user to Group
    *
-   * Creation of a new Group (only SuperUser)
-   * @return Created
+   * Subscribe user to group
+   * @param group_id undefined
    */
-  authGroupsCreateCreateResponse(): __Observable<__StrictHttpResponse<Group>> {
+  authGroupsAddUserUpdateResponse(groupId: string): __Observable<__StrictHttpResponse<null>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
+
+    let req = new HttpRequest<any>(
+      'PUT',
+      this.rootUrl + `/auth/groups/add-user/${encodeURIComponent(String(groupId))}`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<null>;
+      })
+    );
+  }
+  /**
+   * Add user to Group
+   *
+   * Subscribe user to group
+   * @param group_id undefined
+   */
+  authGroupsAddUserUpdate(groupId: string): __Observable<null> {
+    return this.authGroupsAddUserUpdateResponse(groupId).pipe(
+      __map(_r => _r.body as null)
+    );
+  }
+
+  /**
+   * Create Group (only SuperUser)
+   *
+   * Creation of a new Group (only SuperUser)
+   * @param data undefined
+   * @return Created
+   */
+  authGroupsCreateCreateResponse(data: Group): __Observable<__StrictHttpResponse<Group>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+    __body = data;
     let req = new HttpRequest<any>(
       'POST',
       this.rootUrl + `/auth/groups/create/`,
@@ -73,11 +117,52 @@ class AuthService extends __BaseService {
    * Create Group (only SuperUser)
    *
    * Creation of a new Group (only SuperUser)
+   * @param data undefined
    * @return Created
    */
-  authGroupsCreateCreate(): __Observable<Group> {
-    return this.authGroupsCreateCreateResponse().pipe(
+  authGroupsCreateCreate(data: Group): __Observable<Group> {
+    return this.authGroupsCreateCreateResponse(data).pipe(
       __map(_r => _r.body as Group)
+    );
+  }
+
+  /**
+   * Remove user from Group
+   *
+   * Unsubscribe user from group
+   * @param group_id undefined
+   */
+  authGroupsDeleteUserUpdateResponse(groupId: string): __Observable<__StrictHttpResponse<null>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+
+    let req = new HttpRequest<any>(
+      'PUT',
+      this.rootUrl + `/auth/groups/delete-user/${encodeURIComponent(String(groupId))}`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<null>;
+      })
+    );
+  }
+  /**
+   * Remove user from Group
+   *
+   * Unsubscribe user from group
+   * @param group_id undefined
+   */
+  authGroupsDeleteUserUpdate(groupId: string): __Observable<null> {
+    return this.authGroupsDeleteUserUpdateResponse(groupId).pipe(
+      __map(_r => _r.body as null)
     );
   }
 
@@ -85,16 +170,16 @@ class AuthService extends __BaseService {
    * Delete Group (only SuperUser)
    *
    * Delete a Group (only SuperUser)
-   * @param id undefined
+   * @param group_id undefined
    */
-  authGroupsDeleteDeleteResponse(id: string): __Observable<__StrictHttpResponse<null>> {
+  authGroupsDeleteDeleteResponse(groupId: string): __Observable<__StrictHttpResponse<null>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'DELETE',
-      this.rootUrl + `/auth/groups/delete/${encodeURIComponent(String(id))}`,
+      this.rootUrl + `/auth/groups/delete/${encodeURIComponent(String(groupId))}`,
       __body,
       {
         headers: __headers,
@@ -113,10 +198,10 @@ class AuthService extends __BaseService {
    * Delete Group (only SuperUser)
    *
    * Delete a Group (only SuperUser)
-   * @param id undefined
+   * @param group_id undefined
    */
-  authGroupsDeleteDelete(id: string): __Observable<null> {
-    return this.authGroupsDeleteDeleteResponse(id).pipe(
+  authGroupsDeleteDelete(groupId: string): __Observable<null> {
+    return this.authGroupsDeleteDeleteResponse(groupId).pipe(
       __map(_r => _r.body as null)
     );
   }
@@ -203,17 +288,17 @@ class AuthService extends __BaseService {
    * List users of group
    *
    * List all users of a group
-   * @param id undefined
+   * @param group_id undefined
    * @return OK
    */
-  authGroupsUserListReadResponse(id: string): __Observable<__StrictHttpResponse<Array<User>>> {
+  authGroupsUserListReadResponse(groupId: string): __Observable<__StrictHttpResponse<Array<User>>> {
     let __params = this.newParams();
     let __headers = new HttpHeaders();
     let __body: any = null;
 
     let req = new HttpRequest<any>(
       'GET',
-      this.rootUrl + `/auth/groups/user-list/${encodeURIComponent(String(id))}/`,
+      this.rootUrl + `/auth/groups/user-list/${encodeURIComponent(String(groupId))}/`,
       __body,
       {
         headers: __headers,
@@ -232,11 +317,11 @@ class AuthService extends __BaseService {
    * List users of group
    *
    * List all users of a group
-   * @param id undefined
+   * @param group_id undefined
    * @return OK
    */
-  authGroupsUserListRead(id: string): __Observable<Array<User>> {
-    return this.authGroupsUserListReadResponse(id).pipe(
+  authGroupsUserListRead(groupId: string): __Observable<Array<User>> {
+    return this.authGroupsUserListReadResponse(groupId).pipe(
       __map(_r => _r.body as Array<User>)
     );
   }

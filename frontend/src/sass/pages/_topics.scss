@@ -1,18 +1,73 @@
 #topics {
-  .card-group {
-    .col {
-      margin-left: 0;
-    }
-    margin-bottom: 7rem;
+  .container {
+    margin-bottom: 5rem;
     padding: 2rem;
     border-style: ridge;
     background-color: ghostwhite;
     box-shadow: 0 0 5px 0 black;
-    #topics {
+    .row:nth-child(1) {
+      width: 100%;
+      .col-8 {
+        ol {
+          width: 100%;
+        }
+      }
+      .col-4 {
+        button {
+          float: right;
+          margin: 1rem;
+        }
+      }
+    }
+    .row:nth-child(2),
+    .row:nth-child(3) {
+      width: 100%;
       margin: 0.5rem;
-      height: 14rem;
+      .col-4 {
+        .card-group {
+          .card {
+            margin: 1rem;
+            .card-header {
+              p {
+                float: left;
+                cursor: pointer;
+              }
+              a {
+                cursor: pointer;
+                float: right;
+                margin: 0.2rem;
+              }
+            }
+            .card-footer {
+              .text-muted {
+                float: left;
+              }
+              span {
+                float: right;
+                color: blue;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .row:nth-child(2) {
       .card-header {
-        cursor: pointer;
+        a {
+          span {
+            color: rgb(241, 134, 134);
+          }
+        }
+      }
+    }
+    .row:nth-child(3) {
+      .card-header {
+        a {
+          span {
+            color: rgb(177, 219, 177);
+          }
+        }
       }
     }
   }

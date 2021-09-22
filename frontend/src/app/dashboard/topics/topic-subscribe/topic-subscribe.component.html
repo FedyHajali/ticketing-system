@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1 *ngIf="data.sub">Do you want to join this topic?</h1>
+      <h1 *ngIf="!data.sub">Do you want to unsubscribe from this topic?</h1>
+      <div class="button-group" style="text-align: center">
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          style="margin: 1rem"
+          (click)="submit()"
+          *ngIf="data.sub"
+        >
+          Subscribe
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          style="margin: 1rem"
+          (click)="submit()"
+          *ngIf="!data.sub"
+        >
+          Unsubscribe
+        </button>
+        <button type="button" class="btn btn-outline-primary">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

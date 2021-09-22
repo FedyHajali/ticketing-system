@@ -56,6 +56,7 @@ class TicketSerializer(serializers.ModelSerializer):
     topics = TopicSerializer(many=True)
     comments = CommentSerializer(many=True)
     creator = UserSerializer()
+    last_updated_by = UserSerializer()
 
     class Meta:
         model = Ticket

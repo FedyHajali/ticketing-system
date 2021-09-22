@@ -28,6 +28,8 @@ import { GroupsComponent } from './dashboard/groups/groups.component';
 import { GroupCreateComponent } from './dashboard/groups/group-create/group-create.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { MaterialModule } from '../app/material/material.module';
+import { GroupSubscribeComponent } from './dashboard/groups/group-subscribe/group-subscribe.component';
+import { TopicSubscribeComponent } from './dashboard/topics/topic-subscribe/topic-subscribe.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,14 +44,16 @@ import { MaterialModule } from '../app/material/material.module';
     ReportsComponent,
     SettingsComponent,
     TopicCreateComponent,
-    TicketDetailComponent,
     TicketCreateComponent,
+    TicketDetailComponent,
     TicketUpdateComponent,
     TicketDeleteComponent,
     TopicDeleteComponent,
     PageNotFoundComponent,
     GroupsComponent,
     GroupCreateComponent,
+    GroupSubscribeComponent,
+    TopicSubscribeComponent,
   ],
   imports: [
     BrowserModule,

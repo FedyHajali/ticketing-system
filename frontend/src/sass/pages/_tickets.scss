@@ -1,23 +1,58 @@
 #tickets {
-  .card-group {
-    margin-bottom: 7rem;
+  .container {
+    margin-bottom: 5rem;
     padding: 2rem;
     border-style: ridge;
     background-color: ghostwhite;
     box-shadow: 0 0 5px 0 black;
-    .card {
-      margin-bottom: 2rem;
-      padding: 2rem;
-      box-shadow: 0 0 5px 0 black;
-      .card-header {
-        .mat-tab-label {
-          width: 50% !important;
+    .row {
+      width: 100%;
+    }
+    .row:nth-child(1) {
+      .col-8 {
+        ol {
+          width: 100%;
+          li:nth-child(2) {
+            width: 50%;
+          }
+        }
+      }
+      .col-4 {
+        button {
+          float: right;
+          margin: 1rem;
+        }
+      }
+    }
+    .row:nth-child(2) {
+      .col {
+        h1 {
+          float: left;
+        }
+        button {
+          float: right;
+        }
+      }
+    }
+    .row:nth-child(3) {
+      .card {
+        margin: 1rem;
+        padding: 1rem;
+        box-shadow: 0 0 4px 0 black;
+        .card-header {
+          .card-title {
+            float: left;
+          }
+          span {
+            float: right;
+          }
+        }
+        .card-body {
+          button {
+            float: right;
+          }
         }
       }
     }
   }
-}
-
-::ng-deep .mat-tab-label {
-  min-width: 100px;
 }

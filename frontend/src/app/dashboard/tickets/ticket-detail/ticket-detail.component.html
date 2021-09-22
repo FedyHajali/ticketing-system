@@ -1,225 +1,236 @@
-<div class="container" id="dashboard-container">
-  <div class="row">
-    <div class="col">
-      <button
-        type="button"
-        class="btn btn-outline-primary"
-        style="float: right"
-        routerLink="../.."
-      >
-        Go Back
-      </button>
-    </div>
-  </div>
-  <div class="container" id="ticket-detail">
-    <div class="row">
-      <div class="col-8">
-        <mat-card>
-          <div class="row">
-            <nav aria-label="breadcrumb" style="float: left">
-              <ol class="breadcrumb">
-                <ng-container *ngFor="let segment of path; let i = index">
-                  <li class="breadcrumb-item" *ngIf="i % 2 == 0">
-                    <a href=""> {{ segment | titlecase }}</a>
-                  </li>
-                </ng-container>
-              </ol>
-            </nav>
-            <div class="col">
-              <h1 style="float: left">
-                <em>{{ ticket?.title }}</em>
-              </h1>
-              <div class="btn-group" style="float: right">
-                <button type="button" class="btn btn-outline-danger">
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <h4>Actions</h4>
-              <mat-chip-list aria-label="Actions">
-                <mat-chip color="primary">Upload</mat-chip>
-                <mat-chip color="secondary" [matMenuTriggerFor]="menu"
-                  >Change Status</mat-chip
-                >
-                <mat-menu #menu="matMenu">
-                  <button mat-menu-item>Opened</button>
-                  <button mat-menu-item>In Pending</button>
-                  <button mat-menu-item>Resolved</button>
-                  <button mat-menu-item>Closed</button>
-                </mat-menu>
-                <mat-chip color="primary">Add Receiver</mat-chip>
-                <mat-chip color="primary">...</mat-chip>
-              </mat-chip-list>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <h4>Content Description</h4>
-              <div class="card">
-                <div class="card-body">
-                  {{ ticket?.content }}
+<div id="dashboard-container">
+  <div id="ticket-detail">
+    <div class="container">
+      <div class="row">
+        <div class="col-8">
+          <mat-card>
+            <div class="row">
+              <div class="col">
+                <h1 class="float-start">
+                  <em>{{ ticket?.title }}</em>
+                </h1>
+                <div class="btn-group float-end">
+                  <button type="button" class="btn btn-outline-danger">
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <h4>Attachments</h4>
-              <ul class="list inline">
-                <li *ngFor="let file of ticket?.uploads">{{ file }}</li>
-              </ul>
+            <div class="row">
+              <div class="col">
+                <div class="header m-3">
+                  <span class="d-inline me-3"
+                    ><i class="fas fa-angle-double-right"></i
+                  ></span>
+                  <h4 class="d-inline">Actions</h4>
+                </div>
+                <mat-chip-list aria-label="Actions">
+                  <mat-chip color="primary">Upload</mat-chip>
+                  <mat-chip color="secondary" [matMenuTriggerFor]="menu"
+                    >Change Status</mat-chip
+                  >
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item>Opened</button>
+                    <button mat-menu-item>In Pending</button>
+                    <button mat-menu-item>Resolved</button>
+                    <button mat-menu-item>Closed</button>
+                  </mat-menu>
+                  <mat-chip color="primary">Add Receiver</mat-chip>
+                  <mat-chip color="primary">...</mat-chip>
+                </mat-chip-list>
+              </div>
             </div>
-          </div>
-          <div class="row col-10 offset-1">
-            <div class="col">
-              <h4>Comments</h4>
-              <div
-                class="form-group row"
-                *ngFor="let comment of ticket?.comments"
-              >
-                <label
-                  for="comment{{ ticket?.id }}"
-                  class="col-sm-2 col-form-label"
-                  >{{ comment.creator }}</label
-                >
-                <div class="col-sm-10">
-                  <input
-                    type="text"
-                    readonly
-                    class="form-control-plaintext"
-                    id="comment{{ comment.id }}"
-                    value="{{ comment.content }}"
-                  />
+            <div class="row">
+              <div class="col">
+                <div class="header m-3">
+                  <span class="d-inline me-3"
+                    ><i class="fas fa-align-left"></i
+                  ></span>
+                  <h4 class="d-inline">Content Description</h4>
+                </div>
+                <div class="card">
+                  <div class="card-body">
+                    {{ ticket?.content }}
+                  </div>
                 </div>
               </div>
-              <form>
-                <div class="form-group" id="comment-input">
-                  <textarea
-                    class="form-control"
-                    id="comment-content"
-                    rows="2"
-                    placeholder="Add a comment"
-                  ></textarea>
-                </div>
-                <br />
-                <button type="button" class="btn btn-outline-primary">
-                  Save
-                </button>
-              </form>
             </div>
-          </div>
-        </mat-card>
-      </div>
-      <div class="col-4">
-        <div class="table-responsive">
-          <mat-expansion-panel
-            (opened)="panelOpenState = true"
-            (closed)="panelOpenState = false"
-            expanded="true"
+            <div class="row">
+              <div class="col">
+                <div class="header m-3">
+                  <span class="d-inline me-3"
+                    ><i class="fas fa-upload"></i
+                  ></span>
+                  <h4 class="d-inline">Attachments</h4>
+                </div>
+                <ul class="list inline">
+                  <li *ngFor="let file of ticket?.uploads">{{ file }}</li>
+                </ul>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="header m-3">
+                  <span class="d-inline me-3"
+                    ><i class="fas fa-comment-alt"></i
+                  ></span>
+                  <h4 class="d-inline">Comments</h4>
+                </div>
+                <div class="row" *ngFor="let comment of ticket?.comments">
+                  <div class="form-group">
+                    <label
+                      for="comment{{ ticket?.id }}"
+                      class="col-sm-2 col-form-label"
+                      >{{ comment.creator }}</label
+                    >
+                    <div class="col">
+                      <input
+                        type="text"
+                        readonly
+                        class="form-control-plaintext"
+                        id="comment{{ comment.id }}"
+                        value="{{ comment.content }}"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <form>
+                  <div class="form-group" id="comment-input">
+                    <textarea
+                      class="form-control"
+                      id="comment-content"
+                      rows="2"
+                      placeholder="Add a comment"
+                    ></textarea>
+                  </div>
+                  <br />
+                  <button type="button" class="btn btn-outline-primary">
+                    Save
+                  </button>
+                </form>
+              </div>
+            </div>
+          </mat-card>
+        </div>
+        <div class="col-4">
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            routerLink="../.."
+            [state]="{ group: group, topic: topic, ticket: ticket }"
           >
-            <mat-expansion-panel-header>
-              <mat-panel-title>Details</mat-panel-title>
-              <!-- <mat-panel-description> Description </mat-panel-description> -->
-            </mat-expansion-panel-header>
-            <table class="table">
-              <caption>
-                Creation date:
-                {{
-                  ticket?.created_at | date: "EEEE, d MMMM, y, h:mm"
-                }}
-                <br />
-                Last Update: {{ticket?.lastupdate}
-              </caption>
-              <thead>
-                <tr>
-                  <th scope="col"></th>
-                  <th scope="col"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Creator</td>
-                  <td>{{ ticket?.creator?.username }}</td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <mat-expansion-panel hideToggle>
-                      <mat-expansion-panel-header>
-                        <mat-panel-title>Groups</mat-panel-title>
-                      </mat-expansion-panel-header>
-                      <div class="card">
-                        <ul class="list-group list-group-flush">
-                          <li
-                            class="list-group-item"
-                            *ngFor="let group of ticket?.groups"
-                          >
-                            {{ group.name }}
-                          </li>
-                        </ul>
-                      </div>
-                    </mat-expansion-panel>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <mat-expansion-panel hideToggle>
-                      <mat-expansion-panel-header>
-                        <mat-panel-title>Topics</mat-panel-title>
-                      </mat-expansion-panel-header>
-                      <div class="card">
-                        <ul class="list-group list-group-flush">
-                          <li
-                            class="list-group-item"
-                            *ngFor="let topic of ticket?.topics"
-                          >
-                            {{ topic.name }}
-                          </li>
-                        </ul>
-                      </div>
-                    </mat-expansion-panel>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2">
-                    <mat-expansion-panel hideToggle>
-                      <mat-expansion-panel-header>
-                        <mat-panel-title>Receivers</mat-panel-title>
-                      </mat-expansion-panel-header>
-                      <div class="card">
-                        <ul class="list-group list-group-flush">
-                          <li
-                            class="list-group-item"
-                            *ngFor="let receiver of ticket?.receivers"
-                          >
-                            {{ receiver.username }}
-                          </li>
-                        </ul>
-                      </div>
-                    </mat-expansion-panel>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Tags</td>
-                  <td>@@@</td>
-                </tr>
-                <tr>
-                  <td>Status</td>
-                  <td>
-                    {{ ticket?.status }}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Expiration</td>
-                  <td>
-                    {{ ticket?.expiration | date: "EEEE, d MMMM, y, h:mm" }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </mat-expansion-panel>
+            Back
+          </button>
+          <div class="table-responsive">
+            <mat-expansion-panel
+              (opened)="panelOpenState = true"
+              (closed)="panelOpenState = false"
+              expanded="true"
+            >
+              <mat-expansion-panel-header>
+                <mat-panel-title>Details</mat-panel-title>
+              </mat-expansion-panel-header>
+              <table class="table">
+                <caption>
+                  Creation date:
+                  {{
+                    ticket?.created_at | date: "EEEE, d MMMM, y, h:mm"
+                  }}
+                  <br />
+                  <br />
+                  Last Update:
+                  {{
+                    ticket?.last_updated | date: "EEEE, d MMMM, y, h:mm"
+                  }}
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Creator</td>
+                    <td>{{ ticket?.creator?.username }}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>Groups</mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="card">
+                          <ul class="list-group list-group-flush">
+                            <li
+                              class="list-group-item"
+                              *ngFor="let group of ticket?.groups"
+                            >
+                              {{ group.name }}
+                            </li>
+                          </ul>
+                        </div>
+                      </mat-expansion-panel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>Topics</mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="card">
+                          <ul class="list-group list-group-flush">
+                            <li
+                              class="list-group-item"
+                              *ngFor="let topic of ticket?.topics"
+                            >
+                              {{ topic.name }}
+                            </li>
+                          </ul>
+                        </div>
+                      </mat-expansion-panel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">
+                      <mat-expansion-panel hideToggle>
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>Receivers</mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="card">
+                          <ul class="list-group list-group-flush">
+                            <li
+                              class="list-group-item"
+                              *ngFor="let receiver of ticket?.receivers"
+                            >
+                              {{ receiver.username }}
+                            </li>
+                          </ul>
+                        </div>
+                      </mat-expansion-panel>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Tags</td>
+                    <td>@@@</td>
+                  </tr>
+                  <tr>
+                    <td>Status</td>
+                    <td>
+                      {{ ticket?.status }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Expiration</td>
+                    <td>
+                      {{ ticket?.expiration | date: "EEEE, d MMMM, y, h:mm" }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </mat-expansion-panel>
+          </div>
         </div>
       </div>
     </div>

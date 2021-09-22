@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './account/login/login.component';
 import { RegistrationComponent } from './account/registration/registration.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { TicketCreateComponent } from './dashboard/tickets/ticket-create/ticket-create.component';
 import { TicketDetailComponent } from './dashboard/tickets/ticket-detail/ticket-detail.component';
 import { TicketsComponent } from './dashboard/tickets/tickets.component';
 import { TopicsComponent } from './dashboard/topics/topics.component';
@@ -35,6 +36,10 @@ const routes: Routes = [
       {
         path: 'groups/:group_id/topics/:topic_id/tickets/:ticket_id',
         component: TicketDetailComponent,
+      },
+      {
+        path: 'tickets/create',
+        component: TicketCreateComponent,
       },
       {
         path: 'tickets/:ticket_id',

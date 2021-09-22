@@ -31,9 +31,8 @@ class Ticket(models.Model):
     # Fields
     title = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
     expiration = models.DateTimeField()
-    last_updated = models.DateTimeField()
-    last_updated_by = models.IntegerField(default=None)
     status = models.CharField(
         max_length=2, blank=False, choices=StatusChoices.choices, default=StatusChoices.OPEN)
     content = models.TextField()
@@ -44,6 +43,8 @@ class Ticket(models.Model):
     # Foreign keys
     creator = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name='creator')
+    last_updated_by = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name='last_updated_by')
     groups = models.ManyToManyField(Group, related_name='groups')
     receivers = models.ManyToManyField(
         get_user_model(), related_name='receivers')
