@@ -107,36 +107,11 @@
                     <mat-select formControlName="groups" multiple>
                       <mat-option
                         *ngFor="let group of groups"
-                        [value]="group.id"
+                        [value]="group"
                         >{{ group.name }}</mat-option
                       >
                     </mat-select>
                   </mat-form-field>
-
-                  <!-- <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text"
-                        ><i class="fas fa-users"></i
-                      ></span>
-                    </div>
-                    <button type="button" class="form-control">
-                      Available Groups
-                    </button>
-                    <button
-                      type="button"
-                      class="form-control"
-                      (click)="clearGroupsChoice()"
-                    >
-                      Reset Choice
-                    </button>
-  
-                    <select multiple formControlName="groups">
-                      <br />
-                      <option *ngFor="let group of groups" [ngValue]="group.id">
-                        {{ group["name"] }}
-                      </option>
-                    </select>
-                  </div> -->
                 </div>
                 <br />
                 <div class="input-group">

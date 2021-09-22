@@ -28,10 +28,13 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         password_data = validated_data.pop('password')
         groups_data = validated_data.pop('groups')
+        print('groups_data:', groups_data)
         user = super().create(validated_data)
         user.set_password(password_data)
+        print('user:', user)
         for group_data in groups_data:
-            user.groups.add(group_data)
+            print('group_data:', group_data)
+            user.groups.add(group_data['id'])
 
         user.save()
         return user
