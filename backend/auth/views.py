@@ -1,7 +1,7 @@
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from .permission import IsSuperuser ,IsStaff
+from .permission import IsSuperuser, IsStaff
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.models import User
 from rest_framework.authentication import TokenAuthentication
@@ -54,6 +54,20 @@ def userDetail(request):
 
 
 #################### GROUP ####################
+
+@swagger_auto_schema(
+    method="get",
+    operation_description='Retrieve all Group Information ',
+    operation_summary='Get Group Info',
+    responses={200: openapi.Response('OK', GroupSerializer)})
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([AllowAny, ])
+def groupDetail(request, group_id):
+    group = Group.objects.get(pk=group_id)
+    serializer = GroupSerializer(group)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 @swagger_auto_schema(
     method="get",
@@ -147,7 +161,7 @@ def groupDelete(request, group_id):
                404: openapi.Response('Not Found')})
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,IsStaff])
+@permission_classes([IsAuthenticated, IsStaff])
 def groupUserAdd(request, group_id):
     try:
         group = Group.objects.get(id=group_id)
@@ -168,7 +182,7 @@ def groupUserAdd(request, group_id):
                404: openapi.Response('Not Found')})
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,IsStaff])
+@permission_classes([IsAuthenticated, IsStaff])
 def groupUserDelete(request, group_id):
     try:
         group = Group.objects.get(id=group_id)

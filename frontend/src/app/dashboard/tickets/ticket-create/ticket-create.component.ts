@@ -13,6 +13,7 @@ export class TicketCreateComponent implements OnInit {
   groups: Array<Group> = [];
   topics: Array<Topic> = [];
   receivers: Array<User> = [];
+  user!: User;
   status = [
     { value: 'OP', viewValue: 'Open' },
     { value: 'PE', viewValue: 'In Pending' },
@@ -30,13 +31,18 @@ export class TicketCreateComponent implements OnInit {
     groups: null,
     topics: null,
     receivers: null,
+    creator: this.user,
+    last_updated_by: this.user,
   });
 
   constructor(
     private auth: AuthService,
     private api: ApiService,
-    private fb: FormBuilder
-  ) {}
+    private fb: FormBuilder,
+    private shared: SharedService
+  ) {
+    this.user = this.shared.getActiveUser();
+  }
 
   ngOnInit(): void {
     this.auth.authGroupsListUserList().subscribe((groups) => {
@@ -81,5 +87,9 @@ export class TicketCreateComponent implements OnInit {
         console.log(this.receivers);
       });
     });
+  }
+
+  onSubmit() {
+    console.log(this.form)
   }
 }

@@ -8,9 +8,11 @@ from django.contrib.auth.models import Group, User
 ################# AUTH ######################
 
 class GroupSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
     class Meta:
         model = Group
-        fields = '__all__'
+        fields = ('id', 'name', 'permissions')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -42,12 +44,18 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class TopicSerializer(serializers.ModelSerializer):
-    # users = UserSerializer(many=True)
-    # group = GroupSerializer()
+    users = UserSerializer(many=True, read_only=True)
+    group = GroupSerializer()
 
     class Meta:
         model = Topic
         fields = '__all__'
+
+    def create(self, validated_data):
+        group = validated_data.pop('group')
+        topic_group = Group.objects.get(pk=group['id'])
+        topic = Topic.objects.create(group=topic_group, **validated_data)
+        return topic
 
 
 class TicketSerializer(serializers.ModelSerializer):

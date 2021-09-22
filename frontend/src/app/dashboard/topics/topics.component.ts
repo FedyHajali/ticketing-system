@@ -71,7 +71,7 @@ export class TopicsComponent implements OnInit {
       width: '400px',
       height: '400px',
       autoFocus: true,
-      data: { group: this.group_id },
+      data: { group: this.group },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

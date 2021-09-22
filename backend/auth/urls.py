@@ -10,6 +10,7 @@ urlpatterns = [
     path('users/detail/', views.userDetail, name="user-detail"),
 
     # Group
+    path('groups/detail/<int:group_id>', views.groupList, name="group-detail"),
     path('groups/list/', views.groupList, name="group-list"),
     path('groups/list-user/', views.groupListUser, name="user-group-list"),
     path('groups/create/', views.groupCreate, name="group-create"),
