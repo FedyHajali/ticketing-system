@@ -667,6 +667,24 @@ paths:
         in: path
         required: true
         type: string
+  /auth/groups/detail/{group_id}:
+    get:
+      operationId: auth_groups_detail_read
+      summary: Get Group Info
+      description: 'Retrieve all Group Information '
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Group'
+      tags:
+        - auth
+    parameters:
+      - name: group_id
+        in: path
+        required: true
+        type: string
   /auth/groups/list-user/:
     get:
       operationId: auth_groups_list-user_list
@@ -945,47 +963,14 @@ paths:
         - auth
     parameters: []
 definitions:
-  Comment:
-    required:
-      - title
-      - content
-      - creator
-      - ticket
-    type: object
-    properties:
-      id:
-        title: ID
-        type: integer
-        readOnly: true
-      title:
-        title: Title
-        type: string
-        maxLength: 255
-        minLength: 1
-      content:
-        title: Content
-        type: string
-        minLength: 1
-      created_at:
-        title: Created at
-        type: string
-        format: date-time
-        readOnly: true
-      creator:
-        title: Creator
-        type: integer
-      ticket:
-        title: Ticket
-        type: integer
   Group:
     required:
       - name
     type: object
     properties:
       id:
-        title: ID
+        title: Id
         type: integer
-        readOnly: true
       name:
         title: Name
         type: string
@@ -998,14 +983,18 @@ definitions:
         uniqueItems: true
   User:
     required:
+      - groups
       - password
       - username
     type: object
     properties:
       id:
-        title: ID
+        title: Id
         type: integer
-        readOnly: true
+      groups:
+        type: array
+        items:
+          $ref: '#/definitions/Group'
       password:
         title: Password
         type: string
@@ -1026,7 +1015,6 @@ definitions:
         description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
           only.
         type: string
-        pattern: ^[\w.@+-]+$
         maxLength: 150
         minLength: 1
       first_name:
@@ -1055,15 +1043,6 @@ definitions:
         title: Date joined
         type: string
         format: date-time
-      groups:
-        description: The groups this user belongs to. A user will get all permissions
-          granted to each of their groups.
-        type: array
-        items:
-          description: The groups this user belongs to. A user will get all permissions
-            granted to each of their groups.
-          type: integer
-        uniqueItems: true
       user_permissions:
         description: Specific permissions for this user.
         type: array
@@ -1071,17 +1050,53 @@ definitions:
           description: Specific permissions for this user.
           type: integer
         uniqueItems: true
-  Topic:
+  Comment:
     required:
-      - name
-      - description
-      - group
+      - creator
+      - title
+      - content
     type: object
     properties:
       id:
-        title: ID
+        title: Id
         type: integer
+      creator:
+        $ref: '#/definitions/User'
+      ticket:
+        title: Ticket
+        type: string
         readOnly: true
+      title:
+        title: Title
+        type: string
+        maxLength: 255
+        minLength: 1
+      content:
+        title: Content
+        type: string
+        minLength: 1
+      created_at:
+        title: Created at
+        type: string
+        format: date-time
+        readOnly: true
+  Topic:
+    required:
+      - group
+      - name
+      - description
+    type: object
+    properties:
+      id:
+        title: Id
+        type: integer
+      users:
+        type: array
+        items:
+          $ref: '#/definitions/User'
+        readOnly: true
+      group:
+        $ref: '#/definitions/Group'
       name:
         title: Name
         type: string
@@ -1091,21 +1106,11 @@ definitions:
         title: Description
         type: string
         minLength: 1
-      group:
-        title: Group
-        type: integer
-      users:
-        type: array
-        items:
-          type: integer
-        readOnly: true
-        uniqueItems: true
   Ticket:
     required:
       - groups
       - receivers
       - topics
-      - comments
       - creator
       - last_updated_by
       - title
@@ -1114,9 +1119,8 @@ definitions:
     type: object
     properties:
       id:
-        title: ID
+        title: Id
         type: integer
-        readOnly: true
       groups:
         type: array
         items:

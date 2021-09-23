@@ -30,6 +30,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { MaterialModule } from '../app/material/material.module';
 import { GroupSubscribeComponent } from './dashboard/groups/group-subscribe/group-subscribe.component';
 import { TopicSubscribeComponent } from './dashboard/topics/topic-subscribe/topic-subscribe.component';
+import { GroupDeleteComponent } from './dashboard/groups/group-delete/group-delete.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,6 +55,7 @@ import { TopicSubscribeComponent } from './dashboard/topics/topic-subscribe/topi
     GroupCreateComponent,
     GroupSubscribeComponent,
     TopicSubscribeComponent,
+    GroupDeleteComponent,
   ],
   imports: [
     BrowserModule,

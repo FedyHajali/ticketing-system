@@ -1,9 +1,10 @@
 /* tslint:disable */
+import { User } from './user';
 export interface Comment {
   content: string;
   created_at?: string;
-  creator: number;
+  creator: User;
   id?: number;
-  ticket: number;
+  ticket?: string;
   title: string;
 }

@@ -1,19 +1,15 @@
 <form [formGroup]="form">
   <h1>Create new Group</h1>
   <div class="form-group">
-    <label for="name">Name</label>
-    <input
-      type="text"
-      class="form-control"
-      id="name"
-      placeholder="Enter name"
-      formControlName="name"
-    />
+    <mat-form-field class="w-100" appearance="fill">
+      <mat-label>New Group Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
   </div>
   <br />
   <button
     type="button"
-    class="btn btn-outline-primary"
+    class="btn btn-outline-primary float-end"
     mat-raised-button
     (click)="create()"
   >

@@ -20,7 +20,6 @@ export class TopicCreateComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
     private api: ApiService,
-    private auth: AuthService
   ) {}
 
   onNoClick(): void {
@@ -40,6 +39,7 @@ export class TopicCreateComponent implements OnInit {
 
     this.api.apiTopicsCreateCreate(topic).subscribe((response) => {
       console.log(response);
+      this.onNoClick();
     });
   }
 }

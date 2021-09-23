@@ -62,7 +62,7 @@ def userDetail(request):
     responses={200: openapi.Response('OK', GroupSerializer)})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([AllowAny, ])
+@permission_classes([IsAuthenticated, ])
 def groupDetail(request, group_id):
     group = Group.objects.get(pk=group_id)
     serializer = GroupSerializer(group)
@@ -90,7 +90,7 @@ def groupList(request):
     responses={200: openapi.Response('OK', GroupSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([AllowAny, ])
+@permission_classes([IsAuthenticated, ])
 def groupListUser(request):
     groups = request.user.groups
     groups = Group.objects.filter(pk__in=groups.all())

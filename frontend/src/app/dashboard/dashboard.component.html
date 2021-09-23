@@ -8,24 +8,54 @@
         <h3>Your Groups</h3>
         <div class="card" *ngIf="userGroups?.length === 0">
           <ul class="list-group list-group-flush">
-            <li class="list-group-item"> You are not subscribed to any group.</li>
+            <li class="list-group-item">
+              You are not subscribed to any group.
+            </li>
           </ul>
         </div>
         <ng-container *ngFor="let group of userGroups">
           <div class="card">
             <ul class="list-group list-group-flush">
               <li class="list-group-item">
-                <p style="float: left; cursor: pointer" (click)="navigateGroup(group)">
+                <p
+                  class="float-start w-75"
+                  style="cursor: pointer"
+                  (click)="navigateGroup(group)"
+                >
                   {{ group.name }}
                 </p>
-                <a
-                  (click)="subscribeGroupModal(false, group)"
-                  title="Unsubscribe"
-                  style="cursor: pointer"
+                <button
+                  class="float-end"
+                  mat-icon-button
+                  [matMenuTriggerFor]="menu"
+                  aria-label="Example icon-button with a menu"
                 >
-                  <span style="float: right; color: rgb(241, 134, 134)"
-                    ><i class="fas fa-user-minus"></i></span
-                ></a>
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button
+                    mat-menu-item
+                    (click)="subscribeGroupModal(false, group)"
+                  >
+                    <mat-icon>
+                      <span style="color: rgb(241, 134, 134)"
+                        ><i class="fas fa-user-minus"></i></span
+                    ></mat-icon>
+
+                    <a title="Unsubscribe" style="cursor: pointer"
+                      ><span>Unsubscribe</span></a
+                    >
+                  </button>
+                  <button
+                    mat-menu-item
+                    (click)="deleteGroupModal(group)"
+                    *ngIf="user.is_superuser"
+                  >
+                    <mat-icon>
+                      <span><i class="fas fa-trash-alt"></i></span></mat-icon
+                    ><span>Delete</span>
+                  </button>
+                </mat-menu>
               </li>
             </ul>
           </div>
@@ -35,10 +65,9 @@
           <div class="col">
             <h3 style="float: left">All Groups</h3>
             <button
-              *ngIf="user?.is_superuser"
+              *ngIf="user.is_superuser"
               type="button"
-              class="btn btn-outline-primary"
-              style="float: right"
+              class="btn btn-outline-primary float-end"
               (click)="createGroupModal()"
             >
               Add Group
@@ -49,15 +78,38 @@
           <div class="card">
             <ul class="list-group list-group-flush">
               <li class="list-group-item">
-                <p style="float: left; cursor: pointer">{{ group.name }}</p>
-                <a
-                  (click)="subscribeGroupModal(true, group)"
-                  title="Subscribe"
-                  style="cursor: pointer"
+                <p class="float-start" style="cursor: pointer">
+                  {{ group.name }}
+                </p>
+                <button
+                  class="float-end"
+                  mat-icon-button
+                  [matMenuTriggerFor]="menu"
+                  aria-label="Example icon-button with a menu"
                 >
-                  <span style="float: right; color: rgb(177, 219, 177)"
-                    ><i class="fas fa-user-plus"></i></span
-                ></a>
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button
+                    mat-menu-item
+                    (click)="subscribeGroupModal(true, group)"
+                  >
+                    <mat-icon>
+                      <span style="color: rgb(177, 219, 177)"
+                        ><i class="fas fa-user-plus"></i></span
+                    ></mat-icon>
+                    <a title="Subscribe" style="cursor: pointer"> Subscribe </a>
+                  </button>
+                  <button
+                    mat-menu-item
+                    (click)="deleteGroupModal(group)"
+                    *ngIf="user.is_superuser"
+                  >
+                    <mat-icon>
+                      <span><i class="fas fa-trash-alt"></i></span></mat-icon
+                    ><span>Delete</span>
+                  </button>
+                </mat-menu>
               </li>
             </ul>
           </div>
@@ -78,17 +130,27 @@
                   >
                     <p>{{ ticket.title }}</p>
                     <div class="icons" style="display: inline-block">
-                      <span style="margin: 0.2rem"
+                      <span
+                        [matTooltip]="ticket.creator.username"
+                        style="margin: 0.2rem"
                         ><i class="far fa-user"></i
                       ></span>
-                      <span style="margin: 0.2rem"
+                      <span
+                        [matTooltip]="ticket.last_updated_by.username"
+                        style="margin: 0.2rem"
                         ><i class="fas fa-user-edit"></i
                       ></span>
-                      <span style="margin: 0.2rem; color: red"
-                        ><i class="fas fa-calendar-check"></i
+                      <span
+                        [matTooltip]="
+                          ticket.created_at ? ticket.created_at : ''
+                        "
+                        style="margin: 0.2rem; color: green"
+                        ><i class="fas fa-calendar"></i
                       ></span>
-                      <span style="margin: 0.2rem; color: green"
-                        ><i class="fas fa-calendar-check"></i
+                      <span
+                        [matTooltip]="ticket.expiration"
+                        style="margin: 0.2rem; color: red"
+                        ><i class="fas fa-calendar-times"></i
                       ></span>
                     </div>
                   </li>

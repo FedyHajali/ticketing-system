@@ -1,6 +1,6 @@
-export { Comment } from './models/comment';
 export { Group } from './models/group';
 export { User } from './models/user';
+export { Comment } from './models/comment';
 export { Topic } from './models/topic';
 export { Ticket } from './models/ticket';
 export { Login } from './models/login';

@@ -250,6 +250,8 @@ def ticketStaffUpdate(request, ticket_id):
 
 # attenzione doppio parametro
 # perchè staff ? #TODO
+
+
 @swagger_auto_schema(
     method="put",
     operation_description='Subscribe user to selected ticket',
@@ -261,7 +263,7 @@ def ticketStaffUpdate(request, ticket_id):
 @permission_classes([IsAuthenticated, IsStaff])
 def ticketUserAdd(request, ticket_id, user_id):
     try:
-        ticket = Ticket.objects.get(id=ticket_id)
+        ticket = Ticket.objects.get(id=ticket_id, creator=request.user.id)
     except Ticket.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
     try:

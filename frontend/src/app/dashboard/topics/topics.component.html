@@ -16,7 +16,6 @@
             type="button"
             class="btn btn-outline-primary"
             routerLink="../.."
-            [state]="{ group: group }"
             id="back"
           >
             Back
@@ -37,12 +36,41 @@
           <div class="card-group">
             <div class="card" id="topics">
               <div class="card-header">
-                <p class="card-title" (click)="navigateTopic(topic)">
+                <p
+                  class="float-start w-75"
+                  style="cursor: pointer"
+                  (click)="navigateTopic(topic)"
+                >
                   {{ topic.name }}
                 </p>
-                <a (click)="subscribeTopicModal(false, topic)" title="Subscribe">
-                  <span><i class="fas fa-user-minus"></i></span
-                ></a>
+                <button
+                  class="float-end"
+                  mat-icon-button
+                  [matMenuTriggerFor]="menu"
+                  aria-label="Example icon-button with a menu"
+                >
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button
+                    mat-menu-item
+                    (click)="subscribeTopicModal(false, topic)"
+                  >
+                    <mat-icon>
+                      <span style="color: rgb(241, 134, 134)"
+                        ><i class="fas fa-user-minus"></i></span
+                    ></mat-icon>
+
+                    <a title="Unsubscribe" style="cursor: pointer"
+                      ><span>Unsubscribe</span></a
+                    >
+                  </button>
+                  <button mat-menu-item *ngIf="user.is_staff" (click)="deleteTopicModal(topic)">
+                    <mat-icon>
+                      <span><i class="fas fa-trash-alt"></i></span></mat-icon
+                    ><span>Delete</span>
+                  </button>
+                </mat-menu>
               </div>
               <div class="card-body">
                 <em>Description:</em>
@@ -66,12 +94,34 @@
           <div class="card-group">
             <div class="card" id="topics">
               <div class="card-header">
-                <p class="card-title">
+                <p class="float-start" style="cursor: pointer">
                   {{ topic.name }}
                 </p>
-                <a (click)="subscribeTopicModal(true, topic)" title="Subscribe">
-                  <span><i class="fas fa-user-plus"></i></span
-                ></a>
+                <button
+                  class="float-end"
+                  mat-icon-button
+                  [matMenuTriggerFor]="menu"
+                  aria-label="Example icon-button with a menu"
+                >
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button
+                    mat-menu-item
+                    (click)="subscribeTopicModal(true, topic)"
+                  >
+                    <mat-icon>
+                      <span style="color: rgb(177, 219, 177)"
+                        ><i class="fas fa-user-plus"></i></span
+                    ></mat-icon>
+                    <a title="Subscribe" style="cursor: pointer"> Subscribe </a>
+                  </button>
+                  <button mat-menu-item *ngIf="user.is_staff" (click)="deleteTopicModal(topic)">
+                    <mat-icon>
+                      <span><i class="fas fa-trash-alt"></i></span></mat-icon
+                    ><span>Delete</span>
+                  </button>
+                </mat-menu>
               </div>
               <div class="card-body">
                 <em>Description:</em>

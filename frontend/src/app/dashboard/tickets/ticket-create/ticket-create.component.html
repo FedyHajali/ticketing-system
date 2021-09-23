@@ -66,7 +66,7 @@
                     >
                       <mat-option
                         *ngFor="let group of groups"
-                        [value]="group.id"
+                        [value]="group"
                         >{{ group.name }}</mat-option
                       >
                     </mat-select>
@@ -91,8 +91,8 @@
                       >
                         <ng-container *ngFor="let topic of topics">
                           <mat-option
-                            *ngIf="topic.group === group.id"
-                            [value]="topic.id"
+                            *ngIf="topic.group.id === group.id"
+                            [value]="topic"
                             >{{ topic.name }}</mat-option
                           >
                         </ng-container>
@@ -111,7 +111,7 @@
                     <mat-select multiple formControlName="receivers">
                       <mat-option
                         *ngFor="let receiver of receivers"
-                        [value]="receiver.id"
+                        [value]="receiver"
                         >{{ receiver.username }}</mat-option
                       >
                     </mat-select>

@@ -49,7 +49,7 @@ class Ticket(models.Model):
     receivers = models.ManyToManyField(
         get_user_model(), related_name='receivers')
     comments = models.ManyToManyField(
-        'Comment', blank=True, related_name='comments')
+        'Comment', blank=True, default=None, related_name='comments')
     topics = models.ManyToManyField('Topic', related_name='topics')
 
     def __str__(self):

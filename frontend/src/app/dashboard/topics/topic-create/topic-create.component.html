@@ -1,28 +1,21 @@
 <form [formGroup]="form">
   <h1>Create new Topic</h1>
   <div class="form-group">
-    <label for="name">Name</label>
-    <input
-      type="text"
-      class="form-control"
-      id="name"
-      placeholder="Enter name"
-      formControlName="name"
-    />
+    <mat-form-field class="w-100" appearance="fill">
+      <mat-label>New Topic Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
   </div>
   <div class="form-group">
-    <label for="description">Description</label>
-    <textarea
-      class="form-control"
-      id="description"
-      rows="3"
-      formControlName="description"
-    ></textarea>
+    <mat-form-field class="w-100" appearance="fill">
+      <mat-label>Enter Topic Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
   </div>
   <br />
   <button
     type="button"
-    class="btn btn-outline-primary"
+    class="btn btn-outline-primary float-end"
     mat-raised-button
     (click)="create()"
   >

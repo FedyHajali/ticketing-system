@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Group, Topic, User } from 'src/app/api/models';
+import { Group, Ticket, Topic, User } from 'src/app/api/models';
 import { ApiService, AuthService } from 'src/app/api/services';
 import { SharedService } from 'src/app/services/shared.service';
 
@@ -22,8 +22,8 @@ export class TicketCreateComponent implements OnInit {
     { value: 'EX', viewValue: 'Expired' },
   ];
   isClose: boolean = false;
-  selectedGroups!: string[];
-  selectedTopics!: string[];
+  selectedGroups: Group[] = [];
+  selectedTopics!: Topic[];
   form = this.fb.group({
     title: '',
     content: '',
@@ -70,26 +70,50 @@ export class TicketCreateComponent implements OnInit {
 
   getGroupsTopics() {
     this.topics = [];
-    this.selectedGroups?.forEach((group_id) => {
-      this.api.apiTopicsListUserGroupRead(group_id).subscribe((topics) => {
-        this.topics = this.topics.concat(topics);
-        console.log(this.topics);
-      });
+    console.log(this.selectedGroups);
+    this.selectedGroups.forEach((group) => {
+      if (group.id) {
+        this.api
+          .apiTopicsListUserGroupRead(group.id.toString())
+          .subscribe((topics) => {
+            this.topics = this.topics.concat(topics);
+            console.log(this.topics);
+          });
+      }
     });
   }
 
   getTopicReceivers() {
     this.receivers = [];
-    this.selectedTopics?.forEach((topic_id) => {
-      this.api.apiTopicsUserListRead(topic_id).subscribe((users) => {
-        console.log(users);
-        this.receivers = this.receivers.concat(users);
-        console.log(this.receivers);
-      });
+    this.selectedTopics?.forEach((topic) => {
+      if (topic.id) {
+        this.api
+          .apiTopicsUserListRead(topic.id.toString())
+          .subscribe((users) => {
+            console.log(users);
+            this.receivers = this.receivers.concat(users);
+            console.log(this.receivers);
+          });
+      }
     });
   }
 
   onSubmit() {
-    console.log(this.form)
+    let ticket: Ticket = {
+      title: this.form.controls.title.value,
+      content: this.form.controls.content.value,
+      status: this.form.controls.status.value,
+      groups: this.form.controls.groups.value,
+      topics: this.form.controls.topics.value,
+      receivers: this.form.controls.receivers.value,
+      creator: this.user,
+      last_updated_by: this.user,
+      expiration: '2022-03-22T13:17:27.853707Z',
+      comments: [],
+    };
+    console.log(ticket);
+    this.api.apiTicketsCreateCreate(ticket).subscribe((response) => {
+      console.log(response);
+    });
   }
 }
