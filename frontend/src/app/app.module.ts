@@ -30,6 +30,15 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { MaterialModule } from '../app/material/material.module';
 import { GroupSubscribeComponent } from './dashboard/groups/group-subscribe/group-subscribe.component';
 import { TopicSubscribeComponent } from './dashboard/topics/topic-subscribe/topic-subscribe.component';
+import { ChartsModule } from 'ng2-charts';
+import { RadialChartComponent } from './reports/radial-chart/radial-chart.component';
+import { TicketCountComponent } from './reports/ticket-count/ticket-count.component';
+import { CompleteCountComponent } from './reports/complete-count/complete-count.component';
+import { PendingCountComponent } from './reports/pending-count/pending-count.component';
+import { OpenCountComponent } from './reports/open-count/open-count.component';
+import { BubbleChartComponent } from './reports/bubble-chart/bubble-chart.component';
+import { DynamicGraphComponent } from './reports/dynamic-graph/dynamic-graph.component';
+import { ListComponent } from './reports/list/list.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,8 +63,17 @@ import { TopicSubscribeComponent } from './dashboard/topics/topic-subscribe/topi
     GroupCreateComponent,
     GroupSubscribeComponent,
     TopicSubscribeComponent,
+    RadialChartComponent,
+    TicketCountComponent,
+    CompleteCountComponent,
+    PendingCountComponent,
+    OpenCountComponent,
+    BubbleChartComponent,
+    DynamicGraphComponent,
+    ListComponent,
   ],
   imports: [
+    ChartsModule,
     BrowserModule,
     AppRoutingModule,
     RouterModule,
@@ -64,6 +82,7 @@ import { TopicSubscribeComponent } from './dashboard/topics/topic-subscribe/topi
     CommonModule,
     BrowserAnimationsModule,
     MaterialModule,
+    
   ],
   providers: [
     {

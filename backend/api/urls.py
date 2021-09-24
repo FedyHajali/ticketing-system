@@ -6,6 +6,7 @@ urlpatterns = [
     #Ticket
     path('tickets/create/', views.ticketCreate, name="ticket-create"),
     path('tickets/detail/<int:ticket_id>/', views.ticketDetail, name="ticket-detail"),
+    path('tickets/all-topics-users/<int:ticket_id>/', views.ticketAllTopicsUsers, name="ticket-alltopicsusers"),
     path('tickets/list/', views.ticketListReceiver, name="ticket-list"),
     path('tickets/list-creator/<str:creator_id>', views.ticketListCreator, name="ticket-list-creator"),
     path('tickets/list-all/', views.ticketListAll, name="ticket-list-all"),

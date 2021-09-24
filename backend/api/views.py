@@ -140,6 +140,42 @@ def ticketDetail(request, ticket_id):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+
+
+@swagger_auto_schema(
+    method="get",
+    operation_description='Returns the list of users subscribed to the ticket topics',
+    operation_summary='Returns the list of users subscribed to the ticket topics',
+    responses={200: openapi.Response('OK', UserSerializer(many=True)),
+               404: openapi.Response('Not Found')})
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated, ])
+def ticketAllTopicsUsers(request, ticket_id):
+    receivers_id = []
+    receivers = []
+    topics = []
+
+    try:
+        ticket = Ticket.objects.get(id=ticket_id)
+    except Ticket.DoesNotExist:
+        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
+    
+    ticket = TicketSerializer(ticket, many=False)
+    topics = ticket.data['topics']
+
+    for topic in topics:
+        for user in topic['users']:
+            if not user['id'] in receivers_id:
+                receivers_id.append(user['id'])
+                receivers.append(user)
+
+    serializer = UserSerializer(receivers, many=True)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
 @swagger_auto_schema(
     method="post",
     operation_description='Creation of a new Ticket',
