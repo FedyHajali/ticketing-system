@@ -1,17 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ApiService } from 'src/app/api/services';
+import { AuthService } from 'src/app/api/services';
 
 @Component({
-  selector: 'app-topic-delete',
-  templateUrl: './topic-delete.component.html',
-  styleUrls: ['./topic-delete.component.scss']
+  selector: 'app-group-delete',
+  templateUrl: './group-delete.component.html',
+  styleUrls: ['./group-delete.component.scss'],
 })
-export class TopicDeleteComponent implements OnInit {
+export class GroupDeleteComponent implements OnInit {
   constructor(
-    public dialogRef: MatDialogRef<TopicDeleteComponent>,
+    public dialogRef: MatDialogRef<GroupDeleteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private api: ApiService
+    private auth: AuthService
   ) {}
 
   onNoClick(): void {
@@ -20,8 +20,8 @@ export class TopicDeleteComponent implements OnInit {
   ngOnInit(): void {}
 
   onDelete() {
-    this.api
-      .apiTopicsDeleteDelete(this.data.topic.id)
+    this.auth
+      .authGroupsDeleteDelete(this.data.group.id)
       .subscribe((response) => {
         console.log(response);
         this.onNoClick();

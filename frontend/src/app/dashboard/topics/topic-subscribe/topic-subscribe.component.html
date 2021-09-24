@@ -1,13 +1,14 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      <h1 *ngIf="data.sub">Do you want to join this topic?</h1>
-      <h1 *ngIf="!data.sub">Do you want to unsubscribe from this topic?</h1>
-      <div class="button-group" style="text-align: center">
+      <h1 *ngIf="data.sub">Do you want to join {{ data.topic.name }}?</h1>
+      <h1 *ngIf="!data.sub">
+        Do you want to unsubscribe from {{ data.topic.name }}?
+      </h1>
+      <div class="button-group text-center">
         <button
           type="button"
-          class="btn btn-outline-primary"
-          style="margin: 1rem"
+          class="btn btn-outline-success me-2"
           (click)="submit()"
           *ngIf="data.sub"
         >
@@ -15,14 +16,19 @@
         </button>
         <button
           type="button"
-          class="btn btn-outline-primary"
-          style="margin: 1rem"
+          class="btn btn-outline-success me-2"
           (click)="submit()"
           *ngIf="!data.sub"
         >
           Unsubscribe
         </button>
-        <button type="button" class="btn btn-outline-primary">Cancel</button>
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          (click)="onNoClick()"
+        >
+          Cancel
+        </button>
       </div>
     </div>
   </div>

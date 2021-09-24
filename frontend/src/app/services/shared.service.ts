@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/internal/Subject';
 import { ApiService, AuthService } from '../api/services';
 import { Group, Ticket, Topic, User } from '../api/models';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,11 @@ export class SharedService {
   groups: Group[] = [];
   redirectUrl: string | null = null;
 
-  constructor(private auth: AuthService, private api: ApiService) {}
+  constructor(
+    private auth: AuthService,
+    private api: ApiService,
+    private spinner: NgxSpinnerService
+  ) {}
 
   setActiveUser() {
     this.isLoggedIn = true;
@@ -23,10 +28,7 @@ export class SharedService {
   }
 
   getActiveUser() {
-    const user = sessionStorage.getItem('user')
-      ? JSON.parse(<string>sessionStorage.getItem('user'))
-      : null;
-    return user;
+    return JSON.parse(<string>sessionStorage.getItem('user'));
   }
 
   handleAuthentication(user: any) {
@@ -47,5 +49,13 @@ export class SharedService {
   isAuthenticated() {
     this.isLoggedIn = sessionStorage.getItem('user') == null ? false : true;
     return this.isLoggedIn;
+  }
+
+  showSpinner() {
+    this.spinner.show();
+    setTimeout(() => {
+      /** spinner ends after 2 seconds */
+      this.spinner.hide();
+    }, 2000);
   }
 }

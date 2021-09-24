@@ -22,6 +22,7 @@ class AuthService extends __BaseService {
   static readonly authGroupsCreateCreatePath = '/auth/groups/create/';
   static readonly authGroupsDeleteUserUpdatePath = '/auth/groups/delete-user/{group_id}';
   static readonly authGroupsDeleteDeletePath = '/auth/groups/delete/{group_id}';
+  static readonly authGroupsDetailReadPath = '/auth/groups/detail/{group_id}';
   static readonly authGroupsListUserListPath = '/auth/groups/list-user/';
   static readonly authGroupsListListPath = '/auth/groups/list/';
   static readonly authGroupsUserListReadPath = '/auth/groups/user-list/{group_id}/';
@@ -203,6 +204,48 @@ class AuthService extends __BaseService {
   authGroupsDeleteDelete(groupId: string): __Observable<null> {
     return this.authGroupsDeleteDeleteResponse(groupId).pipe(
       __map(_r => _r.body as null)
+    );
+  }
+
+  /**
+   * Get Group Info
+   *
+   * Retrieve all Group Information
+   * @param group_id undefined
+   * @return OK
+   */
+  authGroupsDetailReadResponse(groupId: string): __Observable<__StrictHttpResponse<Group>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+
+    let req = new HttpRequest<any>(
+      'GET',
+      this.rootUrl + `/auth/groups/detail/${encodeURIComponent(String(groupId))}`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<Group>;
+      })
+    );
+  }
+  /**
+   * Get Group Info
+   *
+   * Retrieve all Group Information
+   * @param group_id undefined
+   * @return OK
+   */
+  authGroupsDetailRead(groupId: string): __Observable<Group> {
+    return this.authGroupsDetailReadResponse(groupId).pipe(
+      __map(_r => _r.body as Group)
     );
   }
 

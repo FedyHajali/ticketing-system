@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GroupCreateComponent } from './groups/group-create/group-create.component';
 import { GroupSubscribeComponent } from './groups/group-subscribe/group-subscribe.component';
 import { ApiService, AuthService } from '../api/services';
+import { GroupDeleteComponent } from './groups/group-delete/group-delete.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,6 +20,7 @@ export class DashboardComponent implements OnInit {
   userGroups: Group[] = [];
   allGroups: Group[] = [];
   allTickets: Ticket[] = [];
+  creatorTickets: Ticket[] = [];
 
   constructor(
     private dialog: MatDialog,
@@ -62,11 +64,17 @@ export class DashboardComponent implements OnInit {
     this.api.apiTicketsListList().subscribe((tickets) => {
       this.allTickets = tickets;
     });
+    if (this.user?.id) {
+      this.api
+        .apiTicketsListCreatorRead(this.user.id.toString())
+        .subscribe((tickets) => {
+          this.creatorTickets = tickets;
+        });
+    }
   }
 
   navigateGroup(group: Group) {
     this.router.navigate(['groups/' + group.id], {
-      state: { group: group },
       relativeTo: this.route,
     });
   }
@@ -74,7 +82,7 @@ export class DashboardComponent implements OnInit {
   createGroupModal() {
     const dialogRef = this.dialog.open(GroupCreateComponent, {
       width: '300px',
-      height: '300px',
+      height: 'auto',
       autoFocus: true,
     });
 
@@ -85,10 +93,23 @@ export class DashboardComponent implements OnInit {
 
   subscribeGroupModal(sub: boolean, group: Group) {
     const dialogRef = this.dialog.open(GroupSubscribeComponent, {
-      width: '350px',
-      height: '250px',
+      width: '300px',
+      height: 'auto',
       autoFocus: true,
       data: { sub: sub, group: group },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.getUserGroupList();
+    });
+  }
+
+  deleteGroupModal(group: Group) {
+    const dialogRef = this.dialog.open(GroupDeleteComponent, {
+      width: '350px',
+      height: 'auto',
+      autoFocus: true,
+      data: { group: group },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

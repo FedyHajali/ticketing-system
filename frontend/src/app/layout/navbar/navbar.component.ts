@@ -43,12 +43,13 @@ export class NavbarComponent implements OnInit, OnDestroy, AfterContentInit {
   }
 
   logout() {
+    this.shared.showSpinner();
     this.auth.authLogoutCreate().subscribe((response) => {
       sessionStorage.removeItem('token');
       sessionStorage.removeItem('user');
       this.shared.isLoggedIn = false;
       this.shared.userSubject.next();
-      this.router.navigate(['/']);
+      this.router.navigate(['/login']);
     });
   }
 

@@ -39,6 +39,10 @@ import { OpenCountComponent } from './reports/open-count/open-count.component';
 import { BubbleChartComponent } from './reports/bubble-chart/bubble-chart.component';
 import { DynamicGraphComponent } from './reports/dynamic-graph/dynamic-graph.component';
 import { ListComponent } from './reports/list/list.component'
+import { GroupDeleteComponent } from './dashboard/groups/group-delete/group-delete.component';
+import { TicketAddReceiverComponent } from './dashboard/tickets/ticket-detail/ticket-add-receiver/ticket-add-receiver.component';
+import { TicketChangeStatusComponent } from './dashboard/tickets/ticket-detail/ticket-change-status/ticket-change-status.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 @NgModule({
   declarations: [
     AppComponent,
@@ -71,6 +75,9 @@ import { ListComponent } from './reports/list/list.component'
     BubbleChartComponent,
     DynamicGraphComponent,
     ListComponent,
+    GroupDeleteComponent,
+    TicketAddReceiverComponent,
+    TicketChangeStatusComponent,
   ],
   imports: [
     ChartsModule,
@@ -82,7 +89,7 @@ import { ListComponent } from './reports/list/list.component'
     CommonModule,
     BrowserAnimationsModule,
     MaterialModule,
-    
+    NgxSpinnerModule
   ],
   providers: [
     {

@@ -33,6 +33,10 @@ export class LoginComponent implements OnInit {
       (response) => {
         sessionStorage.setItem('token', response.key);
         this.shared.setActiveUser();
+
+     
+        this.shared.showSpinner()
+
         if (this.shared.redirectUrl) {
           this.router.navigate([this.shared.redirectUrl]);
         } else {

@@ -1,72 +1,43 @@
 #topics {
-  .container {
-    margin-bottom: 5rem;
-    padding: 2rem;
-    border-style: ridge;
-    background-color: ghostwhite;
-    box-shadow: 0 0 5px 0 black;
-    .row:nth-child(1) {
-      width: 100%;
-      .col-8 {
-        ol {
-          width: 100%;
-        }
-      }
-      .col-4 {
-        button {
-          float: right;
-          margin: 1rem;
-        }
-      }
-    }
-    .row:nth-child(2),
-    .row:nth-child(3) {
-      width: 100%;
-      margin: 0.5rem;
-      .col-4 {
-        .card-group {
-          .card {
-            margin: 1rem;
-            .card-header {
-              p {
-                float: left;
-                cursor: pointer;
-              }
-              a {
-                cursor: pointer;
-                float: right;
-                margin: 0.2rem;
-              }
-            }
-            .card-footer {
-              .text-muted {
-                float: left;
-              }
-              span {
-                float: right;
-                color: blue;
-              }
-            }
-          }
-        }
-      }
-    }
+  min-height: 90vh;
+  margin: 1rem;
+  padding: 2rem;
+  border-style: ridge;
+  background-color: ghostwhite;
+  box-shadow: 0 0 5px 0 black;
 
-    .row:nth-child(2) {
-      .card-header {
-        a {
-          span {
-            color: rgb(241, 134, 134);
-          }
+  .row:nth-child(2),
+  .row:nth-child(3) {
+    .col {
+      .card-group {
+        .card {          
+          margin: 1rem;
+          border-radius: 4px;
+          background: #fff;
+          box-shadow: 0 6px 10px rgba(0, 0, 0, 0.08),
+            0 0 6px rgba(0, 0, 0, 0.05);
+          transition: 0.3s transform cubic-bezier(0.155, 1.105, 0.295, 1.12),
+            0.3s box-shadow,
+            0.3s -webkit-transform cubic-bezier(0.155, 1.105, 0.295, 1.12);
         }
       }
     }
-    .row:nth-child(3) {
-      .card-header {
-        a {
-          span {
-            color: rgb(177, 219, 177);
-          }
+  }
+
+  .row:nth-child(2) {
+    .card-header {
+      a {
+        span {
+          color: rgb(241, 134, 134);
+        }
+      }
+    }
+  }
+  .row:nth-child(3) {
+    .card-header {
+      a {
+        span {
+          color: rgb(177, 219, 177);
         }
       }
     }

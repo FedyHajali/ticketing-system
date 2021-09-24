@@ -4,7 +4,7 @@ import { User } from './user';
 import { Group } from './group';
 import { Topic } from './topic';
 export interface Ticket {
-  comments: Array<Comment>;
+  comments?: Array<Comment>;
   content: string;
   created_at?: string;
   creator: User;

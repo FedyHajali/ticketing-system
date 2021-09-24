@@ -2,9 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Group, Topic, User } from 'src/app/api/models';
-import { ApiService } from 'src/app/api/services';
+import { ApiService, AuthService } from 'src/app/api/services';
 import { SharedService } from 'src/app/services/shared.service';
 import { TopicCreateComponent } from './topic-create/topic-create.component';
+import { TopicDeleteComponent } from './topic-delete/topic-delete.component';
 import { TopicSubscribeComponent } from './topic-subscribe/topic-subscribe.component';
 
 @Component({
@@ -23,18 +24,26 @@ export class TopicsComponent implements OnInit {
     private shared: SharedService,
     private dialog: MatDialog,
     private api: ApiService,
+    private auth: AuthService,
     private router: Router,
     private route: ActivatedRoute
-  ) {
-    this.group = this.router.getCurrentNavigation()?.extras?.state?.group;
-  }
+  ) {}
 
   ngOnInit(): void {
     this.user = this.shared.getActiveUser();
     this.sub = this.route.params.subscribe((params) => {
       this.group_id = +params['group_id']; // (+) converts string 'id' to a number
+      this.getGroup();
       this.getUserTopicList(this.group_id);
     });
+  }
+
+  getGroup() {
+    this.auth
+      .authGroupsDetailRead(this.group_id.toString())
+      .subscribe((group) => {
+        this.group = group;
+      });
   }
 
   getUserTopicList(id: number) {
@@ -61,7 +70,6 @@ export class TopicsComponent implements OnInit {
 
   navigateTopic(topic: Topic) {
     this.router.navigate(['topics/' + topic.id], {
-      state: { group: this.group, topic: topic },
       relativeTo: this.route,
     });
   }
@@ -69,7 +77,7 @@ export class TopicsComponent implements OnInit {
   openTopicCreateModal() {
     const dialogRef = this.dialog.open(TopicCreateComponent, {
       width: '400px',
-      height: '400px',
+      height: 'auto',
       autoFocus: true,
       data: { group: this.group },
     });
@@ -81,10 +89,23 @@ export class TopicsComponent implements OnInit {
 
   subscribeTopicModal(sub: boolean, topic: Topic) {
     const dialogRef = this.dialog.open(TopicSubscribeComponent, {
-      width: '350px',
-      height: '250px',
+      width: '300px',
+      height: 'auto',
       autoFocus: true,
       data: { sub: sub, topic: topic },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.getUserTopicList(this.group_id);
+    });
+  }
+
+  deleteTopicModal(topic: Topic) {
+    const dialogRef = this.dialog.open(TopicDeleteComponent, {
+      width: '300px',
+      height: 'auto',
+      autoFocus: true,
+      data: { topic: topic },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
