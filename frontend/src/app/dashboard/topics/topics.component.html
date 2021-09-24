@@ -1,155 +1,169 @@
-<div id="dashboard-container">
-  <div id="topics">
-    <div class="container">
-      <div class="row">
-        <div class="col-8">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <h1>{{ group?.name }}</h1>
-              </li>
-            </ol>
-          </nav>
-        </div>
-        <div class="col-4">
-          <button
-            type="button"
-            class="btn btn-outline-primary"
-            routerLink="../.."
-            id="back"
-          >
-            Back
-          </button>
-        </div>
-      </div>
-      <div class="row">
-        <hr />
-        <h1>Your Topics</h1>
-        <div class="card" *ngIf="userTopics?.length === 0">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-              You are not subscribed to any topic.
+<div id="topics">
+  <div class="container">
+    <div class="row">
+      <div class="col-10">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <h1>{{ group?.name }}</h1>
             </li>
-          </ul>
-        </div>
-        <div class="col-4" *ngFor="let topic of userTopics">
-          <div class="card-group">
-            <div class="card" id="topics">
-              <div class="card-header">
-                <p
-                  class="float-start w-75"
-                  style="cursor: pointer"
-                  (click)="navigateTopic(topic)"
-                >
-                  {{ topic.name }}
-                </p>
-                <button
-                  class="float-end"
-                  mat-icon-button
-                  [matMenuTriggerFor]="menu"
-                  aria-label="Example icon-button with a menu"
-                >
-                  <mat-icon>more_vert</mat-icon>
+          </ol>
+        </nav>
+      </div>
+      <div class="col-2">
+        <button
+          type="button"
+          class="btn btn-outline-primary float-md-end"
+          routerLink="../.."
+        >
+          Back
+        </button>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <hr />
+      <h1>Your Topics</h1>
+      <div class="card" *ngIf="userTopics?.length === 0">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">You are not subscribed to any topic.</li>
+        </ul>
+      </div>
+      <div
+        class="col col-md-4 col-sm-12 d-flex align-items-stretch"
+        *ngFor="let topic of userTopics"
+      >
+        <div class="card-group w-100">
+          <div class="card">
+            <div class="card-header">
+              <p
+                class="float-start w-75"
+                style="cursor: pointer"
+                (click)="navigateTopic(topic)"
+              >
+                {{ topic.name }}
+              </p>
+              <button
+                class="float-end"
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+                aria-label="Example icon-button with a menu"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="navigateTopic(topic)">
+                  <mat-icon>
+                    <span><i class="fas fa-share-square"></i></span
+                  ></mat-icon>
+                  <span>Detail</span>
                 </button>
-                <mat-menu #menu="matMenu">
-                  <button
-                    mat-menu-item
-                    (click)="subscribeTopicModal(false, topic)"
-                  >
-                    <mat-icon>
-                      <span style="color: rgb(241, 134, 134)"
-                        ><i class="fas fa-user-minus"></i></span
-                    ></mat-icon>
-
-                    <a title="Unsubscribe" style="cursor: pointer"
-                      ><span>Unsubscribe</span></a
-                    >
-                  </button>
-                  <button mat-menu-item *ngIf="user.is_staff" (click)="deleteTopicModal(topic)">
-                    <mat-icon>
-                      <span><i class="fas fa-trash-alt"></i></span></mat-icon
-                    ><span>Delete</span>
-                  </button>
-                </mat-menu>
-              </div>
-              <div class="card-body">
-                <em>Description:</em>
-                <br />
-                <p class="card-text">{{ topic.description }}</p>
-              </div>
-              <div class="card-footer">
-                <small class="text-muted"
-                  >Users subscribed: {{ topic.users?.length }}</small
+                <button
+                  mat-menu-item
+                  (click)="subscribeTopicModal(false, topic)"
                 >
-                <span><i class="fas fa-users"></i></span>
-              </div>
+                  <mat-icon>
+                    <span style="color: rgb(241, 134, 134)"
+                      ><i class="fas fa-user-minus"></i></span
+                  ></mat-icon>
+                  <span>Unsubscribe</span>
+                </button>
+                <button
+                  mat-menu-item
+                  *ngIf="user.is_staff"
+                  (click)="deleteTopicModal(topic)"
+                >
+                  <mat-icon>
+                    <span><i class="fas fa-trash-alt"></i></span></mat-icon
+                  ><span>Delete</span>
+                </button>
+              </mat-menu>
+            </div>
+            <div class="card-body">
+              <em>Description:</em>
+              <br />
+              <p class="card-text">{{ topic.description }}</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-muted float-start"
+                >Users subscribed: {{ topic.users?.length }}</small
+              >
+              <span class="float-end text-primary"
+                ><i class="fas fa-users"></i
+              ></span>
             </div>
           </div>
         </div>
       </div>
-      <div class="row">
-        <hr />
-        <h1>All Topics</h1>
-        <div class="col-4" *ngFor="let topic of allTopics">
-          <div class="card-group">
-            <div class="card" id="topics">
-              <div class="card-header">
-                <p class="float-start" style="cursor: pointer">
-                  {{ topic.name }}
-                </p>
+    </div>
+    <div class="row mb-2">
+      <hr />
+      <h1>All Topics</h1>
+      <div class="card" *ngIf="allTopics?.length === 0">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            You are subscribed to all available topics.
+          </li>
+        </ul>
+      </div>
+      <div
+        class="col col-md-4 col-sm-12 d-flex align-items-stretch"
+        *ngFor="let topic of allTopics"
+      >
+        <div class="card-group w-100">
+          <div class="card">
+            <div class="card-header">
+              <p class="float-start">
+                {{ topic.name }}
+              </p>
+              <button
+                class="float-end"
+                mat-icon-button
+                [matMenuTriggerFor]="menu"
+              >
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
                 <button
-                  class="float-end"
-                  mat-icon-button
-                  [matMenuTriggerFor]="menu"
-                  aria-label="Example icon-button with a menu"
+                  mat-menu-item
+                  (click)="subscribeTopicModal(true, topic)"
                 >
-                  <mat-icon>more_vert</mat-icon>
+                  <mat-icon>
+                    <span style="color: rgb(177, 219, 177)"
+                      ><i class="fas fa-user-plus"></i></span
+                  ></mat-icon>
+                  <a title="Subscribe" style="cursor: pointer"> Subscribe </a>
                 </button>
-                <mat-menu #menu="matMenu">
-                  <button
-                    mat-menu-item
-                    (click)="subscribeTopicModal(true, topic)"
-                  >
-                    <mat-icon>
-                      <span style="color: rgb(177, 219, 177)"
-                        ><i class="fas fa-user-plus"></i></span
-                    ></mat-icon>
-                    <a title="Subscribe" style="cursor: pointer"> Subscribe </a>
-                  </button>
-                  <button mat-menu-item *ngIf="user.is_staff" (click)="deleteTopicModal(topic)">
-                    <mat-icon>
-                      <span><i class="fas fa-trash-alt"></i></span></mat-icon
-                    ><span>Delete</span>
-                  </button>
-                </mat-menu>
-              </div>
-              <div class="card-body">
-                <em>Description:</em>
-                <br />
-                <p class="card-text">{{ topic.description }}</p>
-              </div>
-              <div class="card-footer">
-                <small class="text-muted"
-                  >Users subscribed: {{ topic.users?.length }}</small
+                <button
+                  mat-menu-item
+                  *ngIf="user.is_staff"
+                  (click)="deleteTopicModal(topic)"
                 >
-                <span><i class="fas fa-users"></i></span>
-              </div>
+                  <mat-icon>
+                    <span><i class="fas fa-trash-alt"></i></span></mat-icon
+                  ><span>Delete</span>
+                </button>
+              </mat-menu>
+            </div>
+            <div class="card-body">
+              <em>Description:</em>
+              <br />
+              <p class="card-text">{{ topic.description }}</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col">
-          <button
-            *ngIf="user?.is_staff"
-            type="button"
-            class="btn btn-outline-primary"
-            style="float: right"
-            (click)="openTopicCreateModal()"
-          >
-            Add Topic
-          </button>
-        </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button
+          *ngIf="user?.is_staff"
+          type="button"
+          class="btn btn-outline-primary"
+          style="float: right"
+          (click)="openTopicCreateModal()"
+        >
+          Add Topic
+        </button>
       </div>
     </div>
   </div>

@@ -1,0 +1,25 @@
+<form [formGroup]="form">
+  <h1>Add Receivers</h1>
+  <div class="form-group">
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label> Select Receivers</mat-label>
+      <mat-select
+        formControlName="receivers"
+        (openedChange)="onChangeStatus($event)"
+      >
+        <mat-option *ngFor="let receiver of receivers" [value]="receiver">{{
+          receiver.username
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <br />
+  <button
+    type="button"
+    class="btn btn-outline-primary float-end"
+    mat-raised-button
+    (click)="onSubmit()"
+  >
+    Update
+  </button>
+</form>

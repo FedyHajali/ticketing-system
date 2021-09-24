@@ -1,11 +1,14 @@
-<div id="dashboard-container">
-  <h1>Welcome {{ user?.username }}</h1>
-  <br />
-  <div id="dashboard">
+<div id="dashboard">
+  <div class="container">
+    <div class="row">
+      <div class="title float-start">
+        <h1>Welcome {{ user?.username }}</h1>
+      </div>
+    </div>
     <div class="row card-group">
-      <div class="col-6">
+      <div class="col-md-6 col-sm-12">
         <hr />
-        <h3>Your Groups</h3>
+        <h1>Your Groups</h1>
         <div class="card" *ngIf="userGroups?.length === 0">
           <ul class="list-group list-group-flush">
             <li class="list-group-item">
@@ -33,6 +36,12 @@
                   <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="navigateGroup(group)">
+                    <mat-icon>
+                      <span><i class="fas fa-share-square"></i></span
+                    ></mat-icon>
+                    <span>Detail</span>
+                  </button>
                   <button
                     mat-menu-item
                     (click)="subscribeGroupModal(false, group)"
@@ -41,15 +50,12 @@
                       <span style="color: rgb(241, 134, 134)"
                         ><i class="fas fa-user-minus"></i></span
                     ></mat-icon>
-
-                    <a title="Unsubscribe" style="cursor: pointer"
-                      ><span>Unsubscribe</span></a
-                    >
+                    <span>Unsubscribe</span>
                   </button>
                   <button
                     mat-menu-item
                     (click)="deleteGroupModal(group)"
-                    *ngIf="user.is_superuser"
+                    *ngIf="user?.is_superuser"
                   >
                     <mat-icon>
                       <span><i class="fas fa-trash-alt"></i></span></mat-icon
@@ -63,22 +69,29 @@
         <hr />
         <div class="row">
           <div class="col">
-            <h3 style="float: left">All Groups</h3>
+            <h1 style="float: left">All Groups</h1>
             <button
-              *ngIf="user.is_superuser"
+              *ngIf="user?.is_superuser"
               type="button"
               class="btn btn-outline-primary float-end"
               (click)="createGroupModal()"
             >
               Add Group
             </button>
+            <div class="card" *ngIf="allGroups?.length === 0">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  You are subscribed to all available groups.
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <ng-container *ngFor="let group of allGroups">
           <div class="card">
             <ul class="list-group list-group-flush">
               <li class="list-group-item">
-                <p class="float-start" style="cursor: pointer">
+                <p class="float-start">
                   {{ group.name }}
                 </p>
                 <button
@@ -103,7 +116,7 @@
                   <button
                     mat-menu-item
                     (click)="deleteGroupModal(group)"
-                    *ngIf="user.is_superuser"
+                    *ngIf="user?.is_superuser"
                   >
                     <mat-icon>
                       <span><i class="fas fa-trash-alt"></i></span></mat-icon
@@ -116,9 +129,20 @@
         </ng-container>
         <hr />
       </div>
-      <div class="col-6">
+      <div class="col-md-6 col-sm-12" id="dashboard-tickets">
         <hr />
-        <h3>Your Tickets</h3>
+        <div class="row">
+          <div class="col">
+            <h1 class="float-start">Your Tickets</h1>
+            <button
+              type="button"
+              class="btn btn-outline-primary float-end mb-4"
+              routerLink="/dashboard/tickets/create"
+            >
+              Create new Ticket
+            </button>
+          </div>
+        </div>
         <mat-tab-group animationDuration="0ms">
           <mat-tab label="Open">
             <ng-container *ngFor="let ticket of allTickets">
@@ -128,28 +152,26 @@
                     class="list-group-item"
                     [routerLink]="['tickets/' + ticket.id]"
                   >
-                    <p>{{ ticket.title }}</p>
-                    <div class="icons" style="display: inline-block">
-                      <span
-                        [matTooltip]="ticket.creator.username"
-                        style="margin: 0.2rem"
+                    <p class="float-start">{{ ticket.title }}</p>
+                    <div class="icons float-end">
+                      <span class="m-1" [matTooltip]="ticket.creator.username"
                         ><i class="far fa-user"></i
                       ></span>
                       <span
+                        class="m-1"
                         [matTooltip]="ticket.last_updated_by.username"
-                        style="margin: 0.2rem"
                         ><i class="fas fa-user-edit"></i
                       ></span>
                       <span
+                        class="m-1 text-success"
                         [matTooltip]="
                           ticket.created_at ? ticket.created_at : ''
                         "
-                        style="margin: 0.2rem; color: green"
                         ><i class="fas fa-calendar"></i
                       ></span>
                       <span
+                        class="m-1 text-danger"
                         [matTooltip]="ticket.expiration"
-                        style="margin: 0.2rem; color: red"
                         ><i class="fas fa-calendar-times"></i
                       ></span>
                     </div>
@@ -159,70 +181,110 @@
           ></mat-tab>
           <mat-tab label="In pending">
             <ng-container *ngFor="let ticket of allTickets">
-              <div class="col" *ngIf="ticket.status == 'PE'">
-                <div class="card">
-                  <div class="card-header">
-                    <h5 class="card-title">{{ ticket.title }}</h5>
-                  </div>
-                  <div class="card-body">
-                    <p class="card-text">Content: {{ ticket.content }}</p>
-                    <a
-                      [routerLink]="['tickets/' + ticket.id]"
-                      class="btn btn-primary"
-                      >Detail</a
-                    >
-                  </div>
-                  <div class="card-footer">
-                    Creator: {{ ticket.creator["username"] }}
-                  </div>
-                </div>
+              <div class="card" *ngIf="ticket.status == 'PE'">
+                <ul class="list-group list-group-flush">
+                  <li
+                    class="list-group-item"
+                    [routerLink]="['tickets/' + ticket.id]"
+                  >
+                    <p class="float-start">{{ ticket.title }}</p>
+                    <div class="icons inline-block float-end">
+                      <span class="m-1" [matTooltip]="ticket.creator.username"
+                        ><i class="far fa-user"></i
+                      ></span>
+                      <span
+                        class="m-1"
+                        [matTooltip]="ticket.last_updated_by.username"
+                        ><i class="fas fa-user-edit"></i
+                      ></span>
+                      <span
+                        class="m-1 text-success"
+                        [matTooltip]="
+                          ticket.created_at ? ticket.created_at : ''
+                        "
+                        ><i class="fas fa-calendar"></i
+                      ></span>
+                      <span
+                        class="m-1 text-danger"
+                        [matTooltip]="ticket.expiration"
+                        ><i class="fas fa-calendar-times"></i
+                      ></span>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </ng-container>
           </mat-tab>
           <mat-tab label="Resolved">
             <ng-container *ngFor="let ticket of allTickets">
-              <div class="col" *ngIf="ticket.status == 'RE'">
-                <div class="card">
-                  <div class="card-header">
-                    <h5 class="card-title">{{ ticket.title }}</h5>
-                  </div>
-                  <div class="card-body">
-                    <p class="card-text">Content: {{ ticket.content }}</p>
-                    <a
-                      [routerLink]="['tickets/' + ticket.id]"
-                      class="btn btn-primary"
-                      >Detail</a
-                    >
-                  </div>
-                  <div class="card-footer">
-                    Creator: {{ ticket.creator["username"] }}
-                  </div>
-                </div>
-              </div>
-            </ng-container></mat-tab
-          >
+              <div class="card" *ngIf="ticket.status == 'RE'">
+                <ul class="list-group list-group-flush">
+                  <li
+                    class="list-group-item"
+                    [routerLink]="['tickets/' + ticket.id]"
+                  >
+                    <p class="float-start">{{ ticket.title }}</p>
+                    <div class="icons inline-block float-end">
+                      <span class="m-1" [matTooltip]="ticket.creator.username"
+                        ><i class="far fa-user"></i
+                      ></span>
+                      <span
+                        class="m-1"
+                        [matTooltip]="ticket.last_updated_by.username"
+                        ><i class="fas fa-user-edit"></i
+                      ></span>
+                      <span
+                        class="m-1 text-success"
+                        [matTooltip]="
+                          ticket.created_at ? ticket.created_at : ''
+                        "
+                        ><i class="fas fa-calendar"></i
+                      ></span>
+                      <span
+                        class="m-1 text-danger"
+                        [matTooltip]="ticket.expiration"
+                        ><i class="fas fa-calendar-times"></i
+                      ></span>
+                    </div>
+                  </li>
+                </ul>
+              </div> </ng-container
+          ></mat-tab>
           <mat-tab label="Closed">
-            <ng-container *ngFor="let ticket of allTickets">
-              <div class="col" *ngIf="ticket.status == 'CL'">
-                <div class="card">
-                  <div class="card-header">
-                    <h5 class="card-title">{{ ticket.title }}</h5>
-                  </div>
-                  <div class="card-body">
-                    <p class="card-text">Content: {{ ticket.content }}</p>
-                    <a
-                      [routerLink]="['tickets/' + ticket.id]"
-                      class="btn btn-primary"
-                      >Detail</a
-                    >
-                  </div>
-                  <div class="card-footer">
-                    Creator: {{ ticket.creator["username"] }}
-                  </div>
-                </div>
-              </div>
-            </ng-container></mat-tab
-          >
+            <ng-container *ngFor="let ticket of creatorTickets">
+              <div class="card" *ngIf="ticket?.status === 'CL'">
+                <ul class="list-group list-group-flush">
+                  <li
+                    class="list-group-item"
+                    [routerLink]="['tickets/' + ticket.id]"
+                  >
+                    <p class="float-start">{{ ticket.title }}</p>
+                    <div class="icons inline-block float-end">
+                      <span class="m-1" [matTooltip]="ticket.creator.username"
+                        ><i class="far fa-user"></i
+                      ></span>
+                      <span
+                        class="m-1"
+                        [matTooltip]="ticket.last_updated_by.username"
+                        ><i class="fas fa-user-edit"></i
+                      ></span>
+                      <span
+                        class="m-1 text-success"
+                        [matTooltip]="
+                          ticket.created_at ? ticket.created_at : ''
+                        "
+                        ><i class="fas fa-calendar"></i
+                      ></span>
+                      <span
+                        class="m-1 text-danger"
+                        [matTooltip]="ticket.expiration"
+                        ><i class="fas fa-calendar-times"></i
+                      ></span>
+                    </div>
+                  </li>
+                </ul>
+              </div> </ng-container
+          ></mat-tab>
         </mat-tab-group>
       </div>
     </div>

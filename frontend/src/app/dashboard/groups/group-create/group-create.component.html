@@ -7,12 +7,22 @@
     </mat-form-field>
   </div>
   <br />
-  <button
-    type="button"
-    class="btn btn-outline-primary float-end"
-    mat-raised-button
-    (click)="create()"
-  >
-    Save Group
-  </button>
+  <div class="button-group text-center">
+    <button
+      type="button"
+      class="btn btn-outline-success me-2"
+      mat-raised-button
+      (click)="create()"
+    >
+      Create Group
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-danger"
+      mat-raised-button
+      (click)="onNoClick()"
+    >
+      Cancel
+    </button>
+  </div>
 </form>

@@ -5,11 +5,10 @@
       <h1 *ngIf="!data.sub">
         Do you want to unsubscribe from {{ data.topic.name }}?
       </h1>
-      <div class="button-group" style="text-align: center">
+      <div class="button-group text-center">
         <button
           type="button"
-          class="btn btn-outline-primary"
-          style="margin: 1rem"
+          class="btn btn-outline-success me-2"
           (click)="submit()"
           *ngIf="data.sub"
         >
@@ -17,8 +16,7 @@
         </button>
         <button
           type="button"
-          class="btn btn-outline-primary"
-          style="margin: 1rem"
+          class="btn btn-outline-success me-2"
           (click)="submit()"
           *ngIf="!data.sub"
         >
@@ -26,7 +24,7 @@
         </button>
         <button
           type="button"
-          class="btn btn-outline-primary"
+          class="btn btn-outline-danger"
           (click)="onNoClick()"
         >
           Cancel

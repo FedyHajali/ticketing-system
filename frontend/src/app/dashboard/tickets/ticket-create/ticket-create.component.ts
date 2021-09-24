@@ -70,14 +70,12 @@ export class TicketCreateComponent implements OnInit {
 
   getGroupsTopics() {
     this.topics = [];
-    console.log(this.selectedGroups);
-    this.selectedGroups.forEach((group) => {
+    this.selectedGroups?.forEach((group) => {
       if (group.id) {
         this.api
           .apiTopicsListUserGroupRead(group.id.toString())
           .subscribe((topics) => {
             this.topics = this.topics.concat(topics);
-            console.log(this.topics);
           });
       }
     });
@@ -90,9 +88,7 @@ export class TicketCreateComponent implements OnInit {
         this.api
           .apiTopicsUserListRead(topic.id.toString())
           .subscribe((users) => {
-            console.log(users);
             this.receivers = this.receivers.concat(users);
-            console.log(this.receivers);
           });
       }
     });

@@ -1,0 +1,46 @@
+<form [formGroup]="form">
+  <h1>Change Ticket Status</h1>
+  <div class="form-group">
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label> Update status</mat-label>
+      <mat-select
+        formControlName="status"
+        (openedChange)="onChangeStatus($event)"
+      >
+        <mat-option
+          *ngIf="data.user.id === data.ticket.creator.id || data.user.is_staff"
+          [value]="'OP'"
+          >OPEN</mat-option
+        >
+        <mat-option
+          *ngIf="
+          checkReceiver() || data.user.is_staff
+          "
+          [value]="'PE'"
+          >IN PENDING</mat-option
+        >
+        <mat-option
+          *ngIf="
+          checkReceiver() || data.user.is_staff
+          "
+          [value]="'RE'"
+          >RESOLVED</mat-option
+        >
+        <mat-option
+          *ngIf="data.user.id === data.ticket.creator.id || data.user.is_staff"
+          [value]="'CL'"
+          >CLOSED</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <br />
+  <button
+    type="button"
+    class="btn btn-outline-primary float-end"
+    mat-raised-button
+    (click)="onSubmit()"
+  >
+    Update
+  </button>
+</form>

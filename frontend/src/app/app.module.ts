@@ -31,6 +31,9 @@ import { MaterialModule } from '../app/material/material.module';
 import { GroupSubscribeComponent } from './dashboard/groups/group-subscribe/group-subscribe.component';
 import { TopicSubscribeComponent } from './dashboard/topics/topic-subscribe/topic-subscribe.component';
 import { GroupDeleteComponent } from './dashboard/groups/group-delete/group-delete.component';
+import { TicketAddReceiverComponent } from './dashboard/tickets/ticket-detail/ticket-add-receiver/ticket-add-receiver.component';
+import { TicketChangeStatusComponent } from './dashboard/tickets/ticket-detail/ticket-change-status/ticket-change-status.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,6 +59,8 @@ import { GroupDeleteComponent } from './dashboard/groups/group-delete/group-dele
     GroupSubscribeComponent,
     TopicSubscribeComponent,
     GroupDeleteComponent,
+    TicketAddReceiverComponent,
+    TicketChangeStatusComponent,
   ],
   imports: [
     BrowserModule,
@@ -66,6 +71,7 @@ import { GroupDeleteComponent } from './dashboard/groups/group-delete/group-dele
     CommonModule,
     BrowserAnimationsModule,
     MaterialModule,
+    NgxSpinnerModule,
   ],
   providers: [
     {

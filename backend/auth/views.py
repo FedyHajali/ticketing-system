@@ -161,7 +161,7 @@ def groupDelete(request, group_id):
                404: openapi.Response('Not Found')})
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsStaff])
+@permission_classes([IsAuthenticated, ])
 def groupUserAdd(request, group_id):
     try:
         group = Group.objects.get(id=group_id)
@@ -182,7 +182,7 @@ def groupUserAdd(request, group_id):
                404: openapi.Response('Not Found')})
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsStaff])
+@permission_classes([IsAuthenticated, ])
 def groupUserDelete(request, group_id):
     try:
         group = Group.objects.get(id=group_id)

@@ -46,15 +46,17 @@ class UserSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     creator = UserSerializer()
-    ticket = serializers.SerializerMethodField()
     id = serializers.IntegerField(required=False)
 
     class Meta:
         model = Comment
         fields = '__all__'
 
-    def get_ticket(self, obj):
-        return TicketSerializer(obj.ticket).data
+    def create(self, validated_data):
+        creator = validated_data.pop('creator')
+        user_obj = User.objects.get(pk=creator['id'])
+        comment = Comment.objects.create(creator=user_obj, **validated_data)
+        return comment
 
 
 class TopicSerializer(serializers.ModelSerializer):
@@ -91,6 +93,7 @@ class TicketSerializer(serializers.ModelSerializer):
         last_updated_by = validated_data.pop('last_updated_by')
         groups = validated_data.pop('groups')
         topics = validated_data.pop('topics')
+        comments = validated_data.pop('comments')
         receivers = validated_data.pop('receivers')
         creator_obj = User.objects.get(pk=creator['id'])
         last_updated_by_obj = User.objects.get(pk=last_updated_by['id'])
@@ -111,3 +114,12 @@ class TicketSerializer(serializers.ModelSerializer):
             ticket.receivers.add(receivers_obj)
 
         return ticket
+
+    def update(self, instance, validated_data):
+        instance.status = validated_data['status']
+        last_updated_by = validated_data['last_updated_by']
+        last_updated_by_obj = User.objects.get(pk=last_updated_by['id'])
+        instance.last_updated_by = last_updated_by_obj
+        instance.save()
+
+        return instance

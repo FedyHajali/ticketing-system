@@ -1,25 +1,14 @@
 #dashboard {
-  .card-group {
-    .col {
-      margin-left: 0;
-    }
-    margin-bottom: 7rem;
-    padding: 2rem;
-    border-style: ridge;
-    background-color: ghostwhite;
-    box-shadow: 0 0 5px 0 black;
-    #topics {
-      margin: 0.5rem;
-      height: 14rem;
-      .card-header {
-        cursor: pointer;
-      }
+  min-height: 90vh;
+  margin: 1rem;
+  padding: 2rem;
+  border-style: ridge;
+  background-color: ghostwhite;
+  box-shadow: 0 0 5px 0 black;
+
+  #dashboard-tickets {
+    .card:hover {
+      filter: brightness(85%);
     }
   }
-}
-
-.icons {
-	position: absolute;
-	top: 15px;
-	right: 15px;
 }

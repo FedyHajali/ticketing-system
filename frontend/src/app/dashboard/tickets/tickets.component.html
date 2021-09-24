@@ -1,51 +1,53 @@
-<div id="dashboard-container">
-  <div id="tickets">
-    <div class="container">
-      <div class="row">
-        <div class="col-8">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <h1>{{ group?.name }}</h1>
-              </li>
-              <li class="breadcrumb-item">
-                <h1>{{ topic?.name }}</h1>
-              </li>
-            </ol>
-          </nav>
-        </div>
-        <div class="col-4">
-          <button
-            type="button"
-            class="btn btn-outline-primary"
-            routerLink="../.."
-            id="back"
-          >
-            Back
-          </button>
-        </div>
+<div id="tickets">
+  <div class="container">
+    <div class="row">
+      <div class="col col-md-8 col-sm-12">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <h1>{{ group?.name }}</h1>
+            </li>
+            <li class="breadcrumb-item">
+              <h1>{{ topic?.name }}</h1>
+            </li>
+          </ol>
+        </nav>
       </div>
-      <div class="row">
-        <hr />
-        <div class="col">
-          <h1>Tickets</h1>
-          <button
-            type="button"
-            class="btn btn-outline-primary"
-            routerLink="/dashboard/tickets/create"
-          >
-            Create new Ticket
-          </button>
-        </div>
-      </div>
-      <div class="row">
-        <div
-          class="col-3 d-flex align-items-stretch"
-          *ngFor="let ticket of tickets"
+      <div class="col col-md-4 col-sm-12">
+        <button
+          type="button"
+          class="btn btn-outline-primary float-end m-1"
+          routerLink="../.."
         >
+          Back
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <hr />
+      <div class="col">
+        <h1 class="float-start">Tickets</h1>
+        <button
+          type="button"
+          class="btn btn-outline-primary float-end"
+          routerLink="/dashboard/tickets/create"
+        >
+          Create new Ticket
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="card" *ngIf="tickets?.length === 0">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">There aren't tickets for this topic.</li>
+        </ul>
+      </div>
+      <ng-container *ngFor="let ticket of tickets">
+        <div class="col-lg-4 col-md-6 col-sm-12" *ngIf="ticket.status !== 'CL'">
           <div class="card-group">
             <div
               class="card"
+              id="ticket-card"
               (click)="navigateTicket(ticket)"
               [ngClass]="{
                 'border-primary': ticket.status === 'OP',
@@ -113,7 +115,9 @@
                   </div>
                   <div class="expiration d-inline m-1 fs-5">
                     <span
-                      [matTooltip]="'Expiration date: ' + ticket.expiration.toLocaleString()"
+                      [matTooltip]="
+                        'Expiration date: ' + ticket.expiration.toLocaleString()
+                      "
                       class="text-secondary"
                       ><i class="fas fa-calendar-times"></i
                     ></span>
@@ -132,7 +136,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </ng-container>
     </div>
   </div>
 </div>

@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
   userGroups: Group[] = [];
   allGroups: Group[] = [];
   allTickets: Ticket[] = [];
+  creatorTickets: Ticket[] = [];
 
   constructor(
     private dialog: MatDialog,
@@ -63,6 +64,13 @@ export class DashboardComponent implements OnInit {
     this.api.apiTicketsListList().subscribe((tickets) => {
       this.allTickets = tickets;
     });
+    if (this.user?.id) {
+      this.api
+        .apiTicketsListCreatorRead(this.user.id.toString())
+        .subscribe((tickets) => {
+          this.creatorTickets = tickets;
+        });
+    }
   }
 
   navigateGroup(group: Group) {
@@ -96,7 +104,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  deleteGroupModal( group: Group) {
+  deleteGroupModal(group: Group) {
     const dialogRef = this.dialog.open(GroupDeleteComponent, {
       width: '350px',
       height: 'auto',

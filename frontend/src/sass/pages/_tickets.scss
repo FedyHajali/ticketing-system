@@ -1,59 +1,42 @@
 #tickets {
-  .container {
-    margin-bottom: 5rem;
-    padding: 2rem;
-    border-style: ridge;
-    background-color: ghostwhite;
-    box-shadow: 0 0 5px 0 black;
-    .row {
-      width: 100%;
-    }
-    .row:nth-child(1) {
-      .col-8 {
-        ol {
-          width: 100%;
-          li:nth-child(2) {
-            width: 50%;
-          }
-        }
-      }
-      .col-4 {
-        button {
-          float: right;
-          margin: 1rem;
-        }
-      }
-    }
-    .row:nth-child(2) {
-      .col {
-        h1 {
-          float: left;
-        }
-        button {
-          float: right;
-        }
-      }
-    }
-    .row:nth-child(3) {
-      .card {
-        height: 300px;
-        width: 300px;
-        margin: 1rem;
-        padding: 1rem;
-        border-radius: 4px;
-        background: #fff;
-        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.08), 0 0 6px rgba(0, 0, 0, 0.05);
-        transition: 0.3s transform cubic-bezier(0.155, 1.105, 0.295, 1.12),
-          0.3s box-shadow,
-          0.3s -webkit-transform cubic-bezier(0.155, 1.105, 0.295, 1.12);
-        cursor: pointer;
-      }
+  min-height: 90vh;
+  margin: 1rem;
+  padding: 2rem;
+  border-style: ridge;
+  background-color: ghostwhite;
+  box-shadow: 0 0 5px 0 black;
 
-      .card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12),
-          0 4px 8px rgba(0, 0, 0, 0.06);
-      }
+  .row:nth-child(3) {
+    #ticket-card {
+      margin: 1rem;
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.08), 0 0 6px rgba(0, 0, 0, 0.05);
+      transition: 0.3s transform cubic-bezier(0.155, 1.105, 0.295, 1.12),
+        0.3s box-shadow,
+        0.3s -webkit-transform cubic-bezier(0.155, 1.105, 0.295, 1.12);
+      cursor: pointer;
+    }
+
+    #ticket-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
     }
   }
+}
+
+#ticket-detail {
+  min-height: 90vh;
+  margin: 1rem;
+  border-style: ridge;
+  background-color: ghostwhite;
+  box-shadow: 0 0 5px 0 black;
+}
+
+#ticket-create {
+  min-height: 90vh;
+  margin: 1rem;
+  border-style: ridge;
+  background-color: ghostwhite;
+  box-shadow: 0 0 5px 0 black;
 }

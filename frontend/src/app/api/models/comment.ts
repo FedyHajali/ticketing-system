@@ -5,6 +5,6 @@ export interface Comment {
   created_at?: string;
   creator: User;
   id?: number;
-  ticket?: string;
+  ticket: number;
   title: string;
 }
