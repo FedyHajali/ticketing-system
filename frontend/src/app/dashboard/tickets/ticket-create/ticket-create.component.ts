@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Group, Ticket, Topic, User } from 'src/app/api/models';
 import { ApiService, AuthService } from 'src/app/api/services';
 import { SharedService } from 'src/app/services/shared.service';
@@ -33,18 +34,22 @@ export class TicketCreateComponent implements OnInit {
     receivers: null,
     creator: this.user,
     last_updated_by: this.user,
+    expiration: null,
   });
 
   constructor(
     private auth: AuthService,
     private api: ApiService,
     private fb: FormBuilder,
-    private shared: SharedService
+    private shared: SharedService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.user = this.shared.getActiveUser();
   }
 
   ngOnInit(): void {
+    this.shared.showSpinner();
     this.auth.authGroupsListUserList().subscribe((groups) => {
       this.groups = groups;
     });
@@ -104,15 +109,16 @@ export class TicketCreateComponent implements OnInit {
       receivers: this.form.controls.receivers.value,
       creator: this.user,
       last_updated_by: this.user,
-      expiration: '2022-03-22T13:17:27.853707Z',
-      comments: [],
+      expiration: this.form.controls.expiration.value.toISOString()
     };
-    console.log(ticket);
-    this.api.apiTicketsCreateCreate(ticket).subscribe((response) => {
-      this.shared.showToastSuccess('Successfully create', 'Ticket Create');      
-    },
-    (error) => {
-      this.shared.showToastDanger(error, 'Ticket Create');
-    });
+    this.api.apiTicketsCreateCreate(ticket).subscribe(
+      (response) => {
+        this.shared.showToastSuccess('Successfully create', 'Ticket Create');
+        this.router.navigate(['/dashboard/tickets/' + response.id]);
+      },
+      (error) => {
+        this.shared.showToastDanger(error.error, 'Ticket Create');
+      }
+    );
   }
 }

@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   user!: User;
   userGroups: Group[] = [];
   allGroups: Group[] = [];
+  ticketsReceiver: Ticket[] = [];
   allTickets: Ticket[] = [];
   creatorTickets: Ticket[] = [];
 
@@ -34,8 +35,9 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.shared.showSpinner();
     this.getUserGroupList();
-    this.getAllTickets();
+    this.getTickets();
   }
 
   getUserGroupList() {
@@ -60,9 +62,9 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getAllTickets() {
-    this.api.apiTicketsListList().subscribe((tickets) => {
-      this.allTickets = tickets;
+  getTickets() {
+    this.api.apiTicketsListReceiverList().subscribe((tickets) => {
+      this.ticketsReceiver = tickets;
     });
     if (this.user?.id) {
       this.api
@@ -71,6 +73,9 @@ export class DashboardComponent implements OnInit {
           this.creatorTickets = tickets;
         });
     }
+    this.api.apiTicketsListAllList().subscribe((tickets) => {
+      this.allTickets = tickets;
+    });
   }
 
   navigateGroup(group: Group) {

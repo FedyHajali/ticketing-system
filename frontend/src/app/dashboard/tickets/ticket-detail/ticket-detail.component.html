@@ -13,6 +13,7 @@
                   *ngIf="ticket?.creator?.id === user.id"
                   type="button"
                   class="btn btn-outline-danger me-3"
+                  (click)="deleteTicketModal(ticket)"
                 >
                   Delete
                 </button>
@@ -45,7 +46,14 @@
                 <mat-chip
                   color="primary"
                   style="cursor: pointer"
-                  (click)="addReceiverModal()"
+                  [disabled]="
+                    ticket?.status === 'CL' || ticket?.creator?.id !== user?.id
+                  "
+                  (click)="
+                    ticket?.status === 'CL' || ticket?.creator?.id !== user?.id
+                      ? null
+                      : addReceiverModal()
+                  "
                   >Add Receiver</mat-chip
                 >
               </mat-chip-list>
@@ -96,6 +104,13 @@
               <div class="row mb-2" *ngFor="let comment of ticket?.comments">
                 <div class="col">
                   <mat-form-field class="w-100" appearance="fill">
+                    <span
+                      class="position-absolute top-0 end-0"
+                      style="cursor: pointer"
+                      (click)="deleteCommentModal(comment)"
+                      *ngIf="comment.creator.id === user.id"
+                      ><i class="far fa-window-close"></i
+                    ></span>
                     <mat-label>
                       {{ comment.creator.username }} -
                       {{
@@ -176,6 +191,8 @@
                           <li
                             class="list-group-item"
                             *ngFor="let group of ticket?.groups"
+                            style="cursor: pointer"
+                            (click)="navigateGroup(group)"
                           >
                             {{ group.name }}
                           </li>

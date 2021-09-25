@@ -6,8 +6,10 @@ import { Group, Topic, User, Comment } from 'src/app/api/models';
 import { Ticket } from 'src/app/api/models/ticket';
 import { ApiService } from 'src/app/api/services';
 import { SharedService } from 'src/app/services/shared.service';
+import { TicketDeleteComponent } from '../ticket-delete/ticket-delete.component';
 import { TicketAddReceiverComponent } from './ticket-add-receiver/ticket-add-receiver.component';
 import { TicketChangeStatusComponent } from './ticket-change-status/ticket-change-status.component';
+import { TicketCommentDeleteComponent } from './ticket-comment-delete/ticket-comment-delete.component';
 
 @Component({
   selector: 'app-ticket-detail',
@@ -35,6 +37,7 @@ export class TicketDetailComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.shared.showSpinner();
     this.user = this.shared.getActiveUser();
     this.sub = this.route.params.subscribe((params) => {
       this.ticket_id = +params['ticket_id'];
@@ -82,10 +85,49 @@ export class TicketDetailComponent implements OnInit {
       creator: this.shared.getActiveUser(),
       ticket: this.ticket.id ? this.ticket.id : 0,
     };
-    this.api.apiCommentsCreateCreate(comment).subscribe((response) => {
-      console.log(response);
-      this.shared.showSpinner();
+    this.form.controls.comment.reset();
+    this.api.apiCommentsCreateCreate(comment).subscribe(
+      (response) => {
+        this.shared.showSpinner();
+        this.getTicketDetail(this.ticket_id);
+        this.shared.showToastSuccess(
+          'Comment successfully saved',
+          'Add Comment'
+        );
+      },
+      (error) => {
+        this.shared.showToastDanger(error.error, 'Add Comment');
+      }
+    );
+  }
+
+  deleteTicketModal(ticket: Ticket) {
+    const dialogRef = this.dialog.open(TicketDeleteComponent, {
+      width: '350px',
+      height: 'auto',
+      autoFocus: true,
+      data: { ticket: ticket },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.router.navigate(['/dashboard']);
+    });
+  }
+
+  deleteCommentModal(comment: Comment) {
+    const dialogRef = this.dialog.open(TicketCommentDeleteComponent, {
+      width: '350px',
+      height: 'auto',
+      autoFocus: true,
+      data: { comment: comment },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
       this.getTicketDetail(this.ticket_id);
     });
+  }
+
+  navigateGroup(group: Group) {
+    this.router.navigate(['/dashboard/groups/' + group.id]);
   }
 }

@@ -93,7 +93,6 @@ class TicketSerializer(serializers.ModelSerializer):
         last_updated_by = validated_data.pop('last_updated_by')
         groups = validated_data.pop('groups')
         topics = validated_data.pop('topics')
-        comments = validated_data.pop('comments')
         receivers = validated_data.pop('receivers')
         creator_obj = User.objects.get(pk=creator['id'])
         last_updated_by_obj = User.objects.get(pk=last_updated_by['id'])

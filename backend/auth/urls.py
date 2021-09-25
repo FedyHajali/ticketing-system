@@ -15,7 +15,7 @@ urlpatterns = [
     path('groups/list-user/', views.groupListUser, name="user-group-list"),
     path('groups/create/', views.groupCreate, name="group-create"),
     path('groups/user-list/<int:group_id>/',
-         views.userListGroup, name="group-users"),
+         views.userListGroup, name="group-users"), #not used
     path('groups/delete/<int:group_id>', views.groupDelete, name="group-delete"),
     path('groups/add-user/<int:group_id>',
          views.groupUserAdd, name="group-user-add"),

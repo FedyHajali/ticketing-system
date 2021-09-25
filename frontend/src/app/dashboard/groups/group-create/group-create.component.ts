@@ -42,7 +42,7 @@ export class GroupCreateComponent implements OnInit {
         this.onNoClick();
       },
       (error) => {
-        this.shared.showToastDanger(error, 'Group Create');
+        this.shared.showToastDanger(error.error, 'Group Create');
       }
     );
   }

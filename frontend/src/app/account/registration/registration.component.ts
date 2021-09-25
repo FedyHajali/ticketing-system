@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService, AuthService } from 'src/app/api/services';
 import { User, Group } from 'src/app/api/models';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-registration',
@@ -27,12 +28,14 @@ export class RegistrationComponent implements OnInit {
     private fb: FormBuilder,
     private auth: AuthService,
     private authservice: AuthService,
+    private shared: SharedService,
     private api: ApiService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.shared.showSpinner();
     this.getGroups();
   }
 

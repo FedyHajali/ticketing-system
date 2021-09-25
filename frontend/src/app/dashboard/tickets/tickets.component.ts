@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Group, Ticket, Topic } from 'src/app/api/models';
 import { ApiService, AuthService } from 'src/app/api/services';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-tickets',
@@ -18,6 +19,7 @@ export class TicketsComponent implements OnInit {
   tickets!: Ticket[];
 
   constructor(
+    private shared: SharedService,
     private route: ActivatedRoute,
     private router: Router,
     private auth: AuthService,
@@ -25,6 +27,7 @@ export class TicketsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.shared.showSpinner()
     this.sub = this.route.params.subscribe((params) => {
       this.group_id = +params['group_id']; // (+) converts string 'id' to a number
       this.topic_id = +params['topic_id']; // (+) converts string 'id' to a number
@@ -56,12 +59,6 @@ export class TicketsComponent implements OnInit {
       .subscribe((tickets) => {
         this.tickets = tickets;
       });
-  }
-
-  // format date in typescript
-  getFormatedDate(date: Date, format: string) {
-    const datePipe = new DatePipe('en-US');
-    return datePipe.transform(date, format);
   }
 
   navigateTicket(ticket: Ticket) {

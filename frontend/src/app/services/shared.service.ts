@@ -58,7 +58,7 @@ export class SharedService {
     setTimeout(() => {
       /** spinner ends after 2 seconds */
       this.spinner.hide();
-    }, 2000);
+    }, 1000);
   }
 
   showToastSuccess(title: string, message: string) {

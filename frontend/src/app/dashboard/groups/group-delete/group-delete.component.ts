@@ -22,19 +22,14 @@ export class GroupDeleteComponent implements OnInit {
   ngOnInit(): void {}
 
   onDelete() {
-    this.auth
-      .authGroupsDeleteDelete(this.data.group.id)
-      .subscribe((response) => {
-        console.log(response);
-        this.onNoClick();
-        this.shared.showToastSuccess(
-          'Successfully deleted',
-          'Group Delete'
-        );
+    this.auth.authGroupsDeleteDelete(this.data.group.id).subscribe(
+      (response) => {
+        this.shared.showToastSuccess('Successfully deleted', 'Group Delete');
         this.onNoClick();
       },
       (error) => {
-        this.shared.showToastDanger(error, 'Group Delete');
-      });
+        this.shared.showToastDanger(error.error, 'Group Delete');
+      }
+    );
   }
 }

@@ -45,7 +45,7 @@ export class TopicCreateComponent implements OnInit {
       this.onNoClick();
     },
     (error) => {
-      this.shared.showToastDanger(error, 'Topic Create');
+      this.shared.showToastDanger(error.error, 'Topic Create');
     });
   }
 }

@@ -39,7 +39,7 @@ export class TopicSubscribeComponent implements OnInit {
       this.onNoClick();
     },
     (error) => {
-      this.shared.showToastDanger(error, 'Topic subscription');
+      this.shared.showToastDanger(error.error, 'Topic subscription');
     });
   }
 
@@ -53,7 +53,7 @@ export class TopicSubscribeComponent implements OnInit {
       this.onNoClick();
     },
     (error) => {
-      this.shared.showToastDanger(error, 'Topic unsubscription');
+      this.shared.showToastDanger(error.error, 'Topic unsubscription');
     });
   }
 }

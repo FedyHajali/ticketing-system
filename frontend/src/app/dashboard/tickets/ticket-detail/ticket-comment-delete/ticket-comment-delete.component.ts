@@ -4,13 +4,13 @@ import { ApiService } from 'src/app/api/services';
 import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
-  selector: 'app-topic-delete',
-  templateUrl: './topic-delete.component.html',
-  styleUrls: ['./topic-delete.component.scss']
+  selector: 'app-ticket-comment-delete',
+  templateUrl: './ticket-comment-delete.component.html',
+  styleUrls: ['./ticket-comment-delete.component.scss'],
 })
-export class TopicDeleteComponent implements OnInit {
+export class TicketCommentDeleteComponent implements OnInit {
   constructor(
-    public dialogRef: MatDialogRef<TopicDeleteComponent>,
+    public dialogRef: MatDialogRef<TicketCommentDeleteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private api: ApiService,
     private shared: SharedService
@@ -22,17 +22,14 @@ export class TopicDeleteComponent implements OnInit {
   ngOnInit(): void {}
 
   onDelete() {
-    this.api
-      .apiTopicsDeleteDelete(this.data.topic.id)
-      .subscribe((response) => {
-        this.shared.showToastSuccess(
-          'Successfully deleted',
-          'Topic Delete'
-        );
+    this.api.apiCommentsDeleteDelete(this.data.comment.id).subscribe(
+      (response) => {
+        this.shared.showToastSuccess('Successfully deleted', 'Comment Delete');
         this.onNoClick();
       },
       (error) => {
-        this.shared.showToastDanger(error.error, 'Topic Delete');
-      });
+        this.shared.showToastDanger(error.error, 'Comment Delete');
+      }
+    );
   }
 }

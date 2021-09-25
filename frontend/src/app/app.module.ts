@@ -21,7 +21,6 @@ import { TopicCreateComponent } from './dashboard/topics/topic-create/topic-crea
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TicketDetailComponent } from './dashboard/tickets/ticket-detail/ticket-detail.component';
 import { TicketCreateComponent } from './dashboard/tickets/ticket-create/ticket-create.component';
-import { TicketUpdateComponent } from './dashboard/tickets/ticket-update/ticket-update.component';
 import { TicketDeleteComponent } from './dashboard/tickets/ticket-delete/ticket-delete.component';
 import { TopicDeleteComponent } from './dashboard/topics/topic-delete/topic-delete.component';
 import { GroupsComponent } from './dashboard/groups/groups.component';
@@ -44,6 +43,7 @@ import { TicketAddReceiverComponent } from './dashboard/tickets/ticket-detail/ti
 import { TicketChangeStatusComponent } from './dashboard/tickets/ticket-detail/ticket-change-status/ticket-change-status.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
+import { TicketCommentDeleteComponent } from './dashboard/tickets/ticket-detail/ticket-comment-delete/ticket-comment-delete.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -60,7 +60,6 @@ import { ToastrModule } from 'ngx-toastr';
     TopicCreateComponent,
     TicketCreateComponent,
     TicketDetailComponent,
-    TicketUpdateComponent,
     TicketDeleteComponent,
     TopicDeleteComponent,
     PageNotFoundComponent,
@@ -79,6 +78,7 @@ import { ToastrModule } from 'ngx-toastr';
     GroupDeleteComponent,
     TicketAddReceiverComponent,
     TicketChangeStatusComponent,
+    TicketCommentDeleteComponent,
   ],
   imports: [
     ChartsModule,

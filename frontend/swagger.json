@@ -242,6 +242,22 @@ paths:
         in: path
         required: true
         type: string
+  /api/tickets/list-receiver/:
+    get:
+      operationId: api_tickets_list-receiver_list
+      summary: Ticket list received by the active user
+      description: List of tickets for which the active user is a receiver
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Ticket'
+      tags:
+        - api
+    parameters: []
   /api/tickets/list-topic-user/{topic_id}/:
     get:
       operationId: api_tickets_list-topic-user_read
@@ -265,8 +281,8 @@ paths:
   /api/tickets/list-topic/{topic_id}/:
     get:
       operationId: api_tickets_list-topic_read
-      summary: Ticket list for a specific topic
-      description: List of tickets for a specific topic
+      summary: Ticket list for a specific topic (for staff)
+      description: List of tickets for a specific topic (for staff)
       parameters: []
       responses:
         '200':
@@ -282,22 +298,6 @@ paths:
         in: path
         required: true
         type: string
-  /api/tickets/list/:
-    get:
-      operationId: api_tickets_list_list
-      summary: Ticket list received by the active user
-      description: List of tickets for which the active user is a receiver
-      parameters: []
-      responses:
-        '200':
-          description: OK
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Ticket'
-      tags:
-        - api
-    parameters: []
   /api/tickets/receivers-list/{ticket_id}:
     get:
       operationId: api_tickets_receivers-list_read

@@ -26,7 +26,9 @@ export class LoginComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.shared.showSpinner();
+  }
 
   onSubmit() {
     this.auth.authLoginCreate(this.form.value).subscribe(
@@ -34,8 +36,7 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('token', response.key);
         this.shared.setActiveUser();
 
-     
-        this.shared.showSpinner()
+        this.shared.showSpinner();
 
         if (this.shared.redirectUrl) {
           this.router.navigate([this.shared.redirectUrl]);

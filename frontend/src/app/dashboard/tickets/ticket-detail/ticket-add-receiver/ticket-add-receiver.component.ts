@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User } from 'src/app/api/models';
 import { ApiService } from 'src/app/api/services';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-ticket-add-receiver',
@@ -11,7 +12,7 @@ import { ApiService } from 'src/app/api/services';
 })
 export class TicketAddReceiverComponent implements OnInit {
   form = this.fb.group({
-    receivers: this.data.ticket.receivers,
+    receiver: null,
   });
   isClose = false;
   receivers: User[] = [];
@@ -19,36 +20,62 @@ export class TicketAddReceiverComponent implements OnInit {
     public dialogRef: MatDialogRef<TicketAddReceiverComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
-    private api: ApiService
+    private api: ApiService,
+    private shared: SharedService
   ) {}
 
   onNoClick(): void {
     this.dialogRef.close();
   }
   ngOnInit(): void {
-    // TODO
-    // Chiamata per avere lista di tutti gli iscritti a più topic
+    this.getTopicsReceivers();
   }
 
   onSubmit() {
-    this.data.ticket = {
-      ...this.data.ticket,
-      receivers: this.form.controls.receivers.value,
-    };
     const params = {
-      userId: this.data.user.id,
+      userId: this.form.controls.receiver.value.id,
       ticketId: this.data.ticket.id,
     };
-    // this.api.apiTicketsUserAddUpdate(params).subscribe((response) => {
-    //   console.log(response);
-    // });
+    this.api.apiTicketsUserAddUpdate(params).subscribe(
+      (response) => {
+        this.shared.showToastSuccess(
+          'Receiver successfully added',
+          'Add Receiver'
+        );
+        this.onNoClick();
+      },
+      (error) => {
+        this.shared.showToastDanger(error.error, 'Add Receiver');
+      }
+    );
+  }
+
+  getTopicsReceivers() {
+    this.api
+      .apiTicketsAllTopicsUsersRead(this.data.ticket.id)
+      .subscribe((receivers) => {
+        this.receivers = receivers;
+        this.removeTicketReceiversFromTopicReceivers();
+      });
   }
 
   onChangeStatus(event: any) {
     this.isClose = false;
     if (!event) {
       this.isClose = true;
-      console.log(this.form.controls.receivers.value);
+    }
+  }
+
+  removeTicketReceiversFromTopicReceivers() {
+    for (let receiverTopics of this.receivers) {
+      for (let receiverTicket of this.data.ticket.receivers) {
+        if (receiverTopics.id === receiverTicket.id) {
+          this.receivers = this.receivers.splice(
+            this.receivers.indexOf(receiverTicket),
+            1
+          );
+        }
+      }
     }
   }
 }

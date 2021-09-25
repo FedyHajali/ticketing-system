@@ -8,8 +8,8 @@ import { Observable as __Observable } from 'rxjs';
 import { map as __map, filter as __filter } from 'rxjs/operators';
 
 import { Comment } from '../models/comment';
-import { Ticket } from '../models/ticket';
 import { User } from '../models/user';
+import { Ticket } from '../models/ticket';
 import { Topic } from '../models/topic';
 @Injectable({
   providedIn: 'root',
@@ -19,15 +19,16 @@ class ApiService extends __BaseService {
   static readonly apiCommentsDeleteDeletePath = '/api/comments/delete/{comment_id}';
   static readonly apiCommentsDetailReadPath = '/api/comments/detail/{comment_id}';
   static readonly apiCommentsTicketListReadPath = '/api/comments/ticket-list/{ticket_id}';
+  static readonly apiTicketsAllTopicsUsersReadPath = '/api/tickets/all-topics-users/{ticket_id}/';
   static readonly apiTicketsCreateCreatePath = '/api/tickets/create/';
   static readonly apiTicketsDeleteDeletePath = '/api/tickets/delete/{ticket_id}/';
   static readonly apiTicketsDetailReadPath = '/api/tickets/detail/{ticket_id}/';
   static readonly apiTicketsListAllListPath = '/api/tickets/list-all/';
   static readonly apiTicketsListCreatorReadPath = '/api/tickets/list-creator/{creator_id}';
   static readonly apiTicketsListGroupsReadPath = '/api/tickets/list-groups/{group_id}';
+  static readonly apiTicketsListReceiverListPath = '/api/tickets/list-receiver/';
   static readonly apiTicketsListTopicUserReadPath = '/api/tickets/list-topic-user/{topic_id}/';
   static readonly apiTicketsListTopicReadPath = '/api/tickets/list-topic/{topic_id}/';
-  static readonly apiTicketsListListPath = '/api/tickets/list/';
   static readonly apiTicketsReceiversListReadPath = '/api/tickets/receivers-list/{ticket_id}';
   static readonly apiTicketsUpdateCreatorUpdatePath = '/api/tickets/update-creator/{ticket_id}/';
   static readonly apiTicketsUpdateReceiverUpdatePath = '/api/tickets/update-receiver/{ticket_id}/';
@@ -214,6 +215,48 @@ class ApiService extends __BaseService {
   apiCommentsTicketListRead(ticketId: string): __Observable<Array<Comment>> {
     return this.apiCommentsTicketListReadResponse(ticketId).pipe(
       __map(_r => _r.body as Array<Comment>)
+    );
+  }
+
+  /**
+   * Returns the list of users subscribed to the ticket topics
+   *
+   * Returns the list of users subscribed to the ticket topics
+   * @param ticket_id undefined
+   * @return OK
+   */
+  apiTicketsAllTopicsUsersReadResponse(ticketId: string): __Observable<__StrictHttpResponse<Array<User>>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+
+    let req = new HttpRequest<any>(
+      'GET',
+      this.rootUrl + `/api/tickets/all-topics-users/${encodeURIComponent(String(ticketId))}/`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<Array<User>>;
+      })
+    );
+  }
+  /**
+   * Returns the list of users subscribed to the ticket topics
+   *
+   * Returns the list of users subscribed to the ticket topics
+   * @param ticket_id undefined
+   * @return OK
+   */
+  apiTicketsAllTopicsUsersRead(ticketId: string): __Observable<Array<User>> {
+    return this.apiTicketsAllTopicsUsersReadResponse(ticketId).pipe(
+      __map(_r => _r.body as Array<User>)
     );
   }
 
@@ -465,6 +508,45 @@ class ApiService extends __BaseService {
   }
 
   /**
+   * Ticket list received by the active user
+   *
+   * List of tickets for which the active user is a receiver
+   * @return OK
+   */
+  apiTicketsListReceiverListResponse(): __Observable<__StrictHttpResponse<Array<Ticket>>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+    let req = new HttpRequest<any>(
+      'GET',
+      this.rootUrl + `/api/tickets/list-receiver/`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<Array<Ticket>>;
+      })
+    );
+  }
+  /**
+   * Ticket list received by the active user
+   *
+   * List of tickets for which the active user is a receiver
+   * @return OK
+   */
+  apiTicketsListReceiverList(): __Observable<Array<Ticket>> {
+    return this.apiTicketsListReceiverListResponse().pipe(
+      __map(_r => _r.body as Array<Ticket>)
+    );
+  }
+
+  /**
    * List of tickets of the topic to which the user is subscribed
    *
    * List of tickets of the topic to which the user is subscribed
@@ -507,9 +589,9 @@ class ApiService extends __BaseService {
   }
 
   /**
-   * Ticket list for a specific topic
+   * Ticket list for a specific topic (for staff)
    *
-   * List of tickets for a specific topic
+   * List of tickets for a specific topic (for staff)
    * @param topic_id undefined
    * @return OK
    */
@@ -536,53 +618,14 @@ class ApiService extends __BaseService {
     );
   }
   /**
-   * Ticket list for a specific topic
+   * Ticket list for a specific topic (for staff)
    *
-   * List of tickets for a specific topic
+   * List of tickets for a specific topic (for staff)
    * @param topic_id undefined
    * @return OK
    */
   apiTicketsListTopicRead(topicId: string): __Observable<Array<Ticket>> {
     return this.apiTicketsListTopicReadResponse(topicId).pipe(
-      __map(_r => _r.body as Array<Ticket>)
-    );
-  }
-
-  /**
-   * Ticket list received by the active user
-   *
-   * List of tickets for which the active user is a receiver
-   * @return OK
-   */
-  apiTicketsListListResponse(): __Observable<__StrictHttpResponse<Array<Ticket>>> {
-    let __params = this.newParams();
-    let __headers = new HttpHeaders();
-    let __body: any = null;
-    let req = new HttpRequest<any>(
-      'GET',
-      this.rootUrl + `/api/tickets/list/`,
-      __body,
-      {
-        headers: __headers,
-        params: __params,
-        responseType: 'json'
-      });
-
-    return this.http.request<any>(req).pipe(
-      __filter(_r => _r instanceof HttpResponse),
-      __map((_r) => {
-        return _r as __StrictHttpResponse<Array<Ticket>>;
-      })
-    );
-  }
-  /**
-   * Ticket list received by the active user
-   *
-   * List of tickets for which the active user is a receiver
-   * @return OK
-   */
-  apiTicketsListList(): __Observable<Array<Ticket>> {
-    return this.apiTicketsListListResponse().pipe(
       __map(_r => _r.body as Array<Ticket>)
     );
   }

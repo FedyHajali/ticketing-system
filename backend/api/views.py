@@ -63,20 +63,17 @@ def ticketListAll(request):
     responses={200: openapi.Response('OK', TicketSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, ])
+@permission_classes([IsAuthenticated, IsStaff])
 def ticketListGroup(request, group_id):
     tickets = Ticket.objects.filter(groups__id=group_id)
     serializer = TicketSerializer(tickets, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-# TODO
-# DIFFERENZE TRA QUESTA E LA SUCCESSIVA ?
-
-
+# Questa secondo me non serve 
 @swagger_auto_schema(
     method="get",
-    operation_description='List of tickets for a specific topic',
-    operation_summary='Ticket list for a specific topic',
+    operation_description='List of tickets for a specific topic (for staff)',
+    operation_summary='Ticket list for a specific topic (for staff)',
     responses={200: openapi.Response('OK', TicketSerializer(many=True))})
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
@@ -140,8 +137,6 @@ def ticketDetail(request, ticket_id):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
-
 @swagger_auto_schema(
     method="get",
     operation_description='Returns the list of users subscribed to the ticket topics',
@@ -160,7 +155,7 @@ def ticketAllTopicsUsers(request, ticket_id):
         ticket = Ticket.objects.get(id=ticket_id)
     except Ticket.DoesNotExist:
         return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
-    
+
     ticket = TicketSerializer(ticket, many=False)
     topics = ticket.data['topics']
 
@@ -173,7 +168,6 @@ def ticketAllTopicsUsers(request, ticket_id):
     serializer = UserSerializer(receivers, many=True)
 
     return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 
 @swagger_auto_schema(
@@ -296,7 +290,7 @@ def ticketStaffUpdate(request, ticket_id):
                404: openapi.Response('Not Found')})
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsStaff])
+@permission_classes([IsAuthenticated, ])
 def ticketUserAdd(request, ticket_id, user_id):
     try:
         ticket = Ticket.objects.get(id=ticket_id, creator=request.user.id)

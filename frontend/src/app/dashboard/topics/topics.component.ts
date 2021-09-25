@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Group, Topic, User } from 'src/app/api/models';
+import { Group, Ticket, Topic, User } from 'src/app/api/models';
 import { ApiService, AuthService } from 'src/app/api/services';
 import { SharedService } from 'src/app/services/shared.service';
 import { TopicCreateComponent } from './topic-create/topic-create.component';
@@ -18,8 +18,9 @@ export class TopicsComponent implements OnInit {
   private sub: any;
   user!: User;
   group!: Group;
-  userTopics!: Topic[];
-  allTopics!: Topic[];
+  tickets: Ticket[] = [];
+  userTopics: Topic[] = [];
+  allTopics: Topic[] = [];
   constructor(
     private shared: SharedService,
     private dialog: MatDialog,
@@ -30,11 +31,13 @@ export class TopicsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.shared.showSpinner();
     this.user = this.shared.getActiveUser();
     this.sub = this.route.params.subscribe((params) => {
       this.group_id = +params['group_id']; // (+) converts string 'id' to a number
       this.getGroup();
-      this.getUserTopicList(this.group_id);
+      this.getUserTopicList();
+      if (this.user.is_staff) this.getGroupTickets();
     });
   }
 
@@ -46,26 +49,38 @@ export class TopicsComponent implements OnInit {
       });
   }
 
-  getUserTopicList(id: number) {
-    this.api.apiTopicsListUserGroupRead(id.toString()).subscribe((topics) => {
-      this.userTopics = topics;
-      this.getAllTopicList(this.group_id);
-    });
+  getUserTopicList() {
+    this.api
+      .apiTopicsListUserGroupRead(this.group_id.toString())
+      .subscribe((topics) => {
+        this.userTopics = topics;
+        this.getAllTopicList();
+      });
   }
 
-  getAllTopicList(id: number) {
-    this.api.apiTopicsListGroupRead(id.toString()).subscribe((topics) => {
-      this.allTopics = topics;
-      // Remove userTopics from allTopics
-      for (let i = 0; i < this.userTopics.length; i++) {
-        for (let j = 0; j < this.allTopics.length; j++) {
-          if (this.allTopics[j].id === this.userTopics[i].id) {
-            this.allTopics.splice(j, 1);
-            j -= 1;
+  getAllTopicList() {
+    this.api
+      .apiTopicsListGroupRead(this.group_id.toString())
+      .subscribe((topics) => {
+        this.allTopics = topics;
+        // Remove userTopics from allTopics
+        for (let i = 0; i < this.userTopics.length; i++) {
+          for (let j = 0; j < this.allTopics.length; j++) {
+            if (this.allTopics[j].id === this.userTopics[i].id) {
+              this.allTopics.splice(j, 1);
+              j -= 1;
+            }
           }
         }
-      }
-    });
+      });
+  }
+
+  getGroupTickets() {
+    this.api
+      .apiTicketsListGroupsRead(this.group_id.toString())
+      .subscribe((tickets) => {
+        this.tickets = tickets;
+      });
   }
 
   navigateTopic(topic: Topic) {
@@ -83,7 +98,7 @@ export class TopicsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.getUserTopicList(this.group_id);
+      this.getUserTopicList();
     });
   }
 
@@ -96,7 +111,7 @@ export class TopicsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.getUserTopicList(this.group_id);
+      this.getUserTopicList();
     });
   }
 
@@ -109,7 +124,11 @@ export class TopicsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.getUserTopicList(this.group_id);
+      this.getUserTopicList();
     });
+  }
+
+  navigateTicket(ticket: Ticket) {
+    this.router.navigate(['/dashboard/tickets/' + ticket.id]);
   }
 }

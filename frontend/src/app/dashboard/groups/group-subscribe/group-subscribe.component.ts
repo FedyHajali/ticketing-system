@@ -41,7 +41,7 @@ export class GroupSubscribeComponent implements OnInit {
         this.onNoClick();
       },
       (error) => {
-        this.shared.showToastDanger(error, 'Group subscription');
+        this.shared.showToastDanger(error.error, 'Group subscription');
       }
     );
   }
@@ -56,7 +56,7 @@ export class GroupSubscribeComponent implements OnInit {
         this.onNoClick();
       },
       (error) => {
-        this.shared.showToastDanger(error, 'Group unsubscription');
+        this.shared.showToastDanger(error.error, 'Group unsubscription');
       }
     );
   }

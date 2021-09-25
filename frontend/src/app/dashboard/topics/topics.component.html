@@ -29,8 +29,8 @@
         </ul>
       </div>
       <div
-        class="col col-md-4 col-sm-12 d-flex align-items-stretch"
         *ngFor="let topic of userTopics"
+        class="col col-md-4 col-sm-12 d-flex align-items-stretch"
       >
         <div class="card-group w-100">
           <div class="card">
@@ -75,6 +75,10 @@
                   <mat-icon>
                     <span><i class="fas fa-trash-alt"></i></span></mat-icon
                   ><span>Delete</span>
+
+                  <span matTooltip="Staff User" class="bg-success badge">
+                    <i class="fas fa-user-shield"></i
+                  ></span>
                 </button>
               </mat-menu>
             </div>
@@ -141,6 +145,9 @@
                   <mat-icon>
                     <span><i class="fas fa-trash-alt"></i></span></mat-icon
                   ><span>Delete</span>
+                  <span matTooltip="Staff User" class="bg-success badge">
+                    <i class="fas fa-user-shield"></i
+                  ></span>
                 </button>
               </mat-menu>
             </div>
@@ -153,18 +160,151 @@
         </div>
       </div>
     </div>
-    <div class="row">
+    <div class="row mb-2">
       <div class="col">
         <button
           *ngIf="user?.is_staff"
           type="button"
-          class="btn btn-outline-primary"
+          class="btn btn-outline-primary position-relative"
           style="float: right"
           (click)="openTopicCreateModal()"
         >
+          <span
+            matTooltip="Staff User"
+            class="
+              bg-success
+              position-absolute
+              top-0
+              start-100
+              translate-middle
+              badge
+              rounded-pill
+            "
+          >
+            <i class="fas fa-user-shield"></i
+          ></span>
           Add Topic
         </button>
       </div>
+    </div>
+    <div class="row" *ngIf="user.is_staff">
+      <hr />
+      <h1>
+        All {{ group.name }} Tickets
+        <span matTooltip="Staff User" class="badge bg-success">
+          <i class="fas fa-user-shield"></i
+        ></span>
+      </h1>
+
+      <ng-container *ngFor="let ticket of tickets">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <div class="card-group m-2">
+            <div
+              class="card"
+              id="ticket-card"
+              (click)="navigateTicket(ticket)"
+              [ngClass]="{
+                'border-primary': ticket.status === 'OP',
+                'border-warning': ticket.status === 'PE',
+                'border-success': ticket.status === 'RE',
+                'border-danger': ticket.status === 'EX',
+                'border-dark': ticket.status === 'CL'
+              }"
+            >
+              <div class="card-header">
+                <h3 class="card-title float-start">
+                  {{ ticket.title }}
+                </h3>
+                <div class="icon-group float-end">
+                  <div class="status d-inline m-1 fs-5">
+                    <span
+                      *ngIf="ticket.status === 'OP'"
+                      [matTooltip]="
+                        ticket.status === 'OP'
+                          ? 'OPEN -' + ticket.last_updated_by.username
+                          : ''
+                      "
+                      class="text-primary"
+                      ><i class="fas fa-circle"></i
+                    ></span>
+                    <span
+                      *ngIf="ticket.status === 'PE'"
+                      [matTooltip]="
+                        ticket.status === 'PE'
+                          ? 'IN PENDING -' + ticket.last_updated_by.username
+                          : ''
+                      "
+                      class="text-warning"
+                      ><i class="fas fa-circle"></i
+                    ></span>
+                    <span
+                      *ngIf="ticket.status === 'RE'"
+                      [matTooltip]="
+                        ticket.status === 'RE'
+                          ? 'RESOLVED -' + ticket.last_updated_by.username
+                          : ''
+                      "
+                      class="text-success"
+                      ><i class="fas fa-circle"></i
+                    ></span>
+                    <span
+                      *ngIf="ticket.status === 'EX'"
+                      [matTooltip]="
+                        ticket.status === 'EX'
+                          ? 'EXPIRED -' + ticket.last_updated_by.username
+                          : ''
+                      "
+                      class="text-danger"
+                      ><i class="fas fa-circle"></i
+                    ></span>
+                    <span
+                      *ngIf="ticket.status === 'CL'"
+                      [matTooltip]="
+                        ticket.status === 'CL'
+                          ? 'CLOSED -' + ticket.last_updated_by.username
+                          : ''
+                      "
+                      class="text-dark"
+                      ><i class="fas fa-circle"></i
+                    ></span>
+                  </div>
+                  <div class="creation d-inline m-1 fs-5">
+                    <span
+                      [matTooltip]="
+                        'Creation date: ' +
+                        (ticket.created_at
+                          ? (ticket.created_at | date: 'fullDate')
+                          : '')
+                      "
+                      class="text-secondary"
+                      ><i class="fas fa-calendar"></i
+                    ></span>
+                  </div>
+                  <div class="expiration d-inline m-1 fs-5">
+                    <span
+                      [matTooltip]="
+                        'Expiration date: ' +
+                        (ticket.expiration | date: 'fullDate')
+                      "
+                      class="text-secondary"
+                      ><i class="fas fa-calendar-times"></i
+                    ></span>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                Content:
+                <p class="card-text text-truncate">{{ ticket.content }}</p>
+              </div>
+              <div class="card-footer">
+                <small class="text-muted">
+                  Creator: {{ ticket.creator.username }}</small
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>
