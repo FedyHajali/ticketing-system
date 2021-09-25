@@ -3,6 +3,7 @@ import { Subject } from 'rxjs/internal/Subject';
 import { ApiService, AuthService } from '../api/services';
 import { Group, Ticket, Topic, User } from '../api/models';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,8 @@ export class SharedService {
   constructor(
     private auth: AuthService,
     private api: ApiService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private toastr: ToastrService
   ) {}
 
   setActiveUser() {
@@ -57,5 +59,15 @@ export class SharedService {
       /** spinner ends after 2 seconds */
       this.spinner.hide();
     }, 2000);
+  }
+
+  showToastSuccess(title: string, message: string) {
+    this.toastr.success(message, title);
+  }
+  showToastDanger(title: string, message: string) {
+    this.toastr.error(message, title);
+  }
+  showToastWarning(title: string, message: string) {
+    this.toastr.warning(message, title);
   }
 }

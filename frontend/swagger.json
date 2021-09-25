@@ -105,6 +105,28 @@ paths:
         in: path
         required: true
         type: string
+  /api/tickets/all-topics-users/{ticket_id}/:
+    get:
+      operationId: api_tickets_all-topics-users_read
+      summary: Returns the list of users subscribed to the ticket topics
+      description: Returns the list of users subscribed to the ticket topics
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '404':
+          description: Not Found
+      tags:
+        - api
+    parameters:
+      - name: ticket_id
+        in: path
+        required: true
+        type: string
   /api/tickets/create/:
     post:
       operationId: api_tickets_create_create

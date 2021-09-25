@@ -78,14 +78,14 @@
             >
               Add Group
             </button>
-            <div class="card" *ngIf="allGroups?.length === 0">
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item">
-                  You are subscribed to all available groups.
-                </li>
-              </ul>
-            </div>
           </div>
+        </div>
+        <div class="card" *ngIf="allGroups?.length === 0">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              You are subscribed to all available groups.
+            </li>
+          </ul>
         </div>
         <ng-container *ngFor="let group of allGroups">
           <div class="card">

@@ -38,11 +38,12 @@ import { PendingCountComponent } from './reports/pending-count/pending-count.com
 import { OpenCountComponent } from './reports/open-count/open-count.component';
 import { BubbleChartComponent } from './reports/bubble-chart/bubble-chart.component';
 import { DynamicGraphComponent } from './reports/dynamic-graph/dynamic-graph.component';
-import { ListComponent } from './reports/list/list.component'
+import { ListComponent } from './reports/list/list.component';
 import { GroupDeleteComponent } from './dashboard/groups/group-delete/group-delete.component';
 import { TicketAddReceiverComponent } from './dashboard/tickets/ticket-detail/ticket-add-receiver/ticket-add-receiver.component';
 import { TicketChangeStatusComponent } from './dashboard/tickets/ticket-detail/ticket-change-status/ticket-change-status.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { ToastrModule } from 'ngx-toastr';
 @NgModule({
   declarations: [
     AppComponent,
@@ -89,7 +90,12 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     CommonModule,
     BrowserAnimationsModule,
     MaterialModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    ToastrModule.forRoot({
+      timeOut: 1000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
   ],
   providers: [
     {

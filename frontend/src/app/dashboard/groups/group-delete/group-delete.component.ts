@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthService } from 'src/app/api/services';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-group-delete',
@@ -11,7 +12,8 @@ export class GroupDeleteComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<GroupDeleteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private auth: AuthService
+    private auth: AuthService,
+    private shared: SharedService
   ) {}
 
   onNoClick(): void {
@@ -25,6 +27,14 @@ export class GroupDeleteComponent implements OnInit {
       .subscribe((response) => {
         console.log(response);
         this.onNoClick();
+        this.shared.showToastSuccess(
+          'Successfully deleted',
+          'Group Delete'
+        );
+        this.onNoClick();
+      },
+      (error) => {
+        this.shared.showToastDanger(error, 'Group Delete');
       });
   }
 }

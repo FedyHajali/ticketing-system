@@ -109,7 +109,10 @@ export class TicketCreateComponent implements OnInit {
     };
     console.log(ticket);
     this.api.apiTicketsCreateCreate(ticket).subscribe((response) => {
-      console.log(response);
+      this.shared.showToastSuccess('Successfully create', 'Ticket Create');      
+    },
+    (error) => {
+      this.shared.showToastDanger(error, 'Ticket Create');
     });
   }
 }

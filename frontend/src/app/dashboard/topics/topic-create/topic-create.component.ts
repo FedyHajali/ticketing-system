@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Group, Topic } from 'src/app/api/models';
 import { ApiService, AuthService } from 'src/app/api/services';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-topic-create',
@@ -20,6 +21,7 @@ export class TopicCreateComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
     private api: ApiService,
+    private shared: SharedService
   ) {}
 
   onNoClick(): void {
@@ -38,8 +40,12 @@ export class TopicCreateComponent implements OnInit {
     };
 
     this.api.apiTopicsCreateCreate(topic).subscribe((response) => {
-      console.log(response);
+      
+      this.shared.showToastSuccess('Successfully create', 'Topic Create');
       this.onNoClick();
+    },
+    (error) => {
+      this.shared.showToastDanger(error, 'Topic Create');
     });
   }
 }
