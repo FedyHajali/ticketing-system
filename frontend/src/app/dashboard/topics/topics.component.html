@@ -25,7 +25,10 @@
       <h1>Your Topics</h1>
       <div class="card" *ngIf="userTopics?.length === 0">
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">You are not subscribed to any topic.</li>
+          <li class="list-group-item">
+            You are not subscribed to any topic, or maybe this is a new group
+            and there aren't any yet
+          </li>
         </ul>
       </div>
       <div
@@ -102,11 +105,22 @@
     <div class="row mb-2">
       <hr />
       <h1>All Topics</h1>
-      <div class="card" *ngIf="allTopics?.length === 0">
+      <div
+        class="card"
+        *ngIf="allTopics?.length === 0 && userTopics?.length !== 0"
+      >
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
             You are subscribed to all available topics.
           </li>
+        </ul>
+      </div>
+      <div
+        class="card"
+        *ngIf="allTopics?.length === 0 && userTopics?.length === 0"
+      >
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">New group, there aren't topics yet.</li>
         </ul>
       </div>
       <div
