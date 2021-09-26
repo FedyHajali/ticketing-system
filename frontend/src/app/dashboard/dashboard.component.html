@@ -189,15 +189,21 @@
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
-                          class="m-1 text-success"
                           [matTooltip]="
-                            ticket.created_at ? ticket.created_at : ''
+                            'Creation date: ' +
+                            (ticket.created_at
+                              ? (ticket.created_at | date: 'fullDate')
+                              : '')
                           "
+                          class="m-1 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
+                          [matTooltip]="
+                            'Expiration date: ' +
+                            (ticket.expiration | date: 'fullDate')
+                          "
                           class="m-1 text-danger"
-                          [matTooltip]="ticket.expiration"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>
@@ -224,15 +230,21 @@
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
-                          class="m-1 text-success"
                           [matTooltip]="
-                            ticket.created_at ? ticket.created_at : ''
+                            'Creation date: ' +
+                            (ticket.created_at
+                              ? (ticket.created_at | date: 'fullDate')
+                              : '')
                           "
+                          class="m-1 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
+                          [matTooltip]="
+                            'Expiration date: ' +
+                            (ticket.expiration | date: 'fullDate')
+                          "
                           class="m-1 text-danger"
-                          [matTooltip]="ticket.expiration"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>
@@ -260,15 +272,21 @@
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
-                          class="m-1 text-success"
                           [matTooltip]="
-                            ticket.created_at ? ticket.created_at : ''
+                            'Creation date: ' +
+                            (ticket.created_at
+                              ? (ticket.created_at | date: 'fullDate')
+                              : '')
                           "
+                          class="m-1 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
+                          [matTooltip]="
+                            'Expiration date: ' +
+                            (ticket.expiration | date: 'fullDate')
+                          "
                           class="m-1 text-danger"
-                          [matTooltip]="ticket.expiration"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>
@@ -295,15 +313,21 @@
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
-                          class="m-1 text-success"
                           [matTooltip]="
-                            ticket.created_at ? ticket.created_at : ''
+                            'Creation date: ' +
+                            (ticket.created_at
+                              ? (ticket.created_at | date: 'fullDate')
+                              : '')
                           "
+                          class="m-1 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
+                          [matTooltip]="
+                            'Expiration date: ' +
+                            (ticket.expiration | date: 'fullDate')
+                          "
                           class="m-1 text-danger"
-                          [matTooltip]="ticket.expiration"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>
@@ -313,16 +337,18 @@
             ></mat-tab>
           </mat-tab-group>
         </div>
-        <div class="row mt-4" *ngIf="user.is_staff">
+        <div class="row mt-4" *ngIf="user?.is_staff">
           <hr />
           <div class="col">
-            <h1 class="float-start">All Tickets 
+            <h1 class="float-start">
+              All Tickets
               <span matTooltip="Staff User" class="badge bg-success fs-6">
                 <i class="fas fa-user-shield"></i
-              ></span></h1>
+              ></span>
+            </h1>
           </div>
         </div>
-        <div class="row" *ngIf="user.is_staff">
+        <div class="row" *ngIf="user?.is_staff">
           <mat-tab-group animationDuration="1ms">
             <mat-tab label="Open">
               <ng-container *ngFor="let ticket of allTickets">
@@ -343,15 +369,21 @@
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
-                          class="m-1 text-success"
                           [matTooltip]="
-                            ticket.created_at ? ticket.created_at : ''
+                            'Creation date: ' +
+                            (ticket.created_at
+                              ? (ticket.created_at | date: 'fullDate')
+                              : '')
                           "
+                          class="m-1 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
+                          [matTooltip]="
+                            'Expiration date: ' +
+                            (ticket.expiration | date: 'fullDate')
+                          "
                           class="m-1 text-danger"
-                          [matTooltip]="ticket.expiration"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>
@@ -378,15 +410,21 @@
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
-                          class="m-1 text-success"
                           [matTooltip]="
-                            ticket.created_at ? ticket.created_at : ''
+                            'Creation date: ' +
+                            (ticket.created_at
+                              ? (ticket.created_at | date: 'fullDate')
+                              : '')
                           "
+                          class="m-1 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
+                          [matTooltip]="
+                            'Expiration date: ' +
+                            (ticket.expiration | date: 'fullDate')
+                          "
                           class="m-1 text-danger"
-                          [matTooltip]="ticket.expiration"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>
@@ -414,15 +452,21 @@
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
-                          class="m-1 text-success"
                           [matTooltip]="
-                            ticket.created_at ? ticket.created_at : ''
+                            'Creation date: ' +
+                            (ticket.created_at
+                              ? (ticket.created_at | date: 'fullDate')
+                              : '')
                           "
+                          class="m-1 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
+                          [matTooltip]="
+                            'Expiration date: ' +
+                            (ticket.expiration | date: 'fullDate')
+                          "
                           class="m-1 text-danger"
-                          [matTooltip]="ticket.expiration"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>
@@ -449,15 +493,21 @@
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
-                          class="m-1 text-success"
                           [matTooltip]="
-                            ticket.created_at ? ticket.created_at : ''
+                            'Creation date: ' +
+                            (ticket.created_at
+                              ? (ticket.created_at | date: 'fullDate')
+                              : '')
                           "
+                          class="m-1 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
+                          [matTooltip]="
+                            'Expiration date: ' +
+                            (ticket.expiration | date: 'fullDate')
+                          "
                           class="m-1 text-danger"
-                          [matTooltip]="ticket.expiration"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>

@@ -61,7 +61,6 @@ export class TicketChangeStatusComponent implements OnInit {
           this.onNoClick();
         },
         (error) => {
-          console.log(error);
           this.shared.showToastDanger(error.error, 'Change ticket status');
         }
       );
@@ -85,7 +84,6 @@ export class TicketChangeStatusComponent implements OnInit {
     this.isClose = false;
     if (!event) {
       this.isClose = true;
-      console.log(this.form.controls.status.value);
     }
   }
 

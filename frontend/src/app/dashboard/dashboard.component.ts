@@ -73,9 +73,11 @@ export class DashboardComponent implements OnInit {
           this.creatorTickets = tickets;
         });
     }
-    this.api.apiTicketsListAllList().subscribe((tickets) => {
-      this.allTickets = tickets;
-    });
+    if (this.user?.is_staff) {
+      this.api.apiTicketsListAllList().subscribe((tickets) => {
+        this.allTickets = tickets;
+      });
+    }
   }
 
   navigateGroup(group: Group) {
