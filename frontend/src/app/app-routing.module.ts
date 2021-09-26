@@ -49,7 +49,14 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard] },
-  { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
+  {
+    path: 'settings',
+    children: [
+      { path: '', component: SettingsComponent },
+      { path: 'account', component: SettingsComponent },
+    ],
+    canActivate: [AuthGuard],
+  },
   { path: '**', component: PageNotFoundComponent }, // Wildcard route for a 404 page
 ];
 

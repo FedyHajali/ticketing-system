@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Group, Ticket, Topic, User } from 'src/app/api/models';
 import { ApiService, AuthService } from 'src/app/api/services';
@@ -26,15 +26,25 @@ export class TicketCreateComponent implements OnInit {
   selectedGroups: Group[] = [];
   selectedTopics!: Topic[];
   form = this.fb.group({
-    title: '',
-    content: '',
-    status: 'OP',
-    groups: null,
-    topics: null,
-    receivers: null,
+    title: [
+      '',
+      [Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(20),]
+    ],
+    content: [
+      '',
+      [Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(100),]
+    ],
+    status: ['OP', Validators.required],
+    groups: [null, Validators.required],
+    topics: [null, Validators.required],
+    receivers: [null, Validators.required],
     creator: this.user,
     last_updated_by: this.user,
-    expiration: null,
+    expiration: [null, Validators.required],
   });
 
   constructor(
@@ -109,7 +119,7 @@ export class TicketCreateComponent implements OnInit {
       receivers: this.form.controls.receivers.value,
       creator: this.user,
       last_updated_by: this.user,
-      expiration: this.form.controls.expiration.value.toISOString()
+      expiration: this.form.controls.expiration.value.toISOString(),
     };
     this.api.apiTicketsCreateCreate(ticket).subscribe(
       (response) => {

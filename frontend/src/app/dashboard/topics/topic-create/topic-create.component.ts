@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Group, Topic } from 'src/app/api/models';
 import { ApiService, AuthService } from 'src/app/api/services';
@@ -12,8 +12,8 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class TopicCreateComponent implements OnInit {
   form = this.fb.group({
-    name: '',
-    description: '',
+    name: ['', [Validators.required, Validators.minLength(2),Validators.maxLength(20)]],
+    description: ['', [Validators.required, Validators.minLength(2),Validators.maxLength(50)]],
   });
   group!: Group;
   topic!: Topic;

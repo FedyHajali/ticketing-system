@@ -120,10 +120,39 @@
                       formControlName="comment"
                       placeholder="Add a new comment"
                     ></textarea>
+                    <mat-error
+                      *ngIf="
+                        form.controls.comment.hasError('minlength') &&
+                        !form.controls.comment.hasError('maxlength') &&
+                        !form.controls.comment.hasError('required')
+                      "
+                    >
+                      Please enter a valid comment, <strong>minimum length</strong> legth is 2
+                      characters
+                    </mat-error>
+                    <mat-error
+                      *ngIf="
+                        form.controls.comment.hasError('maxlength') &&
+                        !form.controls.comment.hasError('minlength') &&
+                        !form.controls.comment.hasError('required')
+                      "
+                    >
+                      Please enter a valid comment, <strong>maximum length</strong> is 100
+                      characters.
+                    </mat-error>
+                    <mat-error
+                      *ngIf="form.controls.comment.hasError('required')"
+                    >
+                      comment is <strong>required</strong>
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <br />
-                <button type="submit" class="btn btn-outline-primary float-end">
+                <button
+                  type="submit"
+                  [disabled]="form.invalid"
+                  class="btn btn-outline-primary float-end"
+                >
                   Save Comment
                 </button>
               </form>

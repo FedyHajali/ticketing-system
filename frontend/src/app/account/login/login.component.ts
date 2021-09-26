@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/internal/Subject';
 import { AuthService } from 'src/app/api/services';
@@ -13,9 +13,10 @@ import { SharedService } from 'src/app/services/shared.service';
 export class LoginComponent implements OnInit {
   userSubject = new Subject<User>();
   user: User | undefined;
+  errorMessage: string = '';
   form = this.fb.group({
-    username: '',
-    password: '',
+    username: ['', Validators.required],
+    password: ['', Validators.required],
   });
 
   constructor(
@@ -45,6 +46,7 @@ export class LoginComponent implements OnInit {
         }
       },
       (error) => {
+        this.errorMessage = error.error.non_field_errors;
         console.error(error);
       }
     );

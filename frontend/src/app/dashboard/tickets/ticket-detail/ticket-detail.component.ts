@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Group, Topic, User, Comment } from 'src/app/api/models';
@@ -27,7 +27,7 @@ export class TicketDetailComponent implements OnInit {
   userIsReceiver = false;
   userIsCreator = false;
   form = this.fb.group({
-    comment: '',
+    comment: ['', [Validators.required, Validators.minLength(2),Validators.maxLength(100)]],
   });
   constructor(
     private dialog: MatDialog,

@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
-  <a class="navbar-brand ms-2" routerLink="/">UniDesk</a>
+  <a class="navbar-brand ms-4" routerLink="/">UniDesk</a>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <ul class="navbar-nav">
       <li class="nav-item active" routerLinkActive="active">
@@ -27,17 +27,20 @@
         <li class="nav-item" *ngIf="!isAuthenticated">
           <a class="nav-link nav-link d-flex" routerLink="/login">Sign In</a>
         </li>
-        <li class="nav-item" *ngIf="isAuthenticated">
-          <!-- <i class="fa fa-user-circle fa-lg"></i> -->
-          <a class="nav-link nav-link d-flex">{{ user?.username }}</a>
+        <li class="nav-item text-center" *ngIf="isAuthenticated">
+          <a class="nav-link nav-link"
+            >{{ user?.username
+            }}<span class="badge fs-6"> <i class="fa fa-user-circle"></i></span
+          ></a>
         </li>
-        <li class="nav-item" *ngIf="isAuthenticated">
+        <li class="nav-item me-4" *ngIf="isAuthenticated">
           <a
             class="nav-link nav-link d-flex"
             routerLink="/login"
             (click)="logout()"
-            >Logout</a
-          >
+            >Logout<span class="badge fs-6">
+              <i class="fa fa-sign-out-alt"></i></span
+          ></a>
         </li>
       </ul>
     </div>

@@ -128,7 +128,11 @@
             <div class="row mb-3">
               <div class="col">
                 <div class="button-group float-end">
-                  <button type="submit" class="btn btn-outline-success me-3">
+                  <button
+                    type="submit"
+                    [disabled]="form.invalid"
+                    class="btn btn-outline-success me-3"
+                  >
                     Create
                   </button>
                   <button

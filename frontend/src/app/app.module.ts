@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroupDirective, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
@@ -23,7 +23,6 @@ import { TicketDetailComponent } from './dashboard/tickets/ticket-detail/ticket-
 import { TicketCreateComponent } from './dashboard/tickets/ticket-create/ticket-create.component';
 import { TicketDeleteComponent } from './dashboard/tickets/ticket-delete/ticket-delete.component';
 import { TopicDeleteComponent } from './dashboard/topics/topic-delete/topic-delete.component';
-import { GroupsComponent } from './dashboard/groups/groups.component';
 import { GroupCreateComponent } from './dashboard/groups/group-create/group-create.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { MaterialModule } from '../app/material/material.module';
@@ -44,6 +43,11 @@ import { TicketChangeStatusComponent } from './dashboard/tickets/ticket-detail/t
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
 import { TicketCommentDeleteComponent } from './dashboard/tickets/ticket-detail/ticket-comment-delete/ticket-comment-delete.component';
+import { ProfileComponent } from './settings/profile/profile.component';
+import {
+  ErrorStateMatcher,
+  ShowOnDirtyErrorStateMatcher,
+} from '@angular/material/core';
 @NgModule({
   declarations: [
     AppComponent,
@@ -63,7 +67,6 @@ import { TicketCommentDeleteComponent } from './dashboard/tickets/ticket-detail/
     TicketDeleteComponent,
     TopicDeleteComponent,
     PageNotFoundComponent,
-    GroupsComponent,
     GroupCreateComponent,
     GroupSubscribeComponent,
     TopicSubscribeComponent,
@@ -79,6 +82,7 @@ import { TicketCommentDeleteComponent } from './dashboard/tickets/ticket-detail/
     TicketAddReceiverComponent,
     TicketChangeStatusComponent,
     TicketCommentDeleteComponent,
+    ProfileComponent,
   ],
   imports: [
     ChartsModule,
@@ -103,7 +107,16 @@ import { TicketCommentDeleteComponent } from './dashboard/tickets/ticket-detail/
       useClass: AuthInterceptor,
       multi: true,
     },
+    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher },
   ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}

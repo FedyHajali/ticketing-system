@@ -1,6 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Group, User } from 'src/app/api/models';
-import { SharedService } from 'src/app/services/shared.service';
+import { Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,13 +6,7 @@ import { SharedService } from 'src/app/services/shared.service';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-  // @Input() groups: Group[] = [];
-  // @Output() changeGroupEvent = new EventEmitter<Group>();
   constructor() {}
 
   ngOnInit(): void {}
-
-  // changeGroup(group: Group) {
-  //   this.changeGroupEvent.emit(group);
-  // }
 }

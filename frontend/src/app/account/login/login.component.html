@@ -34,7 +34,28 @@
             </div>
             <br />
             <br />
-            <button type="submit" class="btn login_btn">Login</button>
+            <button
+              type="submit"
+              [disabled]="form.invalid"
+              class="btn login_btn"
+            >
+              Login
+            </button>
+            <br />
+            <br />
+            <div
+              class="alert alert-danger d-flex align-items-center"
+              role="alert"
+              *ngIf="errorMessage !== ''"
+            >
+              <span
+                class="position-absolute top-0 end-0 text-danger me-2 mt-1"
+                style="cursor: pointer"
+                (click)="errorMessage = ''"
+                ><i class="fas fa-times"></i
+              ></span>
+              <div>{{ errorMessage }}</div>
+            </div>
           </form>
         </div>
       </div>

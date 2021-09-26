@@ -16,12 +16,24 @@
                       ><i class="fas fa-user"></i
                     ></span>
                   </div>
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Username"
-                    formControlName="username"
-                  />
+                  <mat-form-field appearance="fill">
+                    <mat-label>Username</mat-label>
+                    <input type="text" matInput formControlName="username" />
+                    <mat-error
+                      *ngIf="
+                        form.controls.username.hasError('maxlength') &&
+                        !form.controls.username.hasError('required')
+                      "
+                    >
+                      Please enter a valid username, <strong>maximum length</strong> is 20
+                      characters.
+                    </mat-error>
+                    <mat-error
+                      *ngIf="form.controls.username.hasError('required')"
+                    >
+                      Username is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
                 </div>
                 <br />
                 <div class="input-group">
@@ -30,12 +42,21 @@
                       ><i class="fas fa-at"></i
                     ></span>
                   </div>
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Email"
-                    formControlName="email"
-                  />
+                  <mat-form-field appearance="fill">
+                    <mat-label>Email</mat-label>
+                    <input type="email" matInput formControlName="email" />
+                    <mat-error
+                      *ngIf="
+                        form.controls.email.hasError('email') &&
+                        !form.controls.email.hasError('required')
+                      "
+                    >
+                      Please enter a <strong>valid email</strong> 
+                    </mat-error>
+                    <mat-error *ngIf="form.controls.email.hasError('required')">
+                      Email is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
                 </div>
                 <br />
                 <div class="input-group">
@@ -44,12 +65,38 @@
                       ><i class="fas fa-key"></i
                     ></span>
                   </div>
-                  <input
-                    type="password"
-                    class="form-control"
-                    placeholder="Password"
-                    formControlName="password"
-                  />
+                  <mat-form-field appearance="fill">
+                    <mat-label>Password</mat-label>
+                    <input
+                      type="password"
+                      matInput
+                      formControlName="password"
+                    />
+                    <mat-error
+                      *ngIf="
+                        form.controls.password.hasError('minlength') &&
+                        !form.controls.password.hasError('maxlength') &&
+                        !form.controls.password.hasError('required')
+                      "
+                    >
+                      Please enter a valid password, <strong>minimum length</strong> is 8 characters
+                    </mat-error>
+                    <mat-error
+                      *ngIf="
+                        form.controls.password.hasError('maxlength') &&
+                        !form.controls.password.hasError('minlength') &&
+                        !form.controls.password.hasError('required')
+                      "
+                    >
+                      Please enter a valid password, <strong>maximum length</strong> is 20
+                      characters.
+                    </mat-error>
+                    <mat-error
+                      *ngIf="form.controls.password.hasError('required')"
+                    >
+                      Password is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
                 </div>
                 <br />
                 <div class="input-group">
@@ -58,12 +105,24 @@
                       ><i class="fas fa-key"></i
                     ></span>
                   </div>
-                  <input
-                    type="password"
-                    class="form-control"
-                    placeholder="Confirm Password"
-                    formControlName="password2"
-                  />
+                  <mat-form-field appearance="fill">
+                    <mat-label>Confirm Password</mat-label>
+                    <input
+                      type="password"
+                      matInput
+                      formControlName="password2"
+                    />
+                    <mat-error
+                      *ngIf="form.controls.password2.hasError('required')"
+                    >
+                      Please confirm your password
+                    </mat-error>
+                    <mat-error
+                      *ngIf="form.controls.password2.hasError('mustMatch')"
+                    >
+                      Passwords <strong>must match</strong> 
+                    </mat-error>
+                  </mat-form-field>
                 </div>
                 <br />
               </div>
@@ -74,12 +133,10 @@
                       ><i class="fas fa-user"></i
                     ></span>
                   </div>
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="First Name"
-                    formControlName="first_name"
-                  />
+                  <mat-form-field appearance="fill">
+                    <mat-label>First Name</mat-label>
+                    <input type="text" matInput formControlName="first_name" />
+                  </mat-form-field>
                 </div>
                 <br />
                 <div class="input-group">
@@ -88,12 +145,10 @@
                       ><i class="fas fa-user"></i
                     ></span>
                   </div>
-                  <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Last Name"
-                    formControlName="last_name"
-                  />
+                  <mat-form-field appearance="fill">
+                    <mat-label>Last Name</mat-label>
+                    <input type="text" matInput formControlName="last_name" />
+                  </mat-form-field>
                 </div>
                 <br />
                 <div class="input-group">
@@ -111,6 +166,11 @@
                         >{{ group.name }}</mat-option
                       >
                     </mat-select>
+                    <mat-error
+                      *ngIf="form.controls.groups.hasError('required')"
+                    >
+                      Choise of a group is required
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <br />
@@ -121,13 +181,15 @@
                     ></span>
                   </div>
                   <div class="row align-items-center remember">
-                    <input type="checkbox" formControlName="is_staff" /> Is
-                    Staff
+                    <input type="checkbox" formControlName="is_staff" /> You're
+                    staff ?
                   </div>
                 </div>
               </div>
             </div>
-            <button type="submit" class="btn">Sign Up</button>
+            <button type="submit" [disabled]="form.invalid" class="btn">
+              Sign Up
+            </button>
           </form>
         </div>
       </div>

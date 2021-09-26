@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { User } from 'src/app/api/models';
 import { ApiService } from 'src/app/api/services';
@@ -12,7 +12,7 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class TicketAddReceiverComponent implements OnInit {
   form = this.fb.group({
-    receiver: null,
+    receiver: [null, Validators.required],
   });
   isClose = false;
   receivers: User[] = [];

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService, AuthService } from 'src/app/api/services';
 import { User, Group } from 'src/app/api/models';
 import { SharedService } from 'src/app/services/shared.service';
-
+import { MustMatch } from '../../services/shared.service';
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
@@ -12,17 +12,29 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class RegistrationComponent implements OnInit {
   groups: Group[] = [];
-
-  form = this.fb.group({
-    username: '',
-    email: '',
-    password: '',
-    password2: '',
-    first_name: '',
-    last_name: '',
-    is_staff: true,
-    groups: null,
-  });
+  
+  form = this.fb.group(
+    {
+      username: ['', [Validators.required, Validators.maxLength(20)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.maxLength(20),
+        ],
+      ],
+      password2: ['', Validators.required],
+      first_name: [''],
+      last_name: [''],
+      is_staff: [false, Validators.required],
+      groups: [null, Validators.required],
+    },
+    {
+      validator: MustMatch('password', 'password2'),
+    }
+  );
 
   constructor(
     private fb: FormBuilder,

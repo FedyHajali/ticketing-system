@@ -1,4 +1,4 @@
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
   <h1>Add Receivers</h1>
   <div class="form-group">
     <mat-form-field appearance="fill" class="w-100">
@@ -11,15 +11,18 @@
           receiver.username
         }}</mat-option>
       </mat-select>
+      <mat-error *ngIf="form.controls.receiver.hasError('required')">
+        Receiver is <strong>required</strong>
+      </mat-error>
     </mat-form-field>
   </div>
   <br />
   <div class="button group text-center">
     <button
-      type="button"
+      type="submit"
       class="btn btn-outline-success m-2"
       mat-raised-button
-      (click)="onSubmit()"
+      [disabled]="form.invalid"
     >
       Add
     </button>

@@ -1,18 +1,39 @@
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="create()">
   <h1>Create new Group</h1>
   <div class="form-group">
     <mat-form-field class="w-100" appearance="fill">
       <mat-label>New Group Name</mat-label>
       <input matInput formControlName="name" />
+      <mat-error
+        *ngIf="
+          form.controls.name.hasError('minlength') &&
+          !form.controls.name.hasError('maxlength') &&
+          !form.controls.name.hasError('required')
+        "
+      >
+        Please enter a valid group name, minimum legth is 2 characters
+      </mat-error>
+      <mat-error
+        *ngIf="
+          form.controls.name.hasError('maxlength') &&
+          !form.controls.name.hasError('minlength') &&
+          !form.controls.name.hasError('required')
+        "
+      >
+        Please enter a valid group name, <strong>maximum length</strong> is 30 characters.
+      </mat-error>
+      <mat-error *ngIf="form.controls.name.hasError('required')">
+        Group name is <strong>required</strong>
+      </mat-error>
     </mat-form-field>
   </div>
   <br />
   <div class="button-group text-center">
     <button
-      type="button"
+      type="submit"
       class="btn btn-outline-success me-2"
       mat-raised-button
-      (click)="create()"
+      [disabled]="form.invalid"
     >
       Create Group
     </button>

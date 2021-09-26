@@ -1,1 +1,32 @@
-<p>settings works!</p>
+<mat-drawer-container class="w-100" style="height: 92vh" autosize>
+    <button
+      type="button"
+      mat-button
+      class="btn btn-outline-primary position-absolute top-0 start-0 m-2"
+      (click)="drawer.toggle()"
+    >
+      <span><i class="fa fa-bars"></i></span>
+    </button>
+    <mat-drawer #drawer class="sidenav p-4" mode="side" [opened]="true">
+      <h3>Settings</h3>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Your Account</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Groups</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Topics</a>
+        </li>
+      </ul>
+    </mat-drawer>
+
+    
+    <div class="container">
+      <div class="row">
+        <div class="col"></div>
+      </div>
+    </div>
+  </mat-drawer-container>
+  
