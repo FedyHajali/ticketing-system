@@ -10,7 +10,7 @@
               </h1>
               <div class="btn-group float-end">
                 <button
-                  *ngIf="ticket?.creator?.id === user.id"
+                  *ngIf="userIsCreator"
                   type="button"
                   class="btn btn-outline-danger me-3"
                   (click)="deleteTicketModal(ticket)"
@@ -36,21 +36,17 @@
                 <h4 class="d-inline">Actions</h4>
               </div>
               <mat-chip-list aria-label="Actions">
-                <mat-chip color="primary">Upload</mat-chip>
                 <mat-chip
-                  color="secondary"
                   style="cursor: pointer"
-                  (click)="changeStatusModal()"
+                  [disabled]="!userIsReceiver && !userIsCreator"
+                  (click)="!userIsReceiver ? null : changeStatusModal()"
                   >Change Status</mat-chip
                 >
                 <mat-chip
-                  color="primary"
                   style="cursor: pointer"
-                  [disabled]="
-                    ticket?.status === 'CL' || ticket?.creator?.id !== user?.id
-                  "
+                  [disabled]="ticket?.status === 'CL' || !userIsCreator"
                   (click)="
-                    ticket?.status === 'CL' || ticket?.creator?.id !== user?.id
+                    ticket?.status === 'CL' || !userIsCreator
                       ? null
                       : addReceiverModal()
                   "

@@ -24,6 +24,8 @@ export class TicketDetailComponent implements OnInit {
   topic!: Topic;
   ticket!: Ticket;
   panelOpenState = true;
+  userIsReceiver = false;
+  userIsCreator = false;
   form = this.fb.group({
     comment: '',
   });
@@ -34,11 +36,12 @@ export class TicketDetailComponent implements OnInit {
     private shared: SharedService,
     private api: ApiService,
     private fb: FormBuilder
-  ) {}
+  ) {
+    this.user = this.shared.getActiveUser();
+  }
 
   ngOnInit() {
     this.shared.showSpinner();
-    this.user = this.shared.getActiveUser();
     this.sub = this.route.params.subscribe((params) => {
       this.ticket_id = +params['ticket_id'];
     });
@@ -49,7 +52,23 @@ export class TicketDetailComponent implements OnInit {
   getTicketDetail(ticket_id: number) {
     this.api.apiTicketsDetailRead(ticket_id.toString()).subscribe((ticket) => {
       this.ticket = ticket;
+      this.checkUserIsReceiver();
+      this.checkUserIsCreator();
     });
+  }
+
+  checkUserIsReceiver() {
+    this.ticket?.receivers.forEach((receiver) => {
+      if (receiver.id === this.user.id) {
+        this.userIsReceiver = true;
+      }
+    });
+  }
+
+  checkUserIsCreator() {
+    if (this.ticket.creator.id === this.user.id) {
+      this.userIsCreator = true;
+    }
   }
 
   addReceiverModal() {

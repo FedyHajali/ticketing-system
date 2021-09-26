@@ -28,11 +28,12 @@ export class TopicsComponent implements OnInit {
     private auth: AuthService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.user = this.shared.getActiveUser();
+  }
 
   ngOnInit(): void {
     this.shared.showSpinner();
-    this.user = this.shared.getActiveUser();
     this.sub = this.route.params.subscribe((params) => {
       this.group_id = +params['group_id']; // (+) converts string 'id' to a number
       this.getGroup();
