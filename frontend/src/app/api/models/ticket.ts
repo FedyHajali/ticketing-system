@@ -17,5 +17,4 @@ export interface Ticket {
   status?: 'OP' | 'CL' | 'PE' | 'RE' | 'EX';
   title: string;
   topics: Array<Topic>;
-  uploads?: Array<number>;
 }

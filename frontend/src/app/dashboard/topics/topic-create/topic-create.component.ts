@@ -16,6 +16,7 @@ export class TopicCreateComponent implements OnInit {
     description: '',
   });
   group!: Group;
+  topic!: Topic;
   constructor(
     public dialogRef: MatDialogRef<TopicCreateComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -32,20 +33,40 @@ export class TopicCreateComponent implements OnInit {
   }
 
   create() {
-    let topic: Topic = {
+    this.topic = {
       name: this.form.controls['name'].value,
       description: this.form.controls['description'].value,
       group: this.data.group,
       users: [],
     };
 
-    this.api.apiTopicsCreateCreate(topic).subscribe((response) => {
-      
-      this.shared.showToastSuccess('Successfully create', 'Topic Create');
-      this.onNoClick();
-    },
-    (error) => {
-      this.shared.showToastDanger(error.error, 'Topic Create');
-    });
+    this.api.apiTopicsCreateCreate(this.topic).subscribe(
+      (topic) => {
+        this.topic = topic
+        this.shared.showToastSuccess('Successfully create', 'Topic Create');
+        this.subscribe();
+        this.onNoClick();
+      },
+      (error) => {
+        this.shared.showToastDanger(error.error, 'Topic Create');
+      }
+    );
+  }
+
+  subscribe() {
+    if (this.topic.id) {
+      this.api.apiTopicsAddUserUpdate(this.topic.id.toString()).subscribe(
+        (response) => {
+          this.shared.showToastSuccess(
+            'Successfully subscripted',
+            'Topic subscription'
+          );
+          this.onNoClick();
+        },
+        (error) => {
+          this.shared.showToastDanger(error.error, 'Topic subscription');
+        }
+      );
+    }
   }
 }

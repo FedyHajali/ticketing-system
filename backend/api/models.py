@@ -16,10 +16,6 @@ class Topic(models.Model):
         return self.name
 
 
-class File(models.Model):
-    filename = models.FileField(upload_to='uploads/files/')
-
-
 class Ticket(models.Model):
     class StatusChoices(models.TextChoices):
         OPEN = 'OP', 'Open'
@@ -36,9 +32,6 @@ class Ticket(models.Model):
     status = models.CharField(
         max_length=2, blank=False, choices=StatusChoices.choices, default=StatusChoices.OPEN)
     content = models.TextField()
-    uploads = models.ManyToManyField(
-        'File', blank=True, related_name='uploads'
-    )
 
     # Foreign keys
     creator = models.ForeignKey(

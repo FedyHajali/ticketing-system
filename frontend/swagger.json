@@ -1195,11 +1195,6 @@ definitions:
         title: Content
         type: string
         minLength: 1
-      uploads:
-        type: array
-        items:
-          type: integer
-        uniqueItems: true
   Login:
     required:
       - password
