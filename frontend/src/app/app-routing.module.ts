@@ -11,7 +11,6 @@ import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ReportsComponent } from './reports/reports.component';
 import { AuthGuard } from './services/auth.guard';
-import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/', pathMatch: 'full' },
@@ -49,14 +48,6 @@ const routes: Routes = [
     canActivate: [AuthGuard],
   },
   { path: 'reports', component: ReportsComponent, canActivate: [AuthGuard] },
-  {
-    path: 'settings',
-    children: [
-      { path: '', component: SettingsComponent },
-      { path: 'account', component: SettingsComponent },
-    ],
-    canActivate: [AuthGuard],
-  },
   { path: '**', component: PageNotFoundComponent }, // Wildcard route for a 404 page
 ];
 

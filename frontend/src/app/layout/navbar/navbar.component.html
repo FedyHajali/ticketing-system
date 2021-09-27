@@ -1,48 +1,91 @@
 <nav class="navbar navbar-expand-lg fixed-top" id="navbar">
   <a class="navbar-brand ms-4" routerLink="/">UniDesk</a>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <ul class="navbar-nav">
-      <li class="nav-item active" routerLinkActive="active">
-        <a class="nav-link nav-link active" routerLink="/dashboard"
-          >Dashboard</a
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+  >
+    <span class="text-white"><i class="fa fa-bars"></i></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <li class="nav-item">
+        <a class="nav-link nav-link" routerLink="/dashboard">Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-link" routerLink="/reports">Reports</a>
+      </li>
+      <li class="nav-item" *ngIf="user?.is_superuser">
+        <a class="nav-link nav-link" href="http://localhost:8000/admin/"
+          >Administration</a
         >
       </li>
-      <li class="nav-item active" routerLinkActive="active">
-        <a class="nav-link nav-link active" routerLink="/reports">Reports</a>
-      </li>
-      <li class="nav-item active" routerLinkActive="active">
-        <a class="nav-link nav-link active" routerLink="/settings">Settings</a>
-      </li>
-    </ul>
-  </div>
-  <div
-    class="collapse navbar-collapse justify-content-end"
-    id="navbarNavAltMarkup"
-  >
-    <div class="navbar-nav">
-      <ul class="navbar-nav">
-        <li class="nav-item" *ngIf="!isAuthenticated">
-          <a class="nav-link nav-link d-flex" routerLink="/register">Sign Up</a>
-        </li>
-        <li class="nav-item" *ngIf="!isAuthenticated">
-          <a class="nav-link nav-link d-flex" routerLink="/login">Sign In</a>
-        </li>
-        <li class="nav-item text-center" *ngIf="isAuthenticated">
-          <a class="nav-link nav-link"
-            >{{ user?.username
-            }}<span class="badge fs-6"> <i class="fa fa-user-circle"></i></span
-          ></a>
-        </li>
-        <li class="nav-item me-4" *ngIf="isAuthenticated">
+      <div
+        class="
+          d-sm-inline-block d-lg-inline-flex
+          position-absolute
+          end-0
+          dropdown
+        "
+      >
+        <li class="nav-item dropdown me-4">
           <a
-            class="nav-link nav-link d-flex"
-            routerLink="/login"
-            (click)="logout()"
-            >Logout<span class="badge fs-6">
-              <i class="fa fa-sign-out-alt"></i></span
-          ></a>
+            class="nav-link dropdown-toggle"
+            id="navbarDropdownMenuLink"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <span *ngIf="isAuthenticated">{{ user?.username }}</span>
+            <span *ngIf="!isAuthenticated">Get Started</span>
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="navbarDropdownMenuLink"
+          >
+            <li class="nav-item" routerLink="/login" *ngIf="!isAuthenticated">
+              <button class="nav-link dropdown-item text-black">
+                <span class="badge text-primary fs-6">
+                  <i class="fa fa-sign-in-alt"></i></span
+                >Sign In
+              </button>
+            </li>
+            <li *ngIf="!isAuthenticated" class="dropdown-divider"></li>
+            <li
+              class="nav-item"
+              routerLink="/register"
+              *ngIf="!isAuthenticated"
+            >
+              <button class="nav-link dropdown-item text-black">
+                <span class="badge text-primary fs-6">
+                  <i class="fa fa-clipboard-list"></i></span
+                >Sign Up
+              </button>
+            </li>
+            <li class="nav-item" *ngIf="isAuthenticated">
+              <button class="nav-link dropdown-item text-black">
+                <span class="badge text-primary fs-6">
+                  <i class="fa fa-user-circle"></i></span
+                >Account
+              </button>
+            </li>
+            <li *ngIf="isAuthenticated" class="dropdown-divider"></li>
+            <li class="nav-item" routerLink="/login" *ngIf="isAuthenticated">
+              <button
+                class="nav-link dropdown-item text-black"
+                (click)="logout()"
+              >
+                <span class="badge text-primary fs-6">
+                  <i class="fa fa-sign-out-alt"></i></span
+                >Logout
+              </button>
+            </li>
+          </ul>
         </li>
-      </ul>
-    </div>
+      </div>
+    </ul>
   </div>
 </nav>

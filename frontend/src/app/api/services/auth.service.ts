@@ -36,6 +36,7 @@ class AuthService extends __BaseService {
   static readonly authUserUpdatePath = '/auth/user/';
   static readonly authUserPartialUpdatePath = '/auth/user/';
   static readonly authUsersDetailListPath = '/auth/users/detail/';
+  static readonly authUsersListListPath = '/auth/users/list/';
   static readonly authUsersRegistrationCreatePath = '/auth/users/registration/';
 
   constructor(
@@ -808,6 +809,45 @@ class AuthService extends __BaseService {
   authUsersDetailList(): __Observable<User> {
     return this.authUsersDetailListResponse().pipe(
       __map(_r => _r.body as User)
+    );
+  }
+
+  /**
+   * Get Users
+   *
+   * Retrieve all Users
+   * @return OK
+   */
+  authUsersListListResponse(): __Observable<__StrictHttpResponse<Array<User>>> {
+    let __params = this.newParams();
+    let __headers = new HttpHeaders();
+    let __body: any = null;
+    let req = new HttpRequest<any>(
+      'GET',
+      this.rootUrl + `/auth/users/list/`,
+      __body,
+      {
+        headers: __headers,
+        params: __params,
+        responseType: 'json'
+      });
+
+    return this.http.request<any>(req).pipe(
+      __filter(_r => _r instanceof HttpResponse),
+      __map((_r) => {
+        return _r as __StrictHttpResponse<Array<User>>;
+      })
+    );
+  }
+  /**
+   * Get Users
+   *
+   * Retrieve all Users
+   * @return OK
+   */
+  authUsersListList(): __Observable<Array<User>> {
+    return this.authUsersListListResponse().pipe(
+      __map(_r => _r.body as Array<User>)
     );
   }
 

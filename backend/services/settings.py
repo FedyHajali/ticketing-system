@@ -96,8 +96,7 @@ ROOT_URLCONF = 'services.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        # os.path.join(BASE_DIR, 'templates')
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -172,10 +171,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     )
-    # 'DEFAULT_AUTHENTICATION_CLASSES': (
-    #     'rest_framework.authentication.BasicAuthentication',
-    #     'rest_framework.authentication.SessionAuthentication',
-    # )
 }
 
 
@@ -209,16 +204,16 @@ SWAGGER_SETTINGS = {
     },
 }
 
-CELERY_BROKER_URL = 'redis://localhost:6379'   
-# If time zones are active (USE_TZ = True) define your local 
+CELERY_BROKER_URL = 'redis://localhost:6379'
+# If time zones are active (USE_TZ = True) define your local
 #TIME_ZONE = 'Europe/Rome'
 
 
-# We're going to have our tasks rolling soon, so that will be handy 
+# We're going to have our tasks rolling soon, so that will be handy
 CELERY_BEAT_SCHEDULE = {
-     # Executes every day every three hours
-    'check_expired': { 
-         'task': 'api.tasks.check_expired', 
-         'schedule': crontab(minute=0, hour='*/3'),
-        },          
+    # Executes every day every three hours
+    'check_expired': {
+        'task': 'api.tasks.check_expired',
+        'schedule': crontab(minute=0, hour='*/3'),
+    },
 }

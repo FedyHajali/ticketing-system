@@ -963,6 +963,24 @@ paths:
       tags:
         - auth
     parameters: []
+  /auth/users/list/:
+    get:
+      operationId: auth_users_list_list
+      summary: Get Users
+      description: 'Retrieve all Users '
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+        '400':
+          description: Bad Request
+      tags:
+        - auth
+    parameters: []
   /auth/users/registration/:
     post:
       operationId: auth_users_registration_create

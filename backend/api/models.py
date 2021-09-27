@@ -48,6 +48,9 @@ class Ticket(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        ordering = ("status",)
+
 
 class Comment(models.Model):
     title = models.CharField(max_length=255)

@@ -1,0 +1,187 @@
+{% extends "admin/base_site.html" %} 
+
+{% block title %}Admin Console{% endblock%}
+
+{% block branding %}{% endblock %} 
+
+{% block breadcrumbs %}{% endblock %} 
+
+{%block bodyclass %}bg-light{% endblock %} 
+
+{% block extrastyle %}
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+  crossorigin="anonymous"
+/>
+
+{% endblock %} {% block bodyheader %}
+<nav class="navbar navbar-expand-lg fixed-top" id="navbar">
+  <a class="navbar-brand ms-4 text-white" routerLink="/"
+    >UniDesk Admin Console</a
+  >
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent"
+    aria-expanded="false"
+  >
+    <span class="text-white"><i class="fa fa-bars"></i></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0 list-unstyled text-white">
+      <li class="nav-item">
+        <a class="nav-link text-white" href="http://localhost:4200/dashboard/"
+          >Dashboard</a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="http://localhost:4200/reports/"
+          >Reports</a
+        >
+      </li>
+      <li class="nav-item" *ngIf="user?.is_superuser">
+        <a class="nav-link text-white" href="http://localhost:8000/admin/"
+          >Administration</a
+        >
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div id="main-site">
+  <style>
+    #navbar {
+      background-color: #1b278d;
+      align-items: center;
+      box-shadow: 0 0 10px 0 black;
+    }
+    .nav-item {
+      font-size: 18px;
+      list-style-type: none;
+    }
+    #main-site {
+      margin-top: 3rem;
+    }
+
+    #header,
+  .breadcrumbs {
+    display: none;
+  }
+
+  /* Bootstrap issues with admin */
+  * {
+    box-sizing: unset;
+  }
+  div.module caption {
+    caption-side: top !important;
+  }
+  .collapse {
+    display: block !important;
+  }
+    /*
+    DJANGO Admin styles
+*/
+
+@import url(fonts.css);
+
+/* VARIABLE DEFINITIONS */
+:root {
+  --primary: #1b278d;
+  --secondary: #cbddff;
+  --accent: #ff3385;
+  --primary-fg: #fff;
+
+  --body-fg: #333;
+  --body-bg: #fff;
+  --body-quiet-color: #666;
+  --body-loud-color: #000;
+
+  --header-color: #ffceed;
+  --header-branding-color: var(--accent);
+  --header-bg: var(--secondary);
+  --header-link-color: var(--primary-fg);
+
+  --breadcrumbs-fg: #c4dce8;
+  --breadcrumbs-link-fg: var(--body-bg);
+  --breadcrumbs-bg: var(--primary);
+
+  --link-fg: #1b278d;
+  --link-hover-color: var(--accent);
+  --link-selected-fg: var(--accent);
+
+  --hairline-color: #e8e8e8;
+  --border-color: #ccc;
+
+  --error-fg: #ba2121;
+
+  --message-success-bg: #dfd;
+  --message-warning-bg: var(--secondary);
+  --message-error-bg: #ffefef;
+
+  --darkened-bg: #f8f8f8; /* A bit darker than --body-bg */
+  --selected-bg: #e4e4e4; /* E.g. selected table cells */
+  --selected-row: var(--secondary);
+
+  --button-fg: #fff;
+  --button-bg: var(--primary);
+  --button-hover-bg: var(--accent);
+  --default-button-bg: var(--secondary);
+  --default-button-hover-bg: var(--accent);
+  --close-button-bg: #888; /* Previously #bbb, contrast 1.92 */
+  --close-button-hover-bg: #747474;
+  --delete-button-bg: #ba2121;
+  --delete-button-hover-bg: #a41515;
+
+  --object-tools-fg: var(--button-fg);
+  --object-tools-bg: var(--close-button-bg);
+  --object-tools-hover-bg: var(--close-button-hover-bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #264b5d;
+    --primary-fg: #eee;
+
+    --body-fg: #eeeeee;
+    --body-bg: #121212;
+    --body-quiet-color: #e0e0e0;
+    --body-loud-color: #ffffff;
+
+    --breadcrumbs-link-fg: #e0e0e0;
+    --breadcrumbs-bg: var(--primary);
+
+    --link-fg: #81d4fa;
+    --link-hover-color: #4ac1f7;
+    --link-selected-fg: #6f94c6;
+
+    --hairline-color: #272727;
+    --border-color: #353535;
+
+    --error-fg: #e35f5f;
+    --message-success-bg: #006b1b;
+    --message-warning-bg: #583305;
+    --message-error-bg: #570808;
+
+    --darkened-bg: #212121;
+    --selected-bg: #1b1b1b;
+    --selected-row: #00363a;
+
+    --close-button-bg: #333333;
+    --close-button-hover-bg: #666666;
+  }
+}
+
+  </style>
+  {% endblock %} {% block bodyfooter %}
+</div>
+
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+  crossorigin="anonymous"
+></script>
+{% endblock %}

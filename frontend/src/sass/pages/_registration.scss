@@ -24,8 +24,8 @@
 
     .input-group-prepend span {
       width: 50px;
-      background-color: $primary-light-20;
-      color: $secondary-light-20;
+      background-color: var(--primary);
+      color: var(--accent);
       border: 0 !important;
       height: 2.4rem;
       i {
@@ -40,13 +40,13 @@
 
     button {
       color: white;
-      background-color: $primary-light-20;
+      background-color: var(--primary);
       width: 100px;
     }
 
     button:hover {
       color: white;
-      background-color: $secondary-light-20;
+      background-color: var(--accent);
     }
 
     .remember {
@@ -61,7 +61,7 @@
     }
 
     .icon-groups {
-      height: 3.2rem!important;
+      height: 3.2rem !important;
     }
     .mat-form-field-flex {
       background-color: white;

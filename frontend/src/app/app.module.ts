@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormControl, FormGroupDirective, NgForm, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroupDirective,
+  NgForm,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
@@ -13,10 +18,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { TopicsComponent } from './dashboard/topics/topics.component';
 import { TicketsComponent } from './dashboard/tickets/tickets.component';
-import { SidebarComponent } from './layout/sidebar/sidebar.component';
 import { HomeComponent } from './home/home.component';
 import { ReportsComponent } from './reports/reports.component';
-import { SettingsComponent } from './settings/settings.component';
 import { TopicCreateComponent } from './dashboard/topics/topic-create/topic-create.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TicketDetailComponent } from './dashboard/tickets/ticket-detail/ticket-detail.component';
@@ -43,7 +46,6 @@ import { TicketChangeStatusComponent } from './dashboard/tickets/ticket-detail/t
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ToastrModule } from 'ngx-toastr';
 import { TicketCommentDeleteComponent } from './dashboard/tickets/ticket-detail/ticket-comment-delete/ticket-comment-delete.component';
-import { ProfileComponent } from './settings/profile/profile.component';
 import {
   ErrorStateMatcher,
   ShowOnDirtyErrorStateMatcher,
@@ -59,10 +61,8 @@ import { ExpiredCountComponent } from './reports/expired-count/expired-count.com
     DashboardComponent,
     TopicsComponent,
     TicketsComponent,
-    SidebarComponent,
     HomeComponent,
     ReportsComponent,
-    SettingsComponent,
     TopicCreateComponent,
     TicketCreateComponent,
     TicketDetailComponent,
@@ -84,7 +84,6 @@ import { ExpiredCountComponent } from './reports/expired-count/expired-count.com
     TicketAddReceiverComponent,
     TicketChangeStatusComponent,
     TicketCommentDeleteComponent,
-    ProfileComponent,
     RadialChartGroupsComponent,
     ExpiredCountComponent,
   ],
@@ -119,8 +118,15 @@ export class AppModule {}
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null
+  ): boolean {
     const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    return !!(
+      control &&
+      control.invalid &&
+      (control.dirty || control.touched || isSubmitted)
+    );
   }
 }
