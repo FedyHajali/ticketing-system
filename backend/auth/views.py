@@ -53,6 +53,25 @@ def userDetail(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@swagger_auto_schema(
+    method="get",
+    operation_description='Retrieve all Users ',
+    operation_summary='Get Users',
+    responses={200: openapi.Response('OK', UserSerializer(many=True)),
+               400: openapi.Response('Bad Request')})
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated, IsStaff])
+def userList(request):
+    try:
+        user = User.objects.all()
+    except User.DoesNotExist:
+        return Response('Not Found', status=status.HTTP_404_NOT_FOUND)
+
+    serializer = UserSerializer(user, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 #################### GROUP ####################
 
 @swagger_auto_schema(

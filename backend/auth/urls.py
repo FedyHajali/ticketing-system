@@ -8,6 +8,8 @@ urlpatterns = [
     # User
     path('users/registration/', views.registration, name='registration'),
     path('users/detail/', views.userDetail, name="user-detail"),
+    path('users/list/', views.userList, name="user-list"),
+
 
     # Group
     path('groups/detail/<int:group_id>', views.groupDetail, name="group-detail"),
