@@ -3,13 +3,13 @@ import { ApiService, AuthService } from 'src/app/api/services';
 import { Topic, Group, User, Ticket } from '../../api/models';
 
 @Component({
-  selector: 'app-complete-count',
-  templateUrl: './complete-count.component.html',
-  styleUrls: ['./complete-count.component.scss']
+  selector: 'app-expired-count',
+  templateUrl: './expired-count.component.html',
+  styleUrls: ['./expired-count.component.scss']
 })
-export class CompleteCountComponent implements OnInit {
+export class ExpiredCountComponent implements OnInit {
 
-  total_completed: number =0;
+  total_expired: number =0;
   tickets: Ticket[] = [];
   constructor(
     private api: ApiService,
@@ -24,8 +24,8 @@ export class CompleteCountComponent implements OnInit {
       (tickets) => {
         this.tickets = tickets;
         this.tickets.forEach((ticket) =>{
-            if(ticket.status=='CL')
-            this.total_completed++
+            if(ticket.status=='EX')
+            this.total_expired++
         });
       });
     

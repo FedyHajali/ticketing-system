@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { ChartDataSets, ChartType, RadialChartOptions } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { ApiService, AuthService } from 'src/app/api/services';
-import { Topic, Group } from '../../api/models';
+import { Topic, Group, User } from '../../api/models';
 
 @Component({
   selector: 'app-radial-chart',
@@ -17,16 +17,22 @@ export class RadialChartComponent implements OnInit {
   });
   isClose: boolean = false;
   groups: Group[] = [];
-  topics: Topic[] = []
+  topics: Topic[] = [];
+  users_group: User[]=[];
+  users_topic: User[]=[];
+  total_sub: number = 0;
   public radarChartLabels: Label[] = [];
 
   public radarChartOptions: RadialChartOptions = {
+    title:{
+      display:true,
+      text:'Distribution of subscribers to group topics'
+    },
     responsive: true,
   };
   
   public radarChartData: ChartDataSets[] = [
-    { data: [65, 59, 90, 81, 56, 55, 40], label: '%Subscriber' },
-    { data: [28, 48, 40, 19, 96, 27, 100], label: '%ticketOpen' }
+    { data: [], label: '%Subscribers' }
   ];
   public radarChartType: ChartType = 'radar';
 
@@ -40,13 +46,12 @@ export class RadialChartComponent implements OnInit {
     this.getGroups();
   }
 
-
-
   onChangeGroup(event: any) {
     this.isClose = false;
     if (!event) {
       this.isClose = true;
       console.log(this.selectedGroup)
+      this.getSubscribersGroup()
       this.getTopicListGroup()
     }
   }
@@ -56,6 +61,7 @@ export class RadialChartComponent implements OnInit {
       (groups) => {
         this.groups = groups;
         this.form.setValue({group: groups[0]})
+        this.getSubscribersGroup();
         this.getTopicListGroup()
       },
       (error) => {
@@ -67,15 +73,26 @@ export class RadialChartComponent implements OnInit {
   getTopicListGroup() {
     this.api.apiTopicsListGroupRead(this.form.controls.group.value.id).subscribe((topics) => {
       this.topics = topics;
-      this.radarChartLabels=[];
-      this.radarChartData=[];
+      this.radarChartLabels=[]
+      this.radarChartData[0].data=[]
+      this.total_sub=0;
+
       this.topics.forEach((topic)=> {
         this.radarChartLabels.push(topic.name)
-        this.radarChartData[0].data?.push(30)
-        this.radarChartData[1].data?.push(13)
-      })
-    });
+        this.total_sub += topic.users?.length!
+        });
+      this.topics.forEach((topic)=> {
+        this.radarChartData[0].data?.push(topic.users?.length!/this.total_sub*100)
+        });
+      });
+      
   }
 
+  getSubscribersGroup() {
+    this.auth.authGroupsUserListRead(this.form.controls.group.value.id).subscribe((users_group) => {
+      this.users_group=users_group
+      console.log(this.users_group)
+    });
+  }
 
 }

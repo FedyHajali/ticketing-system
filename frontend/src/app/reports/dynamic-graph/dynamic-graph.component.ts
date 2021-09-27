@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { tick } from '@angular/core/testing';
 import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
 import { Color } from 'ng2-charts';
 import { Label } from 'ng2-charts';
+import { ApiService, AuthService } from 'src/app/api/services';
+import { Topic, Group, User, Ticket } from '../../api/models';
 
 @Component({
   selector: 'app-dynamic-graph',
@@ -10,23 +13,65 @@ import { Label } from 'ng2-charts';
 })
 export class DynamicGraphComponent implements OnInit {
 
+  groups: Group[] = [];
+  tickets: Ticket[] = [];
+  users_group: User[]= []
+  total_expired: number =0;
+  total_comments: number=0;
+  labels: string[]=[];
+
+
   public barChartOptions: ChartOptions = {
+    title:{
+      display: true,
+      text:'Correlation of comments / expired tickets'
+  },
     responsive: true,
     // We use these empty structures as placeholders for dynamic theming.
     scales: { xAxes: [{}], yAxes: [{}] },
   };
-  public barChartLabels: Label[] = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+  public barChartLabels: Label[] = [];
   public barChartType: ChartType = 'bar';
   public barChartLegend = true;
 
   public barChartData: ChartDataSets[] = [
-    { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-    { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' }
+    { data: [], label: 'Expired Tickets' },
+    { data: [], label:  'Comments'}
   ];
 
-  constructor() { }
+  constructor(
+    private api: ApiService,
+    private auth: AuthService) { }
 
   ngOnInit(): void {
+    this.getGroups();
+  }
+
+  getGroups() {
+    this.auth.authGroupsListList().subscribe(
+      (groups) => {
+        this.groups = groups;
+        this.getData()
+        });
+    
+  }
+
+  getData() {
+    this.groups.forEach((group)=> {
+      this.api.apiTicketsListGroupsRead(group.id?.toString()!).subscribe((tickets) => {
+          this.tickets = tickets;
+          this.tickets.forEach((ticket)=> {
+            if(ticket.status=='EX')
+              this.total_expired++
+            this.total_comments+=ticket.comments?.length!
+            });
+          this.barChartData[0].data?.push(this.total_expired)
+          this.barChartData[1].data?.push(this.total_comments)
+          this.total_comments=0;
+          this.total_expired=0;
+          this.barChartLabels.push(group.name)
+      });
+    }); 
   }
 
   // events

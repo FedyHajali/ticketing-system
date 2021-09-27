@@ -1,23 +1,23 @@
 <div class="container">
     <div class="row mb-5">
         <div class="col-3">
-            <mat-card>
+            <mat-card id="closed-count">
                 <app-complete-count></app-complete-count>
             </mat-card>
         </div>
         <div class="col-3">
-            <mat-card>
+            <mat-card id="pending-count">
                 <app-pending-count></app-pending-count>
             </mat-card>
         </div>
         <div class="col-3">
-            <mat-card>
+            <mat-card id="open-count">
                 <app-open-count></app-open-count>
             </mat-card>
         </div>
         <div class="col-3">
-            <mat-card>
-                <app-ticket-count></app-ticket-count>
+            <mat-card id="expired-count">
+                <app-expired-count></app-expired-count>
             </mat-card>
         </div>
     </div>
@@ -29,16 +29,27 @@
         </div>
         <div class="col-6">
             <mat-card>
+                <app-radial-chart-groups></app-radial-chart-groups>
+            </mat-card>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <mat-card>
                 <app-bubble-chart></app-bubble-chart>
+            </mat-card>
+        </div>
+        <div class="col-6">
+            <mat-card>
+                <app-dynamic-graph></app-dynamic-graph>
             </mat-card>
         </div>
     </div>
     
-    
     <div class="row">
-        <div class="col">
+        <div class="col-6">
             <mat-card>
-                <app-dynamic-graph></app-dynamic-graph>
+                <app-list></app-list>>
             </mat-card>
         </div>
     </div>

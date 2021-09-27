@@ -48,6 +48,8 @@ import {
   ErrorStateMatcher,
   ShowOnDirtyErrorStateMatcher,
 } from '@angular/material/core';
+import { RadialChartGroupsComponent } from './reports/radial-chart-groups/radial-chart-groups.component';
+import { ExpiredCountComponent } from './reports/expired-count/expired-count.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -83,6 +85,8 @@ import {
     TicketChangeStatusComponent,
     TicketCommentDeleteComponent,
     ProfileComponent,
+    RadialChartGroupsComponent,
+    ExpiredCountComponent,
   ],
   imports: [
     ChartsModule,

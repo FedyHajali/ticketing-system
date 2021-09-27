@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartDataSets, ChartOptions, ChartType } from 'chart.js';
-import { Color } from 'ng2-charts';
+import { ChartDataSets, ChartOptions, ChartType, ChartLegendOptions } from 'chart.js';
+import { Color, Label } from 'ng2-charts';
+import { ApiService, AuthService } from 'src/app/api/services';
+import { Topic, Group, User } from '../../api/models';
 
 
 @Component({
@@ -10,14 +12,26 @@ import { Color } from 'ng2-charts';
 })
 export class BubbleChartComponent implements OnInit {
 
+  groups: Group[] = [];
+  topics: Topic[] = [];
+  users_group: User[]= []
+  total_sub: number=0;
+  total_topics: number=0;
+  label: string='';
+  width: number= 200
+
+  
   public bubbleChartOptions: ChartOptions = {
     responsive: true,
+    title:{
+      display: true,
+      text:'Groups'
+  },
     scales: {
       xAxes: [
         {
           ticks: {
             min: 0,
-            max: 30,
           }
         }
       ],
@@ -25,53 +39,57 @@ export class BubbleChartComponent implements OnInit {
         {
           ticks: {
             min: 0,
-            max: 30,
           }
         }
       ]
     }
   };
+
   public bubbleChartType: ChartType = 'bubble';
   public bubbleChartLegend = true;
+  public bubbleChartData: ChartDataSets[] = [];
+  public bubbleChartColors: Color[] = [];
 
-  public bubbleChartData: ChartDataSets[] = [
-    {
-      data: [
-        { x: 10, y: 10, r: 10 },
-        { x: 15, y: 5, r: 15 },
-        { x: 26, y: 12, r: 23 },
-        { x: 7, y: 8, r: 8 },
-      ],
-      label: 'Series A',
-      backgroundColor: 'green',
-      borderColor: 'blue',
-      hoverBackgroundColor: 'purple',
-      hoverBorderColor: 'red',
-    },
-  ];
-
-  public bubbleChartColors: Color[] = [
-    {
-      backgroundColor: [
-        'red',
-        'green',
-        'blue',
-        'purple',
-        'yellow',
-        'brown',
-        'magenta',
-        'cyan',
-        'orange',
-        'pink'
-      ]
-    }
-  ];
-
-  constructor() { }
+  constructor(
+    private api: ApiService,
+    private auth: AuthService) { }
 
   ngOnInit(): void {
+    this.getGroups();
   }
 
+  getGroups() {
+    this.auth.authGroupsListList().subscribe(
+      (groups) => {
+        this.groups = groups;
+        this.groups.forEach((group)=> {
+          this.auth.authGroupsUserListRead(group.id?.toString()!).subscribe((users_group) => {
+            this.api.apiTopicsListGroupRead(group.id?.toString()!).subscribe((topics) => {
+              this.users_group=users_group
+              this.total_sub=(this.users_group.length)
+              this.topics = topics;
+              this.total_topics=(this.topics.length)
+              this.label=(group.name);
+              this.bubbleChartData.push({data: [{ x: this.total_topics!, y: this.total_sub!, r: (this.total_sub)*this.total_topics}],label: this.label})
+              this.bubbleChartColors.push({backgroundColor: this.getRandomColor(), borderColor: 'black',})
+              this.total_topics=0;
+              this.total_sub=0;
+              this.label=''
+            });
+          });
+        }); 
+        this.bubbleChartData.shift()
+        });
+    
+  }
+  getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
   // events
   public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
     console.log(event, active);
@@ -83,18 +101,5 @@ export class BubbleChartComponent implements OnInit {
 
   private rand(max: number): number {
     return Math.trunc(Math.random() * max);
-  }
-
-  private randomPoint(maxCoordinate: number): { r: number; x: number; y: number } {
-    const x = this.rand(maxCoordinate);
-    const y = this.rand(maxCoordinate);
-    const r = this.rand(30) + 5;
-    return { x, y, r };
-  }
-
-  public randomize(): void {
-    const numberOfPoints = this.rand(5) + 5;
-    let a= [{ length: numberOfPoints }]
-    this.bubbleChartData[0].data = Array.apply(null,a).map(r => this.randomPoint(30));
   }
 }
