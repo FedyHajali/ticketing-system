@@ -18,7 +18,7 @@ export class BubbleChartComponent implements OnInit {
   total_sub: number=0;
   total_topics: number=0;
   label: string='';
-  width: number= 200
+  height: number= 200
 
   
   public bubbleChartOptions: ChartOptions = {
@@ -26,20 +26,28 @@ export class BubbleChartComponent implements OnInit {
     title:{
       display: true,
       text:'Groups'
-  },
+    },
     scales: {
       xAxes: [
         {
           ticks: {
             min: 0,
-          }
+          },
+          scaleLabel:{
+            display:true,
+            labelString:'Topics'
+          }, 
         }
       ],
       yAxes: [
         {
           ticks: {
             min: 0,
-          }
+          },
+          scaleLabel:{
+            display:true,
+            labelString:'Subscribers'
+          },
         }
       ]
     }

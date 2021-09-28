@@ -52,6 +52,11 @@ import {
 } from '@angular/material/core';
 import { RadialChartGroupsComponent } from './reports/radial-chart-groups/radial-chart-groups.component';
 import { ExpiredCountComponent } from './reports/expired-count/expired-count.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { CompleteUserComponent } from './reports/complete-user/complete-user.component';
+import { PendingUserComponent } from './reports/pending-user/pending-user.component';
+import { OpenUserComponent } from './reports/open-user/open-user.component';
+import { ExpiredUserComponent } from './reports/expired-user/expired-user.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -86,6 +91,10 @@ import { ExpiredCountComponent } from './reports/expired-count/expired-count.com
     TicketCommentDeleteComponent,
     RadialChartGroupsComponent,
     ExpiredCountComponent,
+    CompleteUserComponent,
+    PendingUserComponent,
+    OpenUserComponent,
+    ExpiredUserComponent,
   ],
   imports: [
     ChartsModule,
@@ -103,6 +112,7 @@ import { ExpiredCountComponent } from './reports/expired-count/expired-count.com
       positionClass: 'toast-bottom-right',
       preventDuplicates: true,
     }),
+    FlexLayoutModule,
   ],
   providers: [
     {

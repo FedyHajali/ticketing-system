@@ -1,22 +1,37 @@
-<p>Most active users</p>
-<span  class="badge bg-primary rounded-pill">created</span>
-<span  class="badge bg-info rounded-pill">received</span>
-<span  class="badge bg-success rounded-pill">topics</span>
-<span  class="badge bg-dark rounded-pill">groups</span>
-<div class="row">
-    <div class="col-6">
-        <mat-card *ngFor="let user of users; index as i">
-            <ol class="list-group list-group-numbered">
-                <li class="list-group-item d-flex justify-content-between align-items-start">
+<form [formGroup]="form" fxLayoutAlign="left stretch">
+  <mat-form-field appearance="fill" color="white" >
+    <mat-label>Filter by</mat-label>
+    <mat-select formControlName="group" (openedChange)="onChangeGroup($event)">
+      <mat-option
+        *ngFor="let option of options"
+        [value]="option"
+        >{{ option }}</mat-option
+      >
+    </mat-select>
+  </mat-form-field>
+</form>
+<div fxLayoutAlign="left stretch">
+<span  class="badge bg-primary rounded-pill">Tickets Created</span>
+<span  class="badge bg-success rounded-pill">Topics Subscriptions</span>
+<span  class="badge bg-dark rounded-pill">Group's Suscriptions</span>
+</div>
+<div class="row" fxLayoutAlign="center stretch">
+    <div class="col-6" fxFill>
+        <mat-card *ngFor="let user of data; index as i;" fxLayoutAlign="left stretch" fxLayoutGap="10px">
+            <ul *ngIf="i<9" class="list-group" fxFill fxLayoutGap="10px">
+                <li class="list-group-item d-flex justify-content-between align-items-start" fxLayoutGap="10px" fxFill>
                   <div class="ms-2 me-auto">
-                    <div class="fw-bold">{{user.username}}</div>
+                    <div class="fw-bold">{{i+1}} {{user.username}}</div>
                   </div>
-                  <span  class="badge bg-primary rounded-pill">{{total_created[i]}}</span>
-                  <span  class="badge bg-info rounded-pill">8</span>
-                  <span  class="badge bg-success rounded-pill">12</span>
-                  <span  class="badge bg-dark rounded-pill">{{user.groups.length}}</span>
                 </li>
-              </ol>
+                <li class="list-group-item d-flex justify-content-between align-items-start" fxLayoutGap="10px" fxFill>
+                  <div class="ms-2 me-auto" fxLayoutGap="10px">
+                  <span  class="badge bg-primary rounded-pill">{{user.created}}</span>
+                  <span  class="badge bg-success rounded-pill">{{user.topics}}</span>
+                  <span  class="badge bg-dark rounded-pill">{{user.groups}}</span>
+                  </div>
+                </li>
+            </ul>
         </mat-card>
     </div>
 </div>
