@@ -52,6 +52,7 @@ import {
 } from '@angular/material/core';
 import { RadialChartGroupsComponent } from './reports/radial-chart-groups/radial-chart-groups.component';
 import { ExpiredCountComponent } from './reports/expired-count/expired-count.component';
+import { AccountComponent, ChangePasswordComponent } from './account/account.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -86,6 +87,8 @@ import { ExpiredCountComponent } from './reports/expired-count/expired-count.com
     TicketCommentDeleteComponent,
     RadialChartGroupsComponent,
     ExpiredCountComponent,
+    AccountComponent,
+    ChangePasswordComponent
   ],
   imports: [
     ChartsModule,

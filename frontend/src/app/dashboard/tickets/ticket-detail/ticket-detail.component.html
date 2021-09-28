@@ -127,8 +127,8 @@
                         !form.controls.comment.hasError('required')
                       "
                     >
-                      Please enter a valid comment, <strong>minimum length</strong> legth is 2
-                      characters
+                      Please enter a valid comment,
+                      <strong>minimum length</strong> legth is 2 characters
                     </mat-error>
                     <mat-error
                       *ngIf="
@@ -137,8 +137,8 @@
                         !form.controls.comment.hasError('required')
                       "
                     >
-                      Please enter a valid comment, <strong>maximum length</strong> is 100
-                      characters.
+                      Please enter a valid comment,
+                      <strong>maximum length</strong> is 100 characters.
                     </mat-error>
                     <mat-error
                       *ngIf="form.controls.comment.hasError('required')"
@@ -174,13 +174,13 @@
               <caption>
                 Creation date:
                 {{
-                  ticket?.created_at | date: "EEEE, d MMMM, y, h:mm"
+                  ticket?.created_at | date: "fullDate"
                 }}
                 <br />
                 <br />
-                Last Update:
+                Last update:
                 {{
-                  ticket?.last_updated | date: "EEEE, d MMMM, y, h:mm"
+                  ticket?.last_updated | date: "fullDate"
                 }}
               </caption>
               <thead>
@@ -264,13 +264,13 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>Last Updated By</td>
+                  <td>Last updated by</td>
                   <td>{{ ticket?.last_updated_by?.username }}</td>
                 </tr>
                 <tr>
                   <td>Expiration</td>
                   <td>
-                    {{ ticket?.expiration | date: "EEEE, d MMMM, y, h:mm" }}
+                    {{ ticket?.expiration | date: "fullDate" }}
                   </td>
                 </tr>
               </tbody>

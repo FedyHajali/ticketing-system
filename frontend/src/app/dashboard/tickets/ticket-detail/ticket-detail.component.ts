@@ -26,8 +26,12 @@ export class TicketDetailComponent implements OnInit {
   panelOpenState = true;
   userIsReceiver = false;
   userIsCreator = false;
+  isLoading = true;
   form = this.fb.group({
-    comment: ['', [Validators.required, Validators.minLength(2),Validators.maxLength(100)]],
+    comment: [
+      '',
+      [Validators.required, Validators.minLength(2), Validators.maxLength(100)],
+    ],
   });
   constructor(
     private dialog: MatDialog,
@@ -37,7 +41,10 @@ export class TicketDetailComponent implements OnInit {
     private api: ApiService,
     private fb: FormBuilder
   ) {
-    this.user = this.shared.getActiveUser();
+    this.shared.getActiveUser().subscribe((user) => {
+      this.user = user;
+      this.isLoading = false;
+    });
   }
 
   ngOnInit() {
@@ -101,7 +108,7 @@ export class TicketDetailComponent implements OnInit {
     let comment: Comment = {
       title: '--',
       content: this.form.controls.comment.value,
-      creator: this.shared.getActiveUser(),
+      creator: this.user,
       ticket: this.ticket.id ? this.ticket.id : 0,
     };
     this.form.controls.comment.reset();

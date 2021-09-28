@@ -70,6 +70,13 @@
                   ></mat-icon>
                   <span>Unsubscribe</span>
                 </button>
+                <button mat-menu-item [matMenuTriggerFor]="users1">
+                  <mat-icon>
+                    <span class="float-end text-primary"
+                      ><i class="fas fa-users"></i></span
+                  ></mat-icon>
+                  <span>Users subscribed</span>
+                </button>
                 <button
                   mat-menu-item
                   *ngIf="user.is_staff"
@@ -83,6 +90,24 @@
                     <i class="fas fa-user-shield"></i
                   ></span>
                 </button>
+              </mat-menu>
+              <mat-menu #users1="matMenu">
+                <button
+                  mat-menu-item
+                  *ngIf="topic.users?.length === 0"
+                  style="pointer-events: none"
+                >
+                  No registered users yet
+                </button>
+                <ng-container *ngIf="topic.users?.length !== 0">
+                  <button
+                    mat-menu-item
+                    *ngFor="let user of topic.users"
+                    style="pointer-events: none"
+                  >
+                    {{ user.username }}
+                  </button>
+                </ng-container>
               </mat-menu>
             </div>
             <div class="card-body">
@@ -151,6 +176,13 @@
                   ></mat-icon>
                   <a title="Subscribe" style="cursor: pointer"> Subscribe </a>
                 </button>
+                <button mat-menu-item [matMenuTriggerFor]="users2">
+                  <mat-icon>
+                    <span class="float-end text-primary"
+                      ><i class="fas fa-users"></i></span
+                  ></mat-icon>
+                  <span>Users subscribed</span>
+                </button>
                 <button
                   mat-menu-item
                   *ngIf="user.is_staff"
@@ -163,6 +195,24 @@
                     <i class="fas fa-user-shield"></i
                   ></span>
                 </button>
+              </mat-menu>
+              <mat-menu #users2="matMenu">
+                <button
+                  mat-menu-item
+                  *ngIf="topic.users?.length === 0"
+                  style="pointer-events: none"
+                >
+                  No registered users yet
+                </button>
+                <ng-container *ngIf="topic.users?.length !== 0">
+                  <button
+                    mat-menu-item
+                    *ngFor="let user of topic.users"
+                    style="pointer-events: none"
+                  >
+                    {{ user.username }}
+                  </button>
+                </ng-container>
               </mat-menu>
             </div>
             <div class="card-body">
@@ -177,7 +227,7 @@
     <div class="row mb-2">
       <div class="col">
         <button
-          *ngIf="user?.is_staff"
+          *ngIf="user.is_staff"
           type="button"
           class="btn btn-outline-primary position-relative"
           style="float: right"

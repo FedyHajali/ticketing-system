@@ -1,0 +1,150 @@
+<div class="p-lg-4 p-md-2 p-sm-0" id="account">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <mat-card>
+          <div class="row mb-4 m-2">
+            <div class="col">
+              <h1 class="float-start">Your Account</h1>
+              <div class="button-group float-end">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary"
+                  (click)="openChangePasswordModal()"
+                >
+                  Change Password
+                </button>
+              </div>
+            </div>
+          </div>
+          <form [formGroup]="form">
+            <div class="row mb-3">
+              <div class="col-sm-2 col-form-label">
+                <label for="username">Username</label>
+              </div>
+              <div class="col-sm-10">
+                <mat-form-field class="w-100" appearance="fill">
+                  <mat-label>Username</mat-label>
+                  <input type="text" matInput formControlName="username" />
+                  <mat-error
+                    *ngIf="
+                      form.controls.username.hasError('maxlength') &&
+                      !form.controls.username.hasError('required')
+                    "
+                  >
+                    Please enter a valid username,
+                    <strong>maximum length</strong> is 20 characters.
+                  </mat-error>
+                  <mat-error
+                    *ngIf="form.controls.username.hasError('required')"
+                  >
+                    Username is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-2 col-form-label">
+                <label for="email">Email</label>
+              </div>
+              <div class="col-sm-10">
+                <mat-form-field class="w-100" appearance="fill">
+                  <mat-label>Email</mat-label>
+                  <input type="email" matInput formControlName="email" />
+                  <mat-error
+                    *ngIf="
+                      form.controls.email.hasError('email') &&
+                      !form.controls.email.hasError('required')
+                    "
+                  >
+                    Please enter a <strong>valid email</strong>
+                  </mat-error>
+                  <mat-error *ngIf="form.controls.email.hasError('required')">
+                    Email is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-2 col-form-label">
+                <label for="password">Password</label>
+              </div>
+              <div class="col-sm-10">
+                <mat-form-field class="w-100" appearance="fill">
+                  <mat-label
+                    >Raw passwords are not stored, so there is no way to see
+                    this user’s password</mat-label
+                  >
+                  <input type="text" matInput formControlName="password" />
+                  <mat-error
+                    *ngIf="
+                      form.controls.password.hasError('minlength') &&
+                      !form.controls.password.hasError('maxlength') &&
+                      !form.controls.password.hasError('required')
+                    "
+                  >
+                    Please enter a valid password,
+                    <strong>minimum length</strong> is 8 characters
+                  </mat-error>
+                  <mat-error
+                    *ngIf="
+                      form.controls.password.hasError('maxlength') &&
+                      !form.controls.password.hasError('minlength') &&
+                      !form.controls.password.hasError('required')
+                    "
+                  >
+                    Please enter a valid password,
+                    <strong>maximum length</strong> is 20 characters.
+                  </mat-error>
+                  <mat-error
+                    *ngIf="form.controls.password.hasError('required')"
+                  >
+                    Password is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-2 col-form-label">
+                <label for="first_name">First Name</label>
+              </div>
+              <div class="col-sm-10">
+                <mat-form-field class="w-100" appearance="fill">
+                  <mat-label>First Name</mat-label>
+                  <input type="text" matInput formControlName="first_name" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-2 col-form-label">
+                <label for="last_name">Last Name</label>
+              </div>
+              <div class="col-sm-10">
+                <mat-form-field class="w-100" appearance="fill">
+                  <mat-label>Last Name</mat-label>
+                  <input type="text" matInput formControlName="last_name" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-sm-2 col-form-label">
+                <label for="staff">Staff User</label>
+              </div>
+              <div class="col-sm-10">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value=""
+                    [checked]="form.controls.is_staff.value"
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
