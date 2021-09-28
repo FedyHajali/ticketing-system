@@ -12,6 +12,7 @@ import { SharedService } from '../../services/shared.service';
 export class ExpiredUserComponent implements OnInit {
 
   total_expired: number =0;
+  isLoading = true;
   tickets: Ticket[] = [];
   user!: User;
   constructor(
@@ -19,7 +20,10 @@ export class ExpiredUserComponent implements OnInit {
     private shared: SharedService,
     private auth: AuthService) 
     { 
-      this.user = this.shared.getActiveUser();
+      this.shared.getActiveUser().subscribe((user) => {
+        this.user = user;
+        this.isLoading = false;
+      });
     }
 
   ngOnInit(): void {

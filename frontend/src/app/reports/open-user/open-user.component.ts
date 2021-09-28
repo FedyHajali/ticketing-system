@@ -12,13 +12,17 @@ export class OpenUserComponent implements OnInit {
 
   total_open: number =0;
   tickets: Ticket[] = [];
+  isLoading = true;
   user!: User;
   constructor(
     private api: ApiService,
     private shared: SharedService,
     private auth: AuthService) 
     { 
-      this.user = this.shared.getActiveUser();
+      this.shared.getActiveUser().subscribe((user) => {
+        this.user = user;
+        this.isLoading = false;
+      });
     }
 
   ngOnInit(): void {

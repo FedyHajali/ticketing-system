@@ -11,6 +11,7 @@ import { SharedService } from '../../services/shared.service';
 })
 export class PendingUserComponent implements OnInit {
   total_pending: number =0;
+  isLoading = true;
   tickets: Ticket[] = [];
   user!: User;
   constructor(
@@ -18,7 +19,10 @@ export class PendingUserComponent implements OnInit {
     private shared: SharedService,
     private auth: AuthService) 
     { 
-      this.user = this.shared.getActiveUser();
+      this.shared.getActiveUser().subscribe((user) => {
+        this.user = user;
+        this.isLoading = false;
+      });
     }
 
   ngOnInit(): void {
