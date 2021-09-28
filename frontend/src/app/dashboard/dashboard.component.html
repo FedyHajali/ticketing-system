@@ -1,4 +1,4 @@
-<div id="dashboard">
+<div id="dashboard" *ngIf="!isLoading">
   <div class="container">
     <div class="row">
       <div class="col">
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="row card-group">
-      <div class="col-md-6 col-sm-12">
+      <div class="col col-md-6 col-sm-12">
         <hr />
         <h1>Your Groups</h1>
         <div class="card" *ngIf="userGroups?.length === 0">
@@ -161,7 +161,7 @@
         </ng-container>
         <hr />
       </div>
-      <div class="col-md-6 col-sm-12" id="dashboard-tickets">
+      <div class="col col-md-6 col-sm-12" id="dashboard-tickets">
         <hr />
         <div class="row">
           <div class="col">
@@ -180,12 +180,16 @@
                     >
                       <p class="float-start">{{ ticket.title }}</p>
                       <div class="icons float-end">
-                        <span class="m-1" [matTooltip]="ticket.creator.username"
+                        <span
+                          class="m-1 fs-5"
+                          [matTooltip]="'Creator: ' + ticket.creator.username"
                           ><i class="far fa-user"></i
                         ></span>
                         <span
-                          class="m-1"
-                          [matTooltip]="ticket.last_updated_by.username"
+                          class="m-1 fs-5"
+                          [matTooltip]="
+                            'Last updated: ' + ticket.last_updated_by.username
+                          "
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
@@ -195,7 +199,7 @@
                               ? (ticket.created_at | date: 'fullDate')
                               : '')
                           "
-                          class="m-1 text-success"
+                          class="m-1 fs-5 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
@@ -203,7 +207,7 @@
                             'Expiration date: ' +
                             (ticket.expiration | date: 'fullDate')
                           "
-                          class="m-1 text-danger"
+                          class="m-1 fs-5 text-danger"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>
@@ -221,12 +225,16 @@
                     >
                       <p class="float-start">{{ ticket.title }}</p>
                       <div class="icons inline-block float-end">
-                        <span class="m-1" [matTooltip]="ticket.creator.username"
+                        <span
+                          class="m-1 fs-5"
+                          [matTooltip]="'Creator: ' + ticket.creator.username"
                           ><i class="far fa-user"></i
                         ></span>
                         <span
-                          class="m-1"
-                          [matTooltip]="ticket.last_updated_by.username"
+                          class="m-1 fs-5"
+                          [matTooltip]="
+                            'Last updated: ' + ticket.last_updated_by.username
+                          "
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
@@ -236,7 +244,7 @@
                               ? (ticket.created_at | date: 'fullDate')
                               : '')
                           "
-                          class="m-1 text-success"
+                          class="m-1 fs-5 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
@@ -244,7 +252,7 @@
                             'Expiration date: ' +
                             (ticket.expiration | date: 'fullDate')
                           "
-                          class="m-1 text-danger"
+                          class="m-1 fs-5 text-danger"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>
@@ -263,12 +271,16 @@
                     >
                       <p class="float-start">{{ ticket.title }}</p>
                       <div class="icons inline-block float-end">
-                        <span class="m-1" [matTooltip]="ticket.creator.username"
+                        <span
+                          class="m-1 fs-5"
+                          [matTooltip]="'Creator: ' + ticket.creator.username"
                           ><i class="far fa-user"></i
                         ></span>
                         <span
-                          class="m-1"
-                          [matTooltip]="ticket.last_updated_by.username"
+                          class="m-1 fs-5"
+                          [matTooltip]="
+                            'Last updated: ' + ticket.last_updated_by.username
+                          "
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
@@ -278,7 +290,7 @@
                               ? (ticket.created_at | date: 'fullDate')
                               : '')
                           "
-                          class="m-1 text-success"
+                          class="m-1 fs-5 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
@@ -286,7 +298,7 @@
                             'Expiration date: ' +
                             (ticket.expiration | date: 'fullDate')
                           "
-                          class="m-1 text-danger"
+                          class="m-1 fs-5 text-danger"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>
@@ -294,7 +306,7 @@
                   </ul>
                 </div> </ng-container
             ></mat-tab>
-            <mat-tab label="Closed">
+            <mat-tab label="Closed (created by you)">
               <ng-container *ngFor="let ticket of creatorTickets">
                 <div class="card" *ngIf="ticket?.status === 'CL'">
                   <ul class="list-group list-group-flush">
@@ -304,12 +316,16 @@
                     >
                       <p class="float-start">{{ ticket.title }}</p>
                       <div class="icons inline-block float-end">
-                        <span class="m-1" [matTooltip]="ticket.creator.username"
+                        <span
+                          class="m-1 fs-5"
+                          [matTooltip]="'Creator: ' + ticket.creator.username"
                           ><i class="far fa-user"></i
                         ></span>
                         <span
-                          class="m-1"
-                          [matTooltip]="ticket.last_updated_by.username"
+                          class="m-1 fs-5"
+                          [matTooltip]="
+                            'Last updated: ' + ticket.last_updated_by.username
+                          "
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
@@ -319,7 +335,7 @@
                               ? (ticket.created_at | date: 'fullDate')
                               : '')
                           "
-                          class="m-1 text-success"
+                          class="m-1 fs-5 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
@@ -327,7 +343,7 @@
                             'Expiration date: ' +
                             (ticket.expiration | date: 'fullDate')
                           "
-                          class="m-1 text-danger"
+                          class="m-1 fs-5 text-danger"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>
@@ -337,7 +353,7 @@
             ></mat-tab>
           </mat-tab-group>
         </div>
-        <div class="row mt-4" *ngIf="user?.is_staff">
+        <div class="row mt-4" *ngIf="user?.is_staff && !isLoading">
           <hr />
           <div class="col">
             <h1 class="float-start">
@@ -348,7 +364,7 @@
             </h1>
           </div>
         </div>
-        <div class="row" *ngIf="user?.is_staff">
+        <div class="row" *ngIf="user?.is_staff && !isLoading">
           <mat-tab-group animationDuration="1ms">
             <mat-tab label="Open">
               <ng-container *ngFor="let ticket of allTickets">
@@ -360,12 +376,16 @@
                     >
                       <p class="float-start">{{ ticket.title }}</p>
                       <div class="icons float-end">
-                        <span class="m-1" [matTooltip]="ticket.creator.username"
+                        <span
+                          class="m-1 fs-5"
+                          [matTooltip]="'Creator: ' + ticket.creator.username"
                           ><i class="far fa-user"></i
                         ></span>
                         <span
-                          class="m-1"
-                          [matTooltip]="ticket.last_updated_by.username"
+                          class="m-1 fs-5"
+                          [matTooltip]="
+                            'Last updated: ' + ticket.last_updated_by.username
+                          "
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
@@ -375,7 +395,7 @@
                               ? (ticket.created_at | date: 'fullDate')
                               : '')
                           "
-                          class="m-1 text-success"
+                          class="m-1 fs-5 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
@@ -383,7 +403,7 @@
                             'Expiration date: ' +
                             (ticket.expiration | date: 'fullDate')
                           "
-                          class="m-1 text-danger"
+                          class="m-1 fs-5 text-danger"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>
@@ -401,12 +421,16 @@
                     >
                       <p class="float-start">{{ ticket.title }}</p>
                       <div class="icons inline-block float-end">
-                        <span class="m-1" [matTooltip]="ticket.creator.username"
+                        <span
+                          class="m-1 fs-5"
+                          [matTooltip]="'Creator: ' + ticket.creator.username"
                           ><i class="far fa-user"></i
                         ></span>
                         <span
-                          class="m-1"
-                          [matTooltip]="ticket.last_updated_by.username"
+                          class="m-1 fs-5"
+                          [matTooltip]="
+                            'Last updated: ' + ticket.last_updated_by.username
+                          "
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
@@ -416,7 +440,7 @@
                               ? (ticket.created_at | date: 'fullDate')
                               : '')
                           "
-                          class="m-1 text-success"
+                          class="m-1 fs-5 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
@@ -424,7 +448,7 @@
                             'Expiration date: ' +
                             (ticket.expiration | date: 'fullDate')
                           "
-                          class="m-1 text-danger"
+                          class="m-1 fs-5 text-danger"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>
@@ -443,12 +467,16 @@
                     >
                       <p class="float-start">{{ ticket.title }}</p>
                       <div class="icons inline-block float-end">
-                        <span class="m-1" [matTooltip]="ticket.creator.username"
+                        <span
+                          class="m-1 fs-5"
+                          [matTooltip]="'Creator: ' + ticket.creator.username"
                           ><i class="far fa-user"></i
                         ></span>
                         <span
-                          class="m-1"
-                          [matTooltip]="ticket.last_updated_by.username"
+                          class="m-1 fs-5"
+                          [matTooltip]="
+                            'Last updated: ' + ticket.last_updated_by.username
+                          "
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
@@ -458,7 +486,7 @@
                               ? (ticket.created_at | date: 'fullDate')
                               : '')
                           "
-                          class="m-1 text-success"
+                          class="m-1 fs-5 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
@@ -466,7 +494,7 @@
                             'Expiration date: ' +
                             (ticket.expiration | date: 'fullDate')
                           "
-                          class="m-1 text-danger"
+                          class="m-1 fs-5 text-danger"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>
@@ -484,12 +512,16 @@
                     >
                       <p class="float-start">{{ ticket.title }}</p>
                       <div class="icons inline-block float-end">
-                        <span class="m-1" [matTooltip]="ticket.creator.username"
+                        <span
+                          class="m-1 fs-5"
+                          [matTooltip]="'Creator: ' + ticket.creator.username"
                           ><i class="far fa-user"></i
                         ></span>
                         <span
-                          class="m-1"
-                          [matTooltip]="ticket.last_updated_by.username"
+                          class="m-1 fs-5"
+                          [matTooltip]="
+                            'Last updated: ' + ticket.last_updated_by.username
+                          "
                           ><i class="fas fa-user-edit"></i
                         ></span>
                         <span
@@ -499,7 +531,7 @@
                               ? (ticket.created_at | date: 'fullDate')
                               : '')
                           "
-                          class="m-1 text-success"
+                          class="m-1 fs-5 text-success"
                           ><i class="fas fa-calendar"></i
                         ></span>
                         <span
@@ -507,7 +539,7 @@
                             'Expiration date: ' +
                             (ticket.expiration | date: 'fullDate')
                           "
-                          class="m-1 text-danger"
+                          class="m-1 fs-5 text-danger"
                           ><i class="fas fa-calendar-times"></i
                         ></span>
                       </div>

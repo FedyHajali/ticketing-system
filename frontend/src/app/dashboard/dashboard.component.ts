@@ -16,6 +16,7 @@ import { GroupDeleteComponent } from './groups/group-delete/group-delete.compone
 })
 export class DashboardComponent implements OnInit {
   private userSub!: Subscription;
+  isLoading = true;
   user!: User;
   userGroups: Group[] = [];
   allGroups: Group[] = [];
@@ -31,7 +32,10 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.user = this.shared.getActiveUser();
+    this.shared.getActiveUser().subscribe((user) => {
+      this.user = user;
+      this.isLoading = false;
+    });
   }
 
   ngOnInit(): void {

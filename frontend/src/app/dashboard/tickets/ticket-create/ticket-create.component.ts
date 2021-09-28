@@ -23,20 +23,17 @@ export class TicketCreateComponent implements OnInit {
     { value: 'EX', viewValue: 'Expired' },
   ];
   isClose: boolean = false;
+  isLoading = true;
   selectedGroups: Group[] = [];
   selectedTopics!: Topic[];
   form = this.fb.group({
     title: [
       '',
-      [Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(20),]
+      [Validators.required, Validators.minLength(2), Validators.maxLength(20)],
     ],
     content: [
       '',
-      [Validators.required,
-      Validators.minLength(2),
-      Validators.maxLength(100),]
+      [Validators.required, Validators.minLength(2), Validators.maxLength(100)],
     ],
     status: ['OP', Validators.required],
     groups: [null, Validators.required],
@@ -55,7 +52,10 @@ export class TicketCreateComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.user = this.shared.getActiveUser();
+    this.shared.getActiveUser().subscribe((user) => {
+      this.user = user;
+      this.isLoading = false;
+    });
   }
 
   ngOnInit(): void {

@@ -57,6 +57,7 @@ import { CompleteUserComponent } from './reports/complete-user/complete-user.com
 import { PendingUserComponent } from './reports/pending-user/pending-user.component';
 import { OpenUserComponent } from './reports/open-user/open-user.component';
 import { ExpiredUserComponent } from './reports/expired-user/expired-user.component';
+import { AccountComponent, ChangePasswordComponent } from './account/account.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -95,6 +96,8 @@ import { ExpiredUserComponent } from './reports/expired-user/expired-user.compon
     PendingUserComponent,
     OpenUserComponent,
     ExpiredUserComponent,
+    AccountComponent,
+    ChangePasswordComponent
   ],
   imports: [
     ChartsModule,

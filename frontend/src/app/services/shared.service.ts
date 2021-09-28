@@ -5,6 +5,8 @@ import { Group, Ticket, Topic, User } from '../api/models';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -30,8 +32,9 @@ export class SharedService {
     });
   }
 
-  getActiveUser() {
-    return JSON.parse(<string>sessionStorage.getItem('user'));
+  getActiveUser(): Observable<User> {
+    let user: User = JSON.parse(<string>sessionStorage.getItem('user'));
+    return of(user);
   }
 
   handleAuthentication(user: any) {

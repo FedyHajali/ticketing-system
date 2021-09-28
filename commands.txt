@@ -1,14 +1,16 @@
 Path: /frontend
 
+- Installazione packages: "npm install"
 
-Generazione nuova API: "npm run generate-api"
+- Generazione nuova API: "npm run generate-api"
 
+- Avvio UI: "npm start"
 
 
 Path: /backend
 
-Avvio redis, dalla cartella /redis :".\redis-server.exe"
+- Avvio redis (dalla cartella /redis) :".\redis-server.exe"
 
-Avvio scheduler beat celery "celery -A services beat -l INFO"
+- Avvio scheduler beat celery: "celery -A services beat -l INFO"
 
-Avvio worker celery  "celery -A services worker --pool=solo -l info"
+- Avvio worker celery:  "celery -A services worker --pool=solo -l info"

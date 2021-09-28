@@ -16,6 +16,7 @@ import { TopicSubscribeComponent } from './topic-subscribe/topic-subscribe.compo
 export class TopicsComponent implements OnInit {
   group_id!: number;
   private sub: any;
+  isLoading = true;
   user!: User;
   group!: Group;
   tickets: Ticket[] = [];
@@ -29,7 +30,10 @@ export class TopicsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.user = this.shared.getActiveUser();
+    this.shared.getActiveUser().subscribe((user) => {
+      this.user = user;
+      this.isLoading = false;
+    });
   }
 
   ngOnInit(): void {
