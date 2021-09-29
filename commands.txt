@@ -14,3 +14,9 @@ Path: /backend
 - Avvio scheduler beat celery: "celery -A services beat -l INFO"
 
 - Avvio worker celery:  "celery -A services worker --pool=solo -l info"
+
+DOCKER 
+
+comandi manage: 
+
+"docker-compose run web python3 manage.py [comando]"
