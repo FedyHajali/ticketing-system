@@ -19,4 +19,4 @@ DOCKER
 
 comandi manage: 
 
-"docker-compose run web python3 manage.py [comando]"
+"docker-compose exec [service] python3 manage.py [comando]"
