@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-wko-!2b3!(=qpo6%jufrt02pxnxp06bsh@(wdkfj7lj4)8e!5x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -117,8 +117,12 @@ WSGI_APPLICATION = 'services.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
@@ -214,6 +218,7 @@ CELERY_BEAT_SCHEDULE = {
     # Executes every day every three hours
     'check_expired': {
         'task': 'api.tasks.check_expired',
-        'schedule': crontab(minute=0, hour='*/3'),
+        # 'schedule': crontab(minute=0, hour='*/3'),
+        'schedule': 30,
     },
 }
