@@ -218,7 +218,6 @@ CELERY_BEAT_SCHEDULE = {
     # Executes every day every three hours
     'check_expired': {
         'task': 'api.tasks.check_expired',
-        # 'schedule': crontab(minute=0, hour='*/3'),
-        'schedule': 30,
+        'schedule': crontab(minute=0, hour='*/3'),
     },
 }
