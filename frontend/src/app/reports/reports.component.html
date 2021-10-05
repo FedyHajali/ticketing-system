@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="row mb-5">
+    <div *ngIf="user?.is_staff" class="row mb-5">
         <h2 style="text-align:center">All tickets</h2>
         <div class="row mb-5">
             <div class="col-3">
@@ -50,14 +50,14 @@
         </div>
     </div>
 
-    <div class="row mb-5">
+    <div *ngIf="user?.is_staff" class="row mb-5">
         <div fxLayout fxLayoutGap="20px">
             <mat-card class="col-6"> <app-radial-chart></app-radial-chart></mat-card> 
             <mat-card class="col-6"><app-radial-chart-groups></app-radial-chart-groups></mat-card> 
         </div>
     </div> 
 
-    <div class="row mb-5">
+    <div *ngIf="user?.is_staff" class="row mb-5">
         <div fxLayout fxLayoutGap="20px">
             <mat-card class="col-6"> <app-list></app-list></mat-card> 
             <mat-card class="col-6"><app-dynamic-graph></app-dynamic-graph></mat-card> 
