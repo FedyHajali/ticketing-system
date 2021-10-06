@@ -26,7 +26,7 @@ services:
     ports:
       - "4200:80"
   celerybeat:
-    container_name: celerybeat
+    container_name: celery-beat
     build: ./backend
     command: celery -A services beat -l INFO
     volumes:
@@ -40,7 +40,7 @@ services:
       - db
       - redis
   celeryworker:
-    container_name: celeryworker
+    container_name: celery-worker
     build: ./backend
     command: celery -A services worker --pool=solo -l info
     volumes:
