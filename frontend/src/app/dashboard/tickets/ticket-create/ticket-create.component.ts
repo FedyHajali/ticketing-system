@@ -29,11 +29,11 @@ export class TicketCreateComponent implements OnInit {
   form = this.fb.group({
     title: [
       '',
-      [Validators.required, Validators.minLength(2), Validators.maxLength(20)],
+      [Validators.required, Validators.minLength(2), Validators.maxLength(50)],
     ],
     content: [
       '',
-      [Validators.required, Validators.minLength(2), Validators.maxLength(100)],
+      [Validators.required, Validators.minLength(2), Validators.maxLength(1000)],
     ],
     status: ['OP', Validators.required],
     groups: [null, Validators.required],

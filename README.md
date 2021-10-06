@@ -1,2 +1,2 @@
-# adm-project
-Project for Application Distribuited and Mobile course
+# UniDesk - university ticketing system
+Project for Application Distribuited and Mobile course.

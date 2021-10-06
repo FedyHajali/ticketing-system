@@ -21,7 +21,7 @@
           !form.controls.name.hasError('required')
         "
       >
-        Please enter a valid topic name, <strong>maximum length</strong> is 20 characters.
+        Please enter a valid topic name, <strong>maximum length</strong> is 50 characters.
       </mat-error>
       <mat-error *ngIf="form.controls.name.hasError('required')">
         Topic name is <strong>required</strong>
@@ -48,7 +48,7 @@
           !form.controls.description.hasError('required')
         "
       >
-        Please enter a valid topic description, <strong>maximum length</strong> is 50 characters.
+        Please enter a valid topic description, <strong>maximum length</strong> is 100 characters.
       </mat-error>
       <mat-error *ngIf="form.controls.description.hasError('required')">
         Topic description is <strong>required</strong>

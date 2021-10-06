@@ -15,6 +15,31 @@
                 <mat-form-field class="w-100" appearance="fill">
                   <mat-label>Ticket Title</mat-label>
                   <input matInput formControlName="title" />
+                  <mat-error
+                    *ngIf="
+                      form.controls.title.hasError('minlength') &&
+                      !form.controls.title.hasError('maxlength') &&
+                      !form.controls.title.hasError('required')
+                    "
+                  >
+                    Please enter a valid title,
+                    <strong>minimum length</strong> legth is 2 characters
+                  </mat-error>
+                  <mat-error
+                    *ngIf="
+                      form.controls.title.hasError('maxlength') &&
+                      !form.controls.title.hasError('minlength') &&
+                      !form.controls.title.hasError('required')
+                    "
+                  >
+                    Please enter a valid title,
+                    <strong>maximum length</strong> is 50 characters.
+                  </mat-error>
+                  <mat-error
+                    *ngIf="form.controls.title.hasError('required')"
+                  >
+                    Title is <strong>required</strong>
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -26,6 +51,31 @@
                 <mat-form-field class="w-100" appearance="fill">
                   <mat-label>Ticket Content</mat-label>
                   <textarea matInput formControlName="content"></textarea>
+                  <mat-error
+                    *ngIf="
+                      form.controls.content.hasError('minlength') &&
+                      !form.controls.content.hasError('maxlength') &&
+                      !form.controls.content.hasError('required')
+                    "
+                  >
+                    Please enter a valid content,
+                    <strong>minimum length</strong> legth is 2 characters
+                  </mat-error>
+                  <mat-error
+                    *ngIf="
+                      form.controls.content.hasError('maxlength') &&
+                      !form.controls.content.hasError('minlength') &&
+                      !form.controls.content.hasError('required')
+                    "
+                  >
+                    Please enter a valid content,
+                    <strong>maximum length</strong> is 1000 characters.
+                  </mat-error>
+                  <mat-error
+                    *ngIf="form.controls.content.hasError('required')"
+                  >
+                    Content is <strong>required</strong>
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -42,6 +92,11 @@
                       {{ stat.viewValue }}
                     </mat-option>
                   </mat-select>
+                  <mat-error
+                    *ngIf="form.controls.status.hasError('required')"
+                  >
+                    Status is <strong>required</strong>
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -62,6 +117,11 @@
                     [for]="picker"
                   ></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
+                  <mat-error
+                    *ngIf="form.controls.expiration.hasError('required')"
+                  >
+                  Expiration date is <strong>required</strong>
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -79,6 +139,11 @@
                       group.name
                     }}</mat-option>
                   </mat-select>
+                  <mat-error
+                    *ngIf="form.controls.groups.hasError('required')"
+                  >
+                  Group is <strong>required</strong>
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -105,6 +170,11 @@
                       </ng-container>
                     </mat-optgroup>
                   </mat-select>
+                  <mat-error
+                    *ngIf="form.controls.topics.hasError('required')"
+                  >
+                  Topic is <strong>required</strong>
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -122,6 +192,11 @@
                       >{{ receiver.username }}</mat-option
                     >
                   </mat-select>
+                  <mat-error
+                    *ngIf="form.controls.receivers.hasError('required')"
+                  >
+                  Receiver is <strong>required</strong>
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>

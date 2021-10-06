@@ -12,8 +12,8 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class TopicCreateComponent implements OnInit {
   form = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(2),Validators.maxLength(20)]],
-    description: ['', [Validators.required, Validators.minLength(2),Validators.maxLength(50)]],
+    name: ['', [Validators.required, Validators.minLength(2),Validators.maxLength(50)]],
+    description: ['', [Validators.required, Validators.minLength(2),Validators.maxLength(100)]],
   });
   group!: Group;
   topic!: Topic;
