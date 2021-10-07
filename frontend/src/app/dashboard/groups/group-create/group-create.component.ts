@@ -12,8 +12,12 @@ import { SharedService } from 'src/app/services/shared.service';
 })
 export class GroupCreateComponent implements OnInit {
   form = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(2),Validators.maxLength(50)]],
+    name: [
+      '',
+      [Validators.required, Validators.minLength(2), Validators.maxLength(50)],
+    ],
   });
+  group!: Group;
   constructor(
     public dialogRef: MatDialogRef<GroupCreateComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -34,16 +38,32 @@ export class GroupCreateComponent implements OnInit {
     };
 
     this.auth.authGroupsCreateCreate(group).subscribe(
-      (response) => {
-        console.log(response);
-        this.dialogRef.close();
-
+      (group) => {
+        this.group = group;
         this.shared.showToastSuccess('Successfully create', 'Group Create');
+        this.subscribe();
         this.onNoClick();
       },
       (error) => {
         this.shared.showToastDanger(error.error, 'Group Create');
       }
     );
+  }
+
+  subscribe() {
+    if (this.group.id) {
+      this.auth.authGroupsAddUserUpdate(this.group.id.toString()).subscribe(
+        (response) => {
+          this.shared.showToastSuccess(
+            'Successfully subscripted',
+            'Group subscription'
+          );
+          this.onNoClick();
+        },
+        (error) => {
+          this.shared.showToastDanger(error.error, 'Group subscription');
+        }
+      );
+    }
   }
 }

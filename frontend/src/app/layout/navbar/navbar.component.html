@@ -12,16 +12,38 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="!isAuthenticated">
+        <a class="nav-link nav-link" routerLink="/" style="color: transparent"
+          >not logged-in</a
+        >
+      </li>
+      <li class="nav-item" *ngIf="isAuthenticated">
         <a class="nav-link nav-link" routerLink="/dashboard">Dashboard</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item" *ngIf="isAuthenticated">
         <a class="nav-link nav-link" routerLink="/reports">Reports</a>
       </li>
-      <li class="nav-item" *ngIf="user?.is_superuser">
-        <a class="nav-link nav-link" href="http://localhost:8000/admin/"
-          >Administration</a
+      <li class="nav-item" *ngIf="isAuthenticated && user?.is_superuser">
+        <a
+          class="nav-link nav-link position-relative"
+          href="http://localhost:8000/admin/"
         >
+          Administration
+          <span
+            matTooltip="Superuser"
+            class="
+              bg-success
+              position-absolute
+              top-70
+              start-100
+              translate-middle
+              badge
+              rounded-pill
+            "
+          >
+            <i class="fas fa-user-shield"></i
+          ></span>
+        </a>
       </li>
       <div
         class="
