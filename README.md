@@ -1,2 +1,2 @@
-# UniDesk - university ticketing system
-Project for Application Distribuited and Mobile course.
+# UniDesk
+Project of university ticketing system for Application Distribuited and Mobile course.
