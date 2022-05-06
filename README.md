@@ -11,7 +11,7 @@ git clone https://github.com/FedyHajali/Ticketing-System.git
 cd /.../path-to-project/Ticketing-System
 ```
 
-# Build and run with Docker 
+## Build and run with Docker 
 
 Build Docker containers 
 ```bash
@@ -22,7 +22,7 @@ Start containers in detached mode
 docker-compose up -d
 ```
 
-# First Setup
+## First setup
 
 Make PostgreSQL migrations and create you first user as administrator of the system 
 ```bash
