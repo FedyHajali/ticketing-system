@@ -1,14 +1,23 @@
 # ticketing-system
 This is an example of Ticketing Management System realized for the "Application Distribuited and Mobile course" course at the University of Modena and Reggio Emilia. 
 
+## Ticket Lifecycle
+
+![tk-lifecycle](./imgs/tk-lifecycle.png)
+
+## Ticket Management
+
+![tk-management](./imgs/tk-management.png)
+
+
 ## Installation
 
-Clone Project from repo access to the directory
+Clone Project from repo access to directory
 ```bash
-git clone https://github.com/FedyHajali/Ticketing-System.git
+git clone https://github.com/FedyHajali/ticketing-system.git
 ```
 ```bash
-cd /.../path-to-project/Ticketing-System
+cd /.../path-to/ticketing-system
 ```
 
 ## Build and run with Docker 
@@ -34,3 +43,7 @@ docker-compose exec api python3 manage.py migrate
 ```bash
 docker exec -it django-rest-api python3 manage.py createsuperuser
 ```
+
+## Authors
+
+Fedy Haj Ali, Giacomo Capitani
