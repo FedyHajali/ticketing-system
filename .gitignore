@@ -135,4 +135,6 @@ data/
 
 /backend/.venv
 
-Presentation.pptx
+.Presentation.pptx
+
+.gitignore
