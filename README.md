@@ -3,14 +3,17 @@ This is an example of Ticketing Management System realized for the "Application 
 
 ## Ticket Lifecycle
 
-![tk-lifecycle](./imgs/tk-lifecycle.png)
+<img src="./imgs/tk-lifecycle.png" width="600" height="250">
+
 
 ## Ticket Management
 
-![tk-management](./imgs/tk-management.png)
+<img src="./imgs/tk-management.png" width="600" height="300">
 
 
-## Installation
+## Getting Started
+
+### Installation
 
 Clone Project from repo access to directory
 ```bash
@@ -19,30 +22,121 @@ git clone https://github.com/FedyHajali/ticketing-system.git
 ```bash
 cd /.../path-to/ticketing-system
 ```
+There are two options for starting the project:
 
-## Build and run with Docker 
+
+## 1. Run with Docker 
+
+
 
 Build Docker containers 
 ```bash
-docker-compose build
+sudo docker-compose build
 ```
 Start containers in detached mode
 ```bash
-docker-compose up -d
+sudo docker-compose up -d
 ```
 
-## First setup
+### <i>First setup </i>
 
-Make PostgreSQL migrations and create you first user as administrator of the system 
+If it's your first time running the project, perform the initial configuration below.
+
+Make PostgreSQL migrations and create you first user as administrator of the system.
+
 ```bash
-docker-compose exec api python3 manage.py makemigrations
+sudo docker-compose exec api python3 manage.py makemigrations
 ```
 ```bash
-docker-compose exec api python3 manage.py migrate
+sudo docker-compose exec api python3 manage.py migrate
 ```
 ```bash
-docker exec -it django-rest-api python3 manage.py createsuperuser
+sudo docker exec -it api python3 manage.py createsuperuser
+
+# docker-compose exec [docker-service] python3 manage.py [command]
 ```
+
+Browse http://localhost:4200/
+
+### <i>Stop Containers</i>
+
+Stops and removes containers, networks, volumes, and images created by 'up' command.
+
+```bash
+sudo docker-compose down
+```
+
+## 2. Run Local 
+
+### Backend setup
+
+Setup virtual environment
+```bash
+cd backend
+python -m venv .venv
+source activate .venv
+```
+Install requirements
+```bash
+pip install -r requirements.txt
+```
+
+#### First Setup - Django
+
+Make PostgreSQL migrations and create you first user as administrator of the system.
+
+```bash
+python manage.py makemigrations
+```
+
+```bash
+python manage.py migrate
+```
+
+```bash
+python manage.py createsuperuser
+```
+
+Launch Django Backend
+```bash
+python manage.py runserver
+```
+
+
+## Celery setup
+
+Start redis (from /backend/redis folder):
+```bash
+.\redis-server.exe
+```
+Start beat celery scheduler:
+```bash
+celery -A services beat -l INFO
+```
+Start celery worker:
+```bash
+celery -A services worker --pool=solo -l info
+```
+
+## Frontend setup
+ 
+```bash
+cd frontend
+```
+Installation of packages:
+```bash
+npm install
+```
+Generate new API:
+```bash
+npm run generate-api
+```
+Run UI module:
+```bash
+npm start
+```
+
+Browse http://localhost:4200/
 
 ## Authors
 

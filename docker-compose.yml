@@ -11,7 +11,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
   api:
-    container_name: django-rest-api
+    container_name: api
     build: ./backend
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
@@ -21,7 +21,7 @@ services:
     depends_on:
       - db
   ui:
-    container_name: angular-ui
+    container_name: ui
     build: ./frontend
     ports:
       - "4200:80"

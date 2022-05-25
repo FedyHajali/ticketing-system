@@ -132,3 +132,7 @@ dmypy.json
 
 # docker data
 data/
+
+/backend/.venv
+
+Presentation.pptx
